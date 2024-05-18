@@ -1,3 +1,11 @@
 ion-searchbar{
-  --background: var(--ion-background-color-step-50);
+  --background: #d9d9d4;
+  --box-shadow: 0;
+  --border-radius: 2rem;
+}
+
+
+ion-chip.active {
+  --background: var(--ion-color-primary);
+  --color: var(--ion-color-light);
 }

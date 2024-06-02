@@ -9,20 +9,10 @@ const routes: Routes = [
     children: [
       {
         path: 'home',
-        loadChildren: () => import('../views/home/home.module').then(m => m.HomePageModule)
-      },
-      {
-        path: '',
-        redirectTo: '/tabs/home',
-        pathMatch: 'full'
+        loadChildren: () => import('../pages/home/home.module').then(m => m.HomePageModule)
       }
     ]
   },
-  {
-    path: '',
-    redirectTo: '/tabs/home',
-    pathMatch: 'full'
-  }
 ];
 
 @NgModule({

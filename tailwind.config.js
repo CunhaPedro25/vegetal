@@ -5,7 +5,6 @@ module.exports = {
     extend: {},
   },
   plugins: [require('@tailwindcss/aspect-ratio')
-,require('@tailwindcss/line-clamp')
-,require('@tailwindcss/typography')
-],
+    , require('@tailwindcss/typography')
+  ],
 };

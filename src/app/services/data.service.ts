@@ -98,7 +98,7 @@ export class DataService {
   }
 
   // Addresses
-  async getUserAddresses(user: number): Promise<Address[]> {
+  async getUserAddresses(user: string): Promise<Address[]> {
     const { data, error } = await this.supabase
       .from('addresses')
       .select('*')
@@ -118,7 +118,7 @@ export class DataService {
   }
 
   // Orders
-  async getUserOrders(user: number): Promise<Order[]> {
+  async getUserOrders(user: string): Promise<Order[]> {
     const { data, error } = await this.supabase
       .from('orders')
       .select('*')
@@ -183,7 +183,7 @@ export class DataService {
   }
 
   // Favorites
-  async getUserFavorites(user: number): Promise<Favorite[]> {
+  async getUserFavorites(user: string): Promise<Favorite[]> {
     const { data, error } = await this.supabase
       .from('favorites')
       .select('*')

@@ -77,7 +77,7 @@ export class AuthService {
 
   async signOut() {
     await AuthService.supabase.auth.signOut()
-    await this.router.navigateByUrl("/welcome", {replaceUrl: true})
+    await this.router.navigateByUrl("/login", {replaceUrl: true})
   }
 
   static getSupabaseClient() {

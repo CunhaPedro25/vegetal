@@ -3,22 +3,40 @@
     <ion-img src="/assets/icon/vegetal.svg" />
 
     <div class="flex flex-col gap-8">
-      <div class="flex flex-col gap-2 items-center">
+      <form (ngSubmit)="login()" [formGroup]="credentials" class="flex flex-col gap-2 items-center">
         <div class="w-full">
           <ion-label>Email</ion-label>
-          <ion-input type="email"></ion-input>
+          <ion-input type="email" formControlName="email"></ion-input>
+          <ion-note
+            *ngIf="(email.dirty || email.touched) && email.errors"
+            slot="error"
+          >
+            Please insert email correctly
+          </ion-note>
         </div>
         <div class="w-full">
           <ion-label>Password</ion-label>
-          <ion-input type="password"></ion-input>
+          <ion-input type="password" formControlName="password"></ion-input>
+          <ion-note
+            *ngIf="(password.dirty || password.touched) && password.errors"
+            slot="error"
+          >
+            Please insert password correctly
+          </ion-note>
         </div>
 
-        <ion-button shape="round" class="w-fit">Login</ion-button>
-      </div>
+        <ion-button
+          type="submit"
+          shape="round"
+          [disabled]="credentials.invalid"
+          class="w-fit"
+        >Sign In
+        </ion-button>
+      </form>
 
       <hr>
 
-      <ion-button routerLink="/register" >Criar Conta</ion-button>
+      <ion-button routerLink="/register" >Sign Up</ion-button>
     </div>
   </div>
 </ion-content>

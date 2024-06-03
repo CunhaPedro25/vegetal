@@ -7,3 +7,4 @@ export interface Restaurant {
   longitude: number;
   categories: string[];
 }
+

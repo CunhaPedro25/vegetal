@@ -26,10 +26,16 @@ const routes: Routes = [
     loadChildren: () => import('./pages/address-search/address-search.module').then( m => m.AddressSearchPageModule)
   },
   {
+    path: 'restaurant',
+    loadChildren: () => import('./pages/restaurant/restaurant.module').then( m => m.RestaurantPageModule)
+  },
+  {
     path: 'settings',
     loadChildren: () => import('./pages/settings/settings.module').then( m => m.SettingsPageModule)
   },
+
 ];
+
 @NgModule({
   imports: [
     RouterModule.forRoot(routes, { preloadingStrategy: PreloadAllModules })

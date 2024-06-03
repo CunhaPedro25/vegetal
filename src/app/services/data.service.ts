@@ -77,7 +77,7 @@ export class DataService {
   }
 
 
-  async getRestaurant(id: string): Promise<Restaurant> {
+  async getRestaurant(id: number): Promise<Restaurant> {
     const { data, error } = await this.supabase
       .from('restaurants')
       .select('*')
@@ -88,61 +88,61 @@ export class DataService {
   }
 
   // Reviews
-  async getReviews(restaurant_id: string): Promise<Review[]> {
+  async getReviews(restaurant: number): Promise<Review[]> {
     const { data, error } = await this.supabase
       .from('reviews')
       .select('*')
-      .eq('restaurant_id', restaurant_id);
+      .eq('restaurant', restaurant);
     if (error) throw error;
     return data as Review[];
   }
 
   // Addresses
-  async getUserAddresses(user_id: string): Promise<Address[]> {
+  async getUserAddresses(user: number): Promise<Address[]> {
     const { data, error } = await this.supabase
       .from('addresses')
       .select('*')
-      .eq('user_id', user_id);
+      .eq('user', user);
     if (error) throw error;
     return data as Address[];
   }
 
   // Items
-  async getItems(restaurant_id: string): Promise<Item[]> {
+  async getItems(restaurant: number): Promise<Item[]> {
     const { data, error } = await this.supabase
       .from('items')
       .select('*')
-      .eq('restaurant_id', restaurant_id);
+      .eq('restaurant', restaurant);
     if (error) throw error;
     return data as Item[];
   }
 
   // Orders
-  async getUserOrders(user_id: string): Promise<Order[]> {
+  async getUserOrders(user: number): Promise<Order[]> {
     const { data, error } = await this.supabase
       .from('orders')
       .select('*')
-      .eq('user_id', user_id);
+      .eq('user', user);
     if (error) throw error;
     return data as Order[];
   }
 
   // Order Items
-  async getOrderItems(order_id: string): Promise<OrderItem[]> {
+  async getOrderItems(order: number): Promise<OrderItem[]> {
     const { data, error } = await this.supabase
       .from('order_items')
       .select('*')
-      .eq('order_id', order_id);
+      .eq('order', order);
     if (error) throw error;
     return data as OrderItem[];
   }
 
   // Deliveries
-  async getDelivery(order_id: string): Promise<Delivery> {
+  async getDelivery(order: number): Promise<Delivery> {
     const { data, error } = await this.supabase
       .from('deliveries')
       .select('*')
-      .eq('order_id', order_id)
+      .eq('order', order)
       .single();
     if (error) throw error;
     return data as Delivery;
@@ -167,11 +167,11 @@ export class DataService {
   }
 
   // Restaurant Categories
-  async getRestaurantCategories(restaurant_id: string): Promise<Category[]> {
+  async getRestaurantCategories(restaurant: string): Promise<Category[]> {
     const { data, error } = await this.supabase
       .from('restaurant_categories')
       .select('category_id')
-      .eq('restaurant_id', restaurant_id);
+      .eq('restaurant', restaurant);
     if (error) throw error;
 
     const categoryIds = data.map(rc => rc.category_id);
@@ -183,11 +183,11 @@ export class DataService {
   }
 
   // Favorites
-  async getUserFavorites(user_id: string): Promise<Favorite[]> {
+  async getUserFavorites(user: number): Promise<Favorite[]> {
     const { data, error } = await this.supabase
       .from('favorites')
       .select('*')
-      .eq('user_id', user_id);
+      .eq('user', user);
     if (error) throw error;
     return data as Favorite[];
   }

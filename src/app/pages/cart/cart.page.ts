@@ -12,7 +12,7 @@ import { AuthService } from 'src/app/services/auth.service';
 export class CartPage implements OnInit {
 
   orders: Order[] = [];
-  restaurantInfo: { [key: string]: any } = {};
+  restaurantInfo: { [key: number]: any } = {};
   isLoading: boolean = true;
   error: string | null = null;
 
@@ -31,8 +31,8 @@ export class CartPage implements OnInit {
       this.orders = await this.data.getUserOrders(userId);
 
       for (let order of this.orders) {
-        const restaurant = await this.data.getRestaurant(order.restaurant_id);
-        this.restaurantInfo[order.restaurant_id] = restaurant;
+        const restaurant = await this.data.getRestaurant(order.restaurant);
+        this.restaurantInfo[order.restaurant] = restaurant;
       }
 
       this.isLoading = false;
@@ -43,7 +43,7 @@ export class CartPage implements OnInit {
     }
   }
 
-  getRestaurantInfo(id: string) {
+  getRestaurantInfo(id: number) {
     return this.restaurantInfo[id] || {};
   }
 }

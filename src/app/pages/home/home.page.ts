@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import {Restaurant} from "../../models/restarurant.model";
+import {DataService} from "../../services/data.service";
+import {Router} from "@angular/router";
 
 @Component({
   selector: 'app-home',
@@ -8,9 +10,16 @@ import {Restaurant} from "../../models/restarurant.model";
 })
 export class HomePage implements OnInit {
   restaurants: Restaurant[] | undefined;
-  constructor() { }
+  constructor(
+    private data: DataService,
+    private router: Router
+  ) { }
 
   ngOnInit() {
+    this.data.getRestaurants().then(r => {
+      console.log(r);
+    })
+
     this.restaurants = [
       {
         image: 'https://images.unsplash.com/photo-1571091718767-18b5b1457add?q=80&w=1000&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTB8fGJ1cmdlcnxlbnwwfHwwfHx8MA%3D%3D',

@@ -1,13 +1,21 @@
 <ion-header [translucent]="true">
   <ion-toolbar>
-    <ion-title>payment</ion-title>
+    <ion-buttons slot="start">
+      <ion-back-button default-href="#"></ion-back-button>
+    </ion-buttons>
+    <ion-title>Payment</ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">payment</ion-title>
-    </ion-toolbar>
-  </ion-header>
+
+  <ion-card>
+    <ion-card-title>Payment Methods</ion-card-title>
+  </ion-card>
+
+  <ion-radio-group value="strawberries">
+    <ion-radio value="Credit" label-placement="end">Credit card</ion-radio><br />
+    <ion-radio value="Paypel" label-placement="end" >Paypal</ion-radio><br />
+    <ion-radio value="PayementOnDelivery" label-placement="end">Payment on Delivery</ion-radio><br />
+  </ion-radio-group>
 </ion-content>

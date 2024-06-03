@@ -28,7 +28,7 @@ export class DataService {
       .from('restaurants')
       .select('*');
     if (error) throw error;
-    return data as Restaurant[];
+    return data.map(item => new Restaurant(item));
   }
 
   async getRestaurant(id: string): Promise<Restaurant> {

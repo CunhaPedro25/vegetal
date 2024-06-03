@@ -21,6 +21,10 @@ const routes: Routes = [
     loadChildren: () => import('./tabs/tabs.module').then(m => m.TabsPageModule),
     canActivate: [AuthGuard]
   },
+  {
+    path: 'address-search',
+    loadChildren: () => import('./pages/address-search/address-search.module').then( m => m.AddressSearchPageModule)
+  },
 ];
 @NgModule({
   imports: [

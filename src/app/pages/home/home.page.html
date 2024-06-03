@@ -8,9 +8,9 @@
         <ion-chip class="active">Pick-up</ion-chip>
       </div>
 
-      <div class="flex justify-between items-center">
-        <div class="flex gap-2 items-center">
-          <div>Rua da avenida da travessa</div>
+      <div class="flex justify-between items-center max-w-full">
+        <div class="flex flex-1 gap-2 items-center truncate" (click)="openAddressSearch()">
+          <div class="truncate">{{ selectedAddress.display_name }}</div>
           <ion-icon aria-hidden="true" name="arrow-dropdown"></ion-icon>
         </div>
 
@@ -20,7 +20,6 @@
       </div>
     </div>
 
-    <!-- TODO: change to template using variables -->
     <div class="relative w-full flex-1 flex items-end">
       <div class="absolute"></div>
 
@@ -28,7 +27,7 @@
         <div class="text-2xl px-2">Restaurants In the Area</div>
 
         <div *ngIf="restaurants.length > 0" class="flex max-w-full overflow-x-scroll snap-mandatory snap-x">
-            <app-restaurant-card class="snap-center" *ngFor="let restaurant of restaurants" [restaurant]="restaurant"></app-restaurant-card>
+          <app-restaurant-card class="snap-center" *ngFor="let restaurant of restaurants" [restaurant]="restaurant"></app-restaurant-card>
         </div>
 
         <div *ngIf="restaurants.length === 0" class="flex w-full h-40 justify-center items-center">

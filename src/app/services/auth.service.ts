@@ -2,7 +2,6 @@
 // https://supabase.com/blog/building-a-realtime-trello-board-with-supabase-and-angular
 
 
-/* eslint-disable @typescript-eslint/naming-convention */
 import {Injectable} from "@angular/core"
 import {createClient, SupabaseClient, User} from "@supabase/supabase-js"
 import {environment} from "../../environments/environment"
@@ -59,13 +58,14 @@ export class AuthService {
     }
   }
 
-  signUp(credentials: {name: string, email: string; password: string}) {
+  signUp(credentials: {firstName: string, lastName: string, email: string; password: string}) {
     return AuthService.supabase.auth.signUp({
       email: credentials.email,
       password: credentials.password,
       options: {
         data: {
-          name: credentials.name,
+          firstName: credentials.firstName,
+          lastName: credentials.lastName,
         }
       }
     })

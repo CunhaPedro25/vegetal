@@ -3,10 +3,18 @@
     <ion-img src="/assets/icon/vegetal.svg" />
 
     <div class="flex flex-col gap-2">
-      <div class="w-full">
-        <ion-label>Name</ion-label>
-        <ion-input type="text" formControlName="name"></ion-input>
+      <div class="flex gap-2">
+        <div class="w-full">
+          <ion-label>First Name</ion-label>
+          <ion-input type="text" formControlName="firstName"></ion-input>
+        </div>
+        <div class="w-full">
+          <ion-label>Last Name</ion-label>
+          <ion-input type="text" formControlName="lastName"></ion-input>
+        </div>
       </div>
+
+
       <div class="w-full">
         <ion-label>Email</ion-label>
         <ion-input type="email" formControlName="email"></ion-input>

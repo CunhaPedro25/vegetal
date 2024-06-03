@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import {AlertController, LoadingController} from "@ionic/angular";
 import {AuthService} from "../../services/auth.service";
 import {FormBuilder, Validators} from "@angular/forms";
@@ -9,9 +9,10 @@ import {Router} from "@angular/router";
   templateUrl: './register.page.html',
   styleUrls: ['./register.page.scss'],
 })
-export class RegisterPage implements OnInit {
+export class RegisterPage  {
   credentials = this.fb.nonNullable.group({
-    name: ['', [Validators.required]],
+    firstName: ['', [Validators.required]],
+    lastName: ['', [Validators.required]],
     email: ['', [Validators.required, Validators.email]],
     password: ['', [Validators.required, Validators.minLength(6)]],
   });
@@ -24,8 +25,12 @@ export class RegisterPage implements OnInit {
     private router: Router
   ) {}
 
-  get name() {
-    return this.credentials.controls.name;
+  get firstName() {
+    return this.credentials.controls.firstName;
+  }
+
+  get lastName() {
+    return this.credentials.controls.lastName;
   }
 
   get email() {
@@ -35,6 +40,8 @@ export class RegisterPage implements OnInit {
   get password() {
     return this.credentials.controls.password;
   }
+
+
 
   async createAccount() {
     const loading = await this.loadingController.create();
@@ -60,9 +67,6 @@ export class RegisterPage implements OnInit {
       buttons: ['OK'],
     });
     await alert.present();
-  }
-
-  ngOnInit() {
   }
 
 }

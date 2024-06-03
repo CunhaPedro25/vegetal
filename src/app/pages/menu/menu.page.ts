@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Users } from 'src/app/models/users.model';
 import { AuthService } from 'src/app/services/auth.service';
 
 @Component({
@@ -7,10 +8,17 @@ import { AuthService } from 'src/app/services/auth.service';
   styleUrls: ['./menu.page.scss'],
 })
 export class MenuPage implements OnInit {
+  user: Users | null = null
 
-  constructor(private authService: AuthService) { }
+  constructor(
+    private authService: AuthService,
+    ) { }
 
-  ngOnInit() {
+  async ngOnInit() {
+    const userId = this.authService.getCurrentUserId()
+    if(userId){
+      this.user = await this.authService.getUser(userId)
+    }
   }
 
   async logout() {

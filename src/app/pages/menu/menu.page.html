@@ -1,10 +1,10 @@
 <ion-content [fullscreen]="true">
-  <ion-card>
+  <ion-card *ngIf="user">
     <ion-card-header>
-      <ion-card-title>USER</ion-card-title>
+      <ion-card-title>{{user.name}}</ion-card-title>
     </ion-card-header>
-    <ion-card-content>email</ion-card-content>
-    <ion-card-content>+351999111999</ion-card-content>
+    <ion-card-content>{{user.email}}</ion-card-content>
+    <ion-card-content>{{user.phone}}</ion-card-content>
   </ion-card>
 
   <div class="grid">

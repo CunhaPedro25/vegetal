@@ -42,6 +42,10 @@ const routes: Routes = [
     loadChildren: () => import('./pages/restaurant-reviews/restaurant-reviews.module').then( m => m.RestaurantReviewsPageModule),
     canActivate: [AuthGuard]
   },
+  {
+    path: 'restaurant-cart',
+    loadChildren: () => import('./pages/restaurant-cart/restaurant-cart.module').then( m => m.RestaurantCartPageModule)
+  },
 
 ];
 

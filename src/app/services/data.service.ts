@@ -159,7 +159,7 @@ export class DataService {
       .eq('restaurant', restaurant);
     if (error) throw error;
 
-    const categoryIds = data.map(rc => rc.category);
+    const categoryIds = data.map(rc => rc.category_id);
     const categories = await this.supabase
       .from('categories')
       .select('*')

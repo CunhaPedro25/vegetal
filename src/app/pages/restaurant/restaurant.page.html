@@ -43,31 +43,38 @@
 
   
   <div [ngSwitch]="selectedSegment">
-    <ion-list *ngSwitchCase="menu">
+    <ion-list *ngSwitchCase="'menu'">
       <ion-item *ngFor="let food of foods; let i = index">
         <ion-thumbnail slot="start">
-          <img src="https://via.placeholder.com/150" alt="Nuggets">
+          <img src="{{food.image_url}}" alt="Nuggets">
         </ion-thumbnail>
         <ion-label>
-          <h2>Nugget</h2>
-          <p>€6.00</p>
-          <p>A very good salad for you hmmmmmmm</p>
+          <h2>{{food.name}}</h2>
+          <p>{{food.price}}</p>
+          <p>{{food.description}}</p>
         </ion-label>
-        <ion-button fill="outline" slot="end">
-          <ion-icon slot="icon-only" name="add-circle-outline"></ion-icon>
-        </ion-button>
+        <div class="quantity-controls" slot="end">
+          <ion-button fill="outline">
+            <ion-icon slot="icon-only" name="remove-circle-outline"></ion-icon>
+          </ion-button>
+          <span>{{ food.quantity }}</span>
+          <ion-button fill="outline">
+            <ion-icon slot="icon-only" name="add-circle-outline"></ion-icon>
+          </ion-button>
+        </div>
+      
       </ion-item>
     </ion-list>
 
-    <ion-list *ngSwitchCase="drinks">
+    <ion-list *ngSwitchCase="'drinks'">
       <ion-item *ngFor="let drink of drinks; let i = index">
         <ion-thumbnail slot="start">
-          <img src="https://via.placeholder.com/150" alt="Nuggets">
+          <img src="{{drink.image_url}}" alt="Nuggets">
         </ion-thumbnail>
         <ion-label>
-          <h2>Nuggets</h2>
-          <p>€6.00</p>
-          <p>A very good salad for you hmmmmmmm</p>
+          <h2>{{drink.name}}</h2>
+          <p>{{drink.price}}</p>
+          <p>{{drink.description}}</p>
         </ion-label>
         <ion-button fill="outline" slot="end">
           <ion-icon slot="icon-only" name="add-circle-outline"></ion-icon>
@@ -75,15 +82,15 @@
       </ion-item>
     </ion-list>
 
-    <ion-list *ngSwitchCase="desserts">
+    <ion-list *ngSwitchCase="'desserts'">
       <ion-item *ngFor="let dessert of desserts; let i = index">
         <ion-thumbnail slot="start">
-          <img src="https://via.placeholder.com/150" alt="Nuggets">
+          <img src="{{dessert.image_url}}" alt="Nuggets">
         </ion-thumbnail>
         <ion-label>
-          <h2>Nuggets</h2>
-          <p>€6.00</p>
-          <p>A very good salad for you hmmmmmmm</p>
+          <h2>{{dessert.name}}</h2>
+          <p>{{dessert.price}}</p>
+          <p>{{dessert.description}}</p>
         </ion-label>
         <ion-button fill="outline" slot="end">
           <ion-icon slot="icon-only" name="add-circle-outline"></ion-icon>

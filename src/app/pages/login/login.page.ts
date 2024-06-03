@@ -37,9 +37,6 @@ export class LoginPage implements OnInit {
     return this.credentials.controls.password;
   }
 
-  ngOnInit() {
-  }
-
   async login() {
     const loading = await this.loadingController.create();
     await loading.present();
@@ -59,5 +56,8 @@ export class LoginPage implements OnInit {
         buttons: ['OK']
       })
     await alert.present();
+  }
+
+  ngOnInit() {
   }
 }

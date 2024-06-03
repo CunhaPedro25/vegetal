@@ -38,8 +38,9 @@ const routes: Routes = [
     loadChildren: () => import('./pages/payment/payment.module').then( m => m.PaymentPageModule)
   },
   {
-    path: 'restaurant-reviews',
-    loadChildren: () => import('./pages/restaurant-reviews/restaurant-reviews.module').then( m => m.RestaurantReviewsPageModule)
+    path: 'restaurant-reviews/:id',
+    loadChildren: () => import('./pages/restaurant-reviews/restaurant-reviews.module').then( m => m.RestaurantReviewsPageModule),
+    canActivate: [AuthGuard]
   },
 
 ];

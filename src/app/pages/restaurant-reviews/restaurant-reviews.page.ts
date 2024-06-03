@@ -1,4 +1,7 @@
 import { Component, OnInit } from '@angular/core';
+import {Review} from "../../models/review.model";
+import {DataService} from "../../services/data.service";
+import {ActivatedRoute, Params, RouterLink} from "@angular/router";
 
 @Component({
   selector: 'app-restaurant-reviews',
@@ -6,10 +9,13 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./restaurant-reviews.page.scss'],
 })
 export class RestaurantReviewsPage implements OnInit {
+  reviews: Review[] = []
 
-  constructor() { }
+  constructor(private dataService: DataService, private  route: ActivatedRoute){ }
 
-  ngOnInit() {
+  async ngOnInit() {
+    this.route.params.subscribe(async (params: Params) => {
+      this.reviews = await this.dataService.getReviews(+params['id'])
+    })
   }
-
 }

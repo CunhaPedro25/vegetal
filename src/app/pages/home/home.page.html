@@ -10,7 +10,7 @@
 
       <div class="flex justify-between items-center max-w-full">
         <div class="flex flex-1 gap-2 items-center truncate" (click)="openAddressSearch()">
-          <div class="truncate">{{ selectedAddress.display_name }}</div>
+          <div class="truncate">{{ data.getSelectedAddress().display_name }}</div>
           <ion-icon aria-hidden="true" name="arrow-dropdown"></ion-icon>
         </div>
 

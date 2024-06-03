@@ -4,8 +4,8 @@
       <ion-searchbar placeholder="Search"></ion-searchbar>
 
       <div class="flex gap-2 w-full justify-center">
-        <ion-chip>Delivery</ion-chip>
-        <ion-chip class="active">Pick-up</ion-chip>
+        <ion-chip (click)="changePage($event)">Delivery</ion-chip>
+        <ion-chip (click)="changePage($event)" class="active">Pick-up / Dine-in</ion-chip>
       </div>
 
       <div class="flex justify-between items-center max-w-full">

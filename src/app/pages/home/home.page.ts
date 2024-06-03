@@ -59,4 +59,8 @@ export class HomePage implements OnInit {
 
     return await modal.present();
   }
+
+  changePage(event: any){
+    console.log(event);
+  }
 }

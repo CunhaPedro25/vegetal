@@ -1,10 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import {Review} from "../../models/review.model";
 import {DataService} from "../../services/data.service";
-import {ActivatedRoute, Params, RouterLink} from "@angular/router";
+import {ActivatedRoute, Params} from "@angular/router";
 
 @Component({
-  selector: 'app-restaurant-reviews',
+  selector: 'app-reviews',
   templateUrl: './restaurant-reviews.page.html',
   styleUrls: ['./restaurant-reviews.page.scss'],
 })

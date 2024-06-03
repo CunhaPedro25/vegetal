@@ -7,6 +7,8 @@ import {createClient, SupabaseClient, User} from "@supabase/supabase-js"
 import {environment} from "../../environments/environment"
 import {BehaviorSubject, Observable} from "rxjs"
 import {Router} from "@angular/router"
+import {Users} from '../models/users.model';
+import {Restaurant} from "../models/restaurant.model";
 
 @Injectable({
   providedIn: 'root'
@@ -48,6 +50,16 @@ export class AuthService {
 
   getCurrentUser(): Observable<User> {
     return this.currentUser.asObservable();
+  }
+
+  async getUser(user_id: string): Promise<Users> {
+    const { data, error } = await AuthService.supabase
+      .from('users')
+      .select('*')
+      .eq('id', user_id)
+      .single();
+    if (error) throw error;
+    return data as Users;
   }
 
   getCurrentUserId() {

@@ -3,6 +3,7 @@ import {SupabaseClient} from '@supabase/supabase-js';
 import {AuthService} from './auth.service';
 import {Restaurant} from '../models/restaurant.model';
 import {Review} from '../models/review.model';
+import {UserAddress} from '../models/user-address.model';
 import {Address} from '../models/address.model';
 import {Item} from '../models/item.model';
 import {Order} from '../models/order.model';
@@ -17,17 +18,19 @@ import {Favorite} from '../models/favorite.model';
 })
 export class DataService {
   private supabase: SupabaseClient;
-  private selectedAddress: any = {
-    display_name: 'Av. do Atlântico 644 4900, Viana do Castelo',
-    lat: 41.69427867398096,  // Default latitude
-    lon: -8.846855462371082   // Default longitude
+  private selectedAddress: Address = {
+    address: 'Av. do Atlântico 644 4900, Viana do Castelo',
+    latitude: 41.69427867398096,  // Default latitude
+    longitude: -8.846855462371082,  // Default longitude
+    city: "Viana do Castelo",
+    zip_code: "644-4900"
   };
 
-  setSelectedAddress(address: any): void {
+  setSelectedAddress(address: Address): void {
     this.selectedAddress = address;
   }
 
-  getSelectedAddress(): any {
+  getSelectedAddress(): Address {
     return this.selectedAddress;
   }
 
@@ -50,7 +53,7 @@ export class DataService {
 
     data.forEach(item => {
       const restaurant = new Restaurant(item);
-      restaurant.calculateDistance(this.selectedAddress.lat, this.selectedAddress.lon);
+      restaurant.calculateDistance(this.selectedAddress.latitude, this.selectedAddress.longitude);
       if (restaurant.distance < maxDistance) {
         restaurants.push(restaurant);
       }
@@ -58,24 +61,6 @@ export class DataService {
 
     return restaurants;
   }
-
-
-  private calculateDistance(lat1: number, lon1: number, lat2: number, lon2: number): number {
-    const R = 6371; // Earth radius in kilometers
-    const dLat = this.deg2rad(lat2 - lat1);
-    const dLon = this.deg2rad(lon2 - lon1);
-    const a =
-      Math.sin(dLat / 2) * Math.sin(dLat / 2) +
-      Math.cos(this.deg2rad(lat1)) * Math.cos(this.deg2rad(lat2)) * Math.sin(dLon / 2) * Math.sin(dLon / 2);
-    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-    const d = R * c;
-    return d;
-  }
-
-  private deg2rad(deg: number): number {
-    return deg * (Math.PI / 180);
-  }
-
 
   async getRestaurant(id: number): Promise<Restaurant> {
     const { data, error } = await this.supabase
@@ -104,7 +89,7 @@ export class DataService {
       .select('*')
       .eq('user', user);
     if (error) throw error;
-    return data as Address[];
+    return data as UserAddress[];
   }
 
   // Items
@@ -174,7 +159,7 @@ export class DataService {
       .eq('restaurant', restaurant);
     if (error) throw error;
 
-    const categoryIds = data.map(rc => rc.category_id);
+    const categoryIds = data.map(rc => rc.category);
     const categories = await this.supabase
       .from('categories')
       .select('*')

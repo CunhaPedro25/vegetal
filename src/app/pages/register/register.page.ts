@@ -49,7 +49,6 @@ export class RegisterPage  {
 
     this.authService.signUp(this.credentials.getRawValue()).then(async (data) => {
       await loading.dismiss();
-      console.log('data: ', data);
 
       if (data.error) {
         await this.showAlert('Registration failed', data.error.message);

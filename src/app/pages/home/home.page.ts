@@ -1,8 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import {ChangeDetectorRef, Component, OnInit} from '@angular/core';
 import {LoadingController, ModalController} from '@ionic/angular';
 import { AddressSearchPage } from '../address-search/address-search.page';
 import { DataService } from '../../services/data.service';
 import { Restaurant } from '../../models/restaurant.model';
+import {Address} from "../../models/address.model";
 
 @Component({
   selector: 'app-home',
@@ -16,7 +17,8 @@ export class HomePage implements OnInit {
   constructor(
     protected data: DataService,
     private modalController: ModalController,
-    private loadingController: LoadingController
+    private loadingController: LoadingController,
+    private cdr: ChangeDetectorRef
   ) { }
 
   async ngOnInit() {
@@ -24,13 +26,14 @@ export class HomePage implements OnInit {
   }
 
   async loadRestaurants(){
+    this.restaurants = []
     const loading = await this.loadingController.create();
     await loading.present();
 
     this.data.getRestaurantsWithinRadius().then(async (data) => {
       await loading.dismiss();
-      console.log(data)
       this.restaurants = data
+      this.cdr.detectChanges();
     })
   }
 
@@ -41,7 +44,15 @@ export class HomePage implements OnInit {
 
     modal.onDidDismiss().then(async (data) => {
       if (data.data) {
-        this.data.setSelectedAddress(data.data);
+        const address: Address = {
+          address: data.data.display_name,
+          latitude: parseFloat(data.data.lat),  // Default latitude
+          longitude: parseFloat(data.data.lon),  // Default longitude
+          city: data.data.address.town,
+          zip_code: data.data.address.postcode
+        };
+
+        this.data.setSelectedAddress(address);
         await this.loadRestaurants()
       }
     });

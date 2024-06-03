@@ -1,7 +1,7 @@
-import { Component, OnInit } from '@angular/core';
-import { DataService } from '../../services/data.service';
-import { Order } from 'src/app/models/order.model';
-import { AuthService } from 'src/app/services/auth.service';
+import {Component, OnInit} from '@angular/core';
+import {DataService} from '../../services/data.service';
+import {Order} from 'src/app/models/order.model';
+import {AuthService} from 'src/app/services/auth.service';
 
 @Component({
   selector: 'app-cart',
@@ -31,8 +31,7 @@ export class CartPage implements OnInit {
       this.orders = await this.data.getUserOrders(userId);
 
       for (let order of this.orders) {
-        const restaurant = await this.data.getRestaurant(order.restaurant);
-        this.restaurantInfo[order.restaurant] = restaurant;
+        this.restaurantInfo[order.restaurant] = await this.data.getRestaurant(order.restaurant);
       }
 
       this.isLoading = false;

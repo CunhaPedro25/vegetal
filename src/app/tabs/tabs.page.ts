@@ -10,25 +10,9 @@ import {LoadingController} from "@ionic/angular";
 })
 export class TabsPage implements OnInit{
 
-  constructor(
-    private authService: AuthService,
-    private loadingController: LoadingController,
-    private router: Router
-  ) {}
+  constructor() {}
 
-  async ngOnInit() {
-    const loading = await this.loadingController.create();
-    await loading.present();
-
-    this.authService.getCurrentUser().subscribe(async (user) => {
-      await loading.dismiss();
-
-      if (!user) {
-        this.router.navigate(["/login"], {replaceUrl: true});
-      }else{
-        this.router.navigate(["/"], {replaceUrl: true});
-      }
-    })
+  ngOnInit() {
   }
 
 }

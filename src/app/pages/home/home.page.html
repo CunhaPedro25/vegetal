@@ -27,8 +27,12 @@
       <div class="flex flex-col gap-1 w-full">
         <div class="text-2xl px-2">Restaurants In the Area</div>
 
-        <div class="flex max-w-full overflow-x-scroll snap-mandatory snap-x">
+        <div *ngIf="restaurants.length > 0" class="flex max-w-full overflow-x-scroll snap-mandatory snap-x">
             <app-restaurant-card class="snap-center" *ngFor="let restaurant of restaurants" [restaurant]="restaurant"></app-restaurant-card>
+        </div>
+
+        <div *ngIf="restaurants.length === 0" class="flex w-full h-40 justify-center items-center">
+          <div>No available restaurants</div>
         </div>
       </div>
     </div>

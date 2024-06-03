@@ -1,6 +1,6 @@
 export interface Favorite {
-  id: string;
-  user_id: string;
-  restaurant_id?: string;
-  item_id?: string;
+  id: number;
+  user: string;
+  restaurant: number;
+  created_at: string;
 }

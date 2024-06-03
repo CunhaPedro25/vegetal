@@ -1,5 +1,5 @@
 export class Restaurant {
-  id: string;
+  id: number;
   name: string;
   image_url: string;
   address: string;
@@ -33,7 +33,6 @@ export class Restaurant {
     this.distance = 0;
   }
   isOpen() {
-    console.log("LOL")
     const currentDay = new Date().toLocaleString('en-us', { weekday: 'long' }).toLowerCase();
     const currentTime = new Date().toTimeString().split(' ')[0].slice(0, 5);
     const hours = JSON.parse(this.opening_hours)[currentDay];

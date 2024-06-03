@@ -1,8 +1,10 @@
 export interface Item {
-  id: string;
-  restaurant_id: string;
+  id: number;
+  restaurant: number;
   name: string;
   description: string;
   price: number;
+  type: string;
+  image_url: string | undefined;
   created_at: string;
 }

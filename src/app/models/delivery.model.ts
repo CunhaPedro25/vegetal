@@ -1,6 +1,6 @@
 export interface Delivery {
-  id: string;
-  order_id: string;
+  id: number;
+  order: number;
   status: string;
   delivery_address: string;
   delivery_time: string;

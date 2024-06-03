@@ -1,9 +1,8 @@
 export interface Review {
-  id: string;
-  user_id: string;
-  restaurant_id: string;
-  delivery_type_id: string;
-  order_id: string;
+  id: number;
+  user: string;
+  restaurant: number;
+  delivery_type: number;
   rating: number;
   comment: string;
   created_at: string;

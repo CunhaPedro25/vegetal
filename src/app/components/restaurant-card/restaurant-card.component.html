@@ -1,29 +1,24 @@
-<!-- restaurant-card.component.html -->
-<div class="w-[20rem]">
-  <ion-card>
-    <div class="flex flex-col h-60">
-      <div class="flex-1 overflow-hidden object-cover relative">
-        <ion-img class="w-full" [src]="restaurant?.image_url"></ion-img>
-        <ion-icon class="absolute top-2 right-2 text-4xl" aria-hidden="true" name="heart-outline"></ion-icon>
+<ion-card class="w-[20rem] h-[12rem] flex flex-col" (click)="openRestaurant(restaurant.id)">
+  <div class="flex-1 overflow-hidden relative">
+    <ion-img class="w-full object-cover" [src]="restaurant.image_url"></ion-img>
+    <ion-icon class="absolute top-2 right-2 text-4xl" aria-hidden="true" name="heart-outline"></ion-icon>
+  </div>
+
+  <div class="h-fit min-1/3 p-1">
+    <div class="text-lg">{{ restaurant.name }}</div>
+    <div class="flex flex-col">
+      <div class="flex gap-1 items-center text-lg text-yellow-400">
+        <div>{{ restaurant.rating }}</div>
+        <ion-icon name="star" *ngFor="let star of [].constructor(restaurant.filledStars)"></ion-icon>
+        <ion-icon name="star-half" *ngIf="restaurant.semiFilledStars"></ion-icon>
+        <ion-icon name="star-outline" *ngFor="let star of [].constructor(restaurant.emptyStars)"></ion-icon>
       </div>
 
-      <div class="h-1/3 p-1">
-        <ion-card-title>{{ restaurant?.name }}</ion-card-title>
-        <div class="flex flex-col">
-          <div class="flex gap-1 items-center text-lg text-yellow-400">
-            <div>{{ restaurant?.rating }}</div>
-            <ion-icon name="star" *ngFor="let star of [].constructor(restaurant?.filledStars)"></ion-icon>
-            <ion-icon name="star-half" *ngIf="restaurant?.semiFilledStars"></ion-icon>
-            <ion-icon name="star-outline" *ngFor="let star of [].constructor(restaurant?.emptyStars)"></ion-icon>
-          </div>
-
-          <div class="flex gap-2">
-            <p>{{ restaurant?.isOpen ? "Open" : "Closed" }}</p>
-            <p>{{ (restaurant?.distance !== undefined) ? Math.round((restaurant?.distance || 0 )* 10) / 10 : 'Unknown' }} km</p>
-            <p>{{ restaurant?.delivery_fee }} Delivery Fee</p>
-          </div>
-        </div>
+      <div class="flex gap-2">
+        <p>{{ restaurant.isOpen() ? "Open" : "Closed" }}</p>
+        <p>{{ Math.round((restaurant.distance || 0 )* 10) / 10 }} km</p>
+        <p>{{ restaurant.delivery_fee }} Delivery Fee</p>
       </div>
     </div>
-  </ion-card>
-</div>
+  </div>
+</ion-card>

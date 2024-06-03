@@ -23,27 +23,30 @@ const routes: Routes = [
   },
   {
     path: 'address-search',
-    loadChildren: () => import('./pages/address-search/address-search.module').then( m => m.AddressSearchPageModule)
+    loadChildren: () => import('./pages/address-search/address-search.module').then( m => m.AddressSearchPageModule),
+    canActivate: [AuthGuard]
   },
   {
-    path: 'restaurant',
-    loadChildren: () => import('./pages/restaurant/restaurant.module').then( m => m.RestaurantPageModule)
+    path: 'restaurant/:id',
+    loadChildren: () => import('./pages/restaurant/restaurant.module').then( m => m.RestaurantPageModule),
+    canActivate: [AuthGuard]
   },
   {
     path: 'settings',
-    loadChildren: () => import('./pages/settings/settings.module').then( m => m.SettingsPageModule)
+    loadChildren: () => import('./pages/settings/settings.module').then( m => m.SettingsPageModule),
+    canActivate: [AuthGuard]
   },
   {
     path: 'payment',
     loadChildren: () => import('./pages/payment/payment.module').then( m => m.PaymentPageModule)
   },
   {
-    path: 'restaurant-reviews/:id',
+    path: 'reviews/:id',
     loadChildren: () => import('./pages/restaurant-reviews/restaurant-reviews.module').then( m => m.RestaurantReviewsPageModule),
     canActivate: [AuthGuard]
   },
   {
-    path: 'restaurant-cart',
+    path: 'cart',
     loadChildren: () => import('./pages/restaurant-cart/restaurant-cart.module').then( m => m.RestaurantCartPageModule)
   },
 

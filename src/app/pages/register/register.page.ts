@@ -3,6 +3,7 @@ import {AlertController, LoadingController} from "@ionic/angular";
 import {AuthService} from "../../services/auth.service";
 import {FormBuilder, Validators} from "@angular/forms";
 import {Router} from "@angular/router";
+import {DataService} from "../../services/data.service";
 
 @Component({
   selector: 'app-register',
@@ -14,6 +15,7 @@ export class RegisterPage  {
     firstName: ['', [Validators.required]],
     lastName: ['', [Validators.required]],
     email: ['', [Validators.required, Validators.email]],
+    phone: ['', [Validators.minLength(9)]],
     password: ['', [Validators.required, Validators.minLength(6)]],
   });
 

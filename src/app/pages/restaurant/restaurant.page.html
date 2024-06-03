@@ -1,103 +1,71 @@
-<ion-header>
-  <ion-toolbar>
-    <ion-buttons slot="start">
-      <ion-back-button></ion-back-button>
-    </ion-buttons>
-    <ion-title>Restaurant</ion-title>
-    <ion-buttons slot="end">
-      <ion-button>
-        <ion-icon slot="icon-only" name="heart-outline"></ion-icon>
-      </ion-button>
-      <ion-button>
-        <ion-icon slot="icon-only" name="share-outline"></ion-icon>
-      </ion-button>
-      <ion-button>
-        <ion-icon slot="icon-only" name="ellipsis-horizontal-outline"></ion-icon>
-      </ion-button>
-    </ion-buttons>
-  </ion-toolbar>
-</ion-header>
-
-
 <ion-content>
-  <ion-card>
-    <ion-img src="https://via.placeholder.com/150" class="full-width-image"></ion-img>
-    <ion-card-header>
-      <ion-card-title>Restaurant</ion-card-title>
-      <ion-card-subtitle>5.0 ★★★★★ Ver reviews • Open • 180 m • €1.20 Delivery Fee</ion-card-subtitle>
-    </ion-card-header>
-    <ion-card-content>
-      <ion-segment [(ngModel)]="selectedSegment" (ionChange)="segmentChanged($event)">
-        <ion-segment-button value="menu">
-          <ion-label>Menu</ion-label>
-        </ion-segment-button>
-        <ion-segment-button value="drinks">
-          <ion-label>Drinks</ion-label>
-        </ion-segment-button>
-        <ion-segment-button value="desserts">
-          <ion-label>Dessert</ion-label>
-        </ion-segment-button>
-      </ion-segment>
-    </ion-card-content>
-  </ion-card>
+  <div class="flex w-full h-40 relative overflow-hidden">
+    <ion-img class="absolute object-contain " [src]="restaurant?.image_url"></ion-img>
+    <div class="flex h-fit p-2 w-full">
+      <ion-buttons>
+        <ion-back-button class="bg-white dark:bg-black rounded-full" defaultHref="/"></ion-back-button>
+      </ion-buttons>
 
-  
-  <div [ngSwitch]="selectedSegment">
-    <ion-list *ngSwitchCase="'menu'">
-      <ion-item *ngFor="let food of foods; let i = index">
-        <ion-thumbnail slot="start">
-          <img src="{{food.image_url}}" alt="Nuggets">
-        </ion-thumbnail>
-        <ion-label>
-          <h2>{{food.name}}</h2>
-          <p>{{food.price}}</p>
-          <p>{{food.description}}</p>
-        </ion-label>
-        <div class="quantity-controls" slot="end">
-          <ion-button fill="outline">
-            <ion-icon slot="icon-only" name="remove-circle-outline"></ion-icon>
-          </ion-button>
-          <span>{{ food.quantity }}</span>
-          <ion-button fill="outline">
-            <ion-icon slot="icon-only" name="add-circle-outline"></ion-icon>
-          </ion-button>
-        </div>
-      
-      </ion-item>
-    </ion-list>
-
-    <ion-list *ngSwitchCase="'drinks'">
-      <ion-item *ngFor="let drink of drinks; let i = index">
-        <ion-thumbnail slot="start">
-          <img src="{{drink.image_url}}" alt="Nuggets">
-        </ion-thumbnail>
-        <ion-label>
-          <h2>{{drink.name}}</h2>
-          <p>{{drink.price}}</p>
-          <p>{{drink.description}}</p>
-        </ion-label>
-        <ion-button fill="outline" slot="end">
-          <ion-icon slot="icon-only" name="add-circle-outline"></ion-icon>
+      <ion-buttons class="flex-1 flex gap-2 justify-end">
+        <ion-button class="bg-white dark:bg-black rounded-full">
+          <ion-icon slot="icon-only" name="heart-outline" class="text-2xl"></ion-icon>
         </ion-button>
-      </ion-item>
-    </ion-list>
-
-    <ion-list *ngSwitchCase="'desserts'">
-      <ion-item *ngFor="let dessert of desserts; let i = index">
-        <ion-thumbnail slot="start">
-          <img src="{{dessert.image_url}}" alt="Nuggets">
-        </ion-thumbnail>
-        <ion-label>
-          <h2>{{dessert.name}}</h2>
-          <p>{{dessert.price}}</p>
-          <p>{{dessert.description}}</p>
-        </ion-label>
-        <ion-button fill="outline" slot="end">
-          <ion-icon slot="icon-only" name="add-circle-outline"></ion-icon>
+        <ion-button class="bg-white dark:bg-black rounded-full">
+          <ion-icon slot="icon-only" name="share-social" class="text-2xl"></ion-icon>
         </ion-button>
-      </ion-item>
-    </ion-list>
+        <ion-button class="bg-white dark:bg-black rounded-full">
+          <ion-icon slot="icon-only" name="information-circle" class="text-2xl"></ion-icon>
+        </ion-button>
+      </ion-buttons>
+    </div>
   </div>
 
+
+  <div class="flex flex-col p-2">
+    <div class="text-2xl">{{ restaurant?.name }}</div>
+    <div class="flex flex-col gap-1">
+      <div class="flex gap-1 items-center text-lg text-yellow-400" (click)="openReviews()">
+        <div>{{ restaurant?.rating }}</div>
+        <ion-icon name="star" *ngFor="let star of [].constructor(restaurant?.filledStars)"></ion-icon>
+        <ion-icon name="star-half" *ngIf="restaurant?.semiFilledStars"></ion-icon>
+        <ion-icon name="star-outline" *ngFor="let star of [].constructor(restaurant?.emptyStars)"></ion-icon>
+      </div>
+      <div class="flex gap-2 items-center">
+        <p>{{ restaurant?.isOpen ? "Open" : "Closed" }}</p>
+        <p>{{ (restaurant?.distance !== undefined) ? Math.round((restaurant?.distance || 0 )* 10) / 10 : 'Unknown' }} km</p>
+        <p>{{ restaurant?.delivery_fee }} Delivery Fee</p>
+      </div>
+    </div>
+  </div>
+
+  <ion-segment [(ngModel)]="selectedSegment" (ionChange)="segmentChanged($event)">
+    <ion-segment-button value="menu">
+      <ion-label>Menu</ion-label>
+    </ion-segment-button>
+    <ion-segment-button value="drinks">
+      <ion-label>Drinks</ion-label>
+    </ion-segment-button>
+    <ion-segment-button value="desserts">
+      <ion-label>Dessert</ion-label>
+    </ion-segment-button>
+  </ion-segment>
+
+  <div [ngSwitch]="selectedSegment">
+    <div *ngSwitchCase="'menu'">
+      <app-item-card *ngFor="let food of foods" [item]="food"></app-item-card>
+    </div>
+
+    <div *ngSwitchCase="'drinks'">
+      <app-item-card *ngFor="let drink of drinks" [item]="drink"></app-item-card>
+    </div>
+
+    <div *ngSwitchCase="'desserts'">
+      <app-item-card *ngFor="let dessert of desserts" [item]="dessert"></app-item-card>
+    </div>
+  </div>
+
+  <div class="absolute left-0 bottom-0 w-full p-2" *ngIf="counter > 0">
+    <ion-button class="w-full" routerLink="/cart">View Basket</ion-button>
+  </div>
 
 </ion-content>

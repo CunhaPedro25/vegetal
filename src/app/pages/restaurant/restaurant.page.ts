@@ -1,6 +1,11 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
+import {ActivatedRoute, Router} from "@angular/router";
+import { Storage } from '@ionic/storage-angular'; // Import Ionic Storage
 import { DataService } from '../../services/data.service';
-import { count } from 'rxjs';
+import { Restaurant } from "../../models/restaurant.model";
+import { Item } from "../../models/item.model";
+import {Order} from "../../models/order.model";
+import {OrderItem} from "../../models/order-item.model";
 
 @Component({
   selector: 'app-restaurant',
@@ -9,34 +14,59 @@ import { count } from 'rxjs';
 })
 export class RestaurantPage implements OnInit {
 
-  public restaurant: number = 1;
-  public selectedSegment: string = 'menu';
-  public drinks: any[] = [];
-  public foods: any[] = [];
-  public desserts: any[] = [];
-  public items: any[] = [];
+  restaurant: Restaurant | undefined;
+  selectedSegment: string = 'menu';
+  drinks: Item[] = [];
+  foods: Item[] = [];
+  desserts: Item[] = [];
+  items: Item[] = [];
   rest: number = 1;
+  counter!: number;
 
   segmentChanged(event: any) {
     this.selectedSegment = event.detail.value;
+    this.cdr.detectChanges();
   }
 
   constructor(
-    private data: DataService
-  ) {}
+    private data: DataService,
+    private route: ActivatedRoute,
+    private cdr: ChangeDetectorRef,
+    private router: Router,
+    private storage: Storage // Inject the Storage service
+  ) { }
 
-  ngOnInit() {
-    this.getitems();
+  async ngOnInit() {
+    this.route.params.subscribe(async params => {
+      this.restaurant = await this.data.getRestaurant(+params['id']);
+    });
+    await this.getItems();
+    await this.loadItemCounters();
   }
 
-  async getitems() {
-    
-    this.items = await this.data.getItems(this.rest); 
-    console.log(this.items);
-    //meter items com contador de quantidade
-    this.items.forEach(item =>  item.count = 0);
-    this.foods = this.items.filter(item => item.category === 'food');
-    this.drinks = this.items.filter(item => item.category === 'drink');
-    this.desserts = this.items.filter(item => item.category === 'dessert');
+  async getItems() {
+    this.items = await this.data.getItems(this.rest);
+
+    this.foods = this.items.filter(item => item.type === 'Food');
+    this.drinks = this.items.filter(item => item.type === 'Drinks');
+    this.desserts = this.items.filter(item => item.type === 'Dessert');
   }
+
+  async loadItemCounters() {
+    await this.storage.create(); // Ensure storage is created
+    // Retrieve item counters from storage
+    for (let item of this.items) {
+      const counter = await this.storage.get(`item_${item.id}_counter`);
+      if (counter !== null) {
+        this.counter = counter;
+      }
+    }
+    this.cdr.detectChanges();
+  }
+
+  async openReviews() {
+    await this.router.navigate([`/reviews`, this.restaurant!.id]);
+  }
+
+  protected readonly Math = Math;
 }

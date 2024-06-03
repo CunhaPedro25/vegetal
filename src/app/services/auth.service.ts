@@ -70,8 +70,8 @@ export class AuthService {
     }
   }
 
-  signUp(credentials: {firstName: string, lastName: string, email: string; password: string}) {
-    return AuthService.supabase.auth.signUp({
+  async signUp(credentials: { firstName: string, lastName: string, email: string, phone: string | undefined, password: string }) {
+    const { data, error } = await AuthService.supabase.auth.signUp({
       email: credentials.email,
       password: credentials.password,
       options: {
@@ -80,7 +80,27 @@ export class AuthService {
           lastName: credentials.lastName,
         }
       }
-    })
+    });
+
+    const user = data.user;
+
+    if (user) {
+      // Insert user details into the `users` table
+      const { error: insertError } = await AuthService.supabase
+        .from('users')
+        .insert([{
+          id: user.id,
+          email: user.email,
+          phone: credentials.phone,
+          name: `${credentials.firstName} ${credentials.lastName}`
+        }]);
+
+      if (insertError) {
+        throw insertError;
+      }
+    }
+
+    return { user, error };
   }
 
   signIn(credentials: {email: string; password: string}) {

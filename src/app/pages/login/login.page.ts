@@ -12,7 +12,7 @@ import {Router} from "@angular/router";
 export class LoginPage implements OnInit {
   credentials = this.fb.nonNullable.group({
     email: ['', [Validators.required, Validators.email]],
-    password: ['', [Validators.required, Validators.minLength(6)]],
+    password: ['', [Validators.required]],
   })
 
   constructor(

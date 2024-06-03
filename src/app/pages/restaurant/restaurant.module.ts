@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 
 import { IonicModule } from '@ionic/angular';
-
+import { ItemCardComponent } from "../../components/item-card/item-card.component";
 import { RestaurantPageRoutingModule } from './restaurant-routing.module';
 
 import { RestaurantPage } from './restaurant.page';
@@ -15,6 +15,6 @@ import { RestaurantPage } from './restaurant.page';
     IonicModule,
     RestaurantPageRoutingModule
   ],
-  declarations: [RestaurantPage]
+  declarations: [RestaurantPage, ItemCardComponent]
 })
 export class RestaurantPageModule {}

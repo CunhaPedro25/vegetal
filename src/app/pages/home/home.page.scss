@@ -1,5 +1,5 @@
 ion-searchbar{
-  --background: #d9d9d4;
+  --background: var(--ion-card-background);
   --box-shadow: 0;
   --border-radius: 2rem;
 }
@@ -8,4 +8,9 @@ ion-searchbar{
 ion-chip.active {
   --background: var(--ion-color-primary);
   --color: var(--ion-color-light);
+}
+
+.floating-restaurants {
+  @apply flex flex-col gap-1 w-full absolute bottom-0 z-50;
+  background-color: var(--ion-background-color);
 }

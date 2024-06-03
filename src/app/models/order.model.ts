@@ -5,5 +5,5 @@ export interface Order {
   status: string;
   total_price: number;
   created_at: string;
-  delivery_type: number;
+  delivery_type: string;
 }

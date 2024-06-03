@@ -69,7 +69,9 @@ export class DataService {
       .eq('id', id)
       .single();
     if (error) throw error;
-    return data as Restaurant;
+    const restaurant = new Restaurant(data);
+    restaurant.calculateDistance(this.selectedAddress.latitude, this.selectedAddress.longitude);
+    return restaurant;
   }
 
   // Reviews

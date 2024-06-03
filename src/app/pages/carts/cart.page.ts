@@ -4,7 +4,7 @@ import {Order} from 'src/app/models/order.model';
 import {AuthService} from 'src/app/services/auth.service';
 
 @Component({
-  selector: 'app-cart',
+  selector: 'app-carts',
   templateUrl: './cart.page.html',
   styleUrls: ['./cart.page.scss'],
 })
@@ -21,8 +21,8 @@ export class CartPage implements OnInit {
     private authService: AuthService
   ) { }
 
-  ngOnInit(): void {
-    this.loadOrders();
+  async ngOnInit() {
+    await this.loadOrders();
   }
 
   async loadOrders() {

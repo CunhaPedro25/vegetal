@@ -3,26 +3,26 @@
 
 /** Ionic CSS Variables **/
 :root {
-  --ion-color-primary: #bbaf07;
-  --ion-color-primary-rgb: 187,175,7;
-  --ion-color-primary-contrast: #000000;
+  --ion-color-primary: #25A749;
+  --ion-color-primary-rgb: 37,167,73;
+  --ion-color-primary-contrast: #ffffff;
   --ion-color-primary-contrast-rgb: 0,0,0;
-  --ion-color-primary-shade: #a59a06;
-  --ion-color-primary-tint: #c2b720;
+  --ion-color-primary-shade: #1d893c;
+  --ion-color-primary-tint: #2abf55;
 
-  --ion-color-secondary: #92a4c8;
-  --ion-color-secondary-rgb: 146,164,200;
-  --ion-color-secondary-contrast: #000000;
+  --ion-color-secondary: #25A749;
+  --ion-color-secondary-rgb: 37,167,73;
+  --ion-color-secondary-contrast: #ffffff;
   --ion-color-secondary-contrast-rgb: 0,0,0;
-  --ion-color-secondary-shade: #8090b0;
-  --ion-color-secondary-tint: #9dadce;
+  --ion-color-secondary-shade: #1d893c;
+  --ion-color-secondary-tint: #2abf55;
 
-  --ion-color-tertiary: #0ccf61;
-  --ion-color-tertiary-rgb: 12,207,97;
-  --ion-color-tertiary-contrast: #000000;
+  --ion-color-tertiary: #25A749;
+  --ion-color-tertiary-rgb: 37,167,73;
+  --ion-color-tertiary-contrast: #ffffff;
   --ion-color-tertiary-contrast-rgb: 0,0,0;
-  --ion-color-tertiary-shade: #0bb655;
-  --ion-color-tertiary-tint: #24d471;
+  --ion-color-tertiary-shade: #1d893c;
+  --ion-color-tertiary-tint: #2abf55;
 
   --ion-color-success: #2dd55b;
   --ion-color-success-rgb: 45,213,91;
@@ -116,8 +116,8 @@
 */
 
 .md body {
-  --ion-background-color: #F5F5F0;
-  --ion-background-color-rgb: 245,245,240;
+  --ion-background-color: #ffffff;
+  --ion-background-color-rgb: 255,255,255;
 
   --ion-text-color: #111109;
   --ion-text-color-rgb: 17,17,9;
@@ -142,13 +142,13 @@
   --ion-color-step-900: #282820;
   --ion-color-step-950: #1c1c15;
 
-  --ion-item-background: #D5D5C2;
+  --ion-item-background: #F5F5F0;
 
-  --ion-toolbar-background: #D6D6C2;
+  --ion-toolbar-background: #F5F5F0;
 
-  --ion-tab-bar-background: #D6D6C2;
+  --ion-tab-bar-background: #F5F5F0;
 
-  --ion-card-background: #D5D5C2;
+  --ion-card-background: #F5F5F0;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -158,26 +158,26 @@
    */
 
   body {
-    --ion-color-primary: #f8ec44;
-    --ion-color-primary-rgb: 248,236,68;
-    --ion-color-primary-contrast: #000000;
+    --ion-color-primary: #25A749;
+    --ion-color-primary-rgb: 37,167,73;
+    --ion-color-primary-contrast: #ffffff;
     --ion-color-primary-contrast-rgb: 0,0,0;
-    --ion-color-primary-shade: #dad03c;
-    --ion-color-primary-tint: #f9ee57;
+    --ion-color-primary-shade: #1d893c;
+    --ion-color-primary-tint: #2abf55;
 
-    --ion-color-secondary: #37496d;
-    --ion-color-secondary-rgb: 55,73,109;
+    --ion-color-secondary: #25A749;
+    --ion-color-secondary-rgb: 37,167,73;
     --ion-color-secondary-contrast: #ffffff;
-    --ion-color-secondary-contrast-rgb: 255,255,255;
-    --ion-color-secondary-shade: #304060;
-    --ion-color-secondary-tint: #4b5b7c;
+    --ion-color-secondary-contrast-rgb: 0,0,0;
+    --ion-color-secondary-shade: #1d893c;
+    --ion-color-secondary-tint: #2abf55;
 
-    --ion-color-tertiary: #30f384;
-    --ion-color-tertiary-rgb: 48,243,132;
-    --ion-color-tertiary-contrast: #000000;
+    --ion-color-tertiary: #25A749;
+    --ion-color-tertiary-rgb: 37,167,73;
+    --ion-color-tertiary-contrast: #ffffff;
     --ion-color-tertiary-contrast-rgb: 0,0,0;
-    --ion-color-tertiary-shade: #2ad674;
-    --ion-color-tertiary-tint: #45f490;
+    --ion-color-tertiary-shade: #1d893c;
+    --ion-color-tertiary-tint: #2abf55;
 
     --ion-color-success: #2dd55b;
     --ion-color-success-rgb: 45,213,91;
@@ -272,8 +272,8 @@
    */
 
   .md body {
-    --ion-background-color: #0F0F0A;
-    --ion-background-color-rgb: 15,15,10;
+    --ion-background-color: #0b0b08;
+    --ion-background-color-rgb: 11,11,8;
 
     --ion-text-color: #F6F6EE;
     --ion-text-color-rgb: 246,246,238;
@@ -298,13 +298,13 @@
     --ion-color-step-900: #dfdfd7;
     --ion-color-step-950: #eaeae3;
 
-    --ion-item-background: #1e1e14;
+    --ion-item-background: #191910;
 
-    --ion-toolbar-background: #1F1F14;
+    --ion-toolbar-background: #191910;
 
-    --ion-tab-bar-background: #1F1F14;
+    --ion-tab-bar-background: #191910;
 
-    --ion-card-background: #1e1e14;
+    --ion-card-background: #191910;
   }
 }
 

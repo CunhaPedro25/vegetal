@@ -1,10 +1,14 @@
+export interface OpeningHours {
+  [day: string]: string[][];
+}
+
 export class Restaurant {
   id: number;
   name: string;
   image_url: string;
   address: string;
   phone: string;
-  opening_hours: string;
+  opening_hours: OpeningHours;
   created_at: string;
   rating: number;
   delivery_fee: number;
@@ -32,20 +36,24 @@ export class Restaurant {
     this.emptyStars = 5 - this.filledStars - this.semiFilledStars;
     this.distance = 0;
   }
+
   isOpen() {
     const currentDay = new Date().toLocaleString('en-us', { weekday: 'long' }).toLowerCase();
     const currentTime = new Date().toTimeString().split(' ')[0].slice(0, 5);
-    const hours = JSON.parse(this.opening_hours)[currentDay];
+    const hours = this.opening_hours[currentDay]; // Access directly without JSON.parse()
 
-    for (let period of hours) {
-      const [start, end] = period;
-      if (currentTime >= start && currentTime <= end) {
-        return true;
+    if (hours && hours.length > 0) {
+      for (let period of hours) {
+        const [start, end] = period;
+        if (currentTime >= start && currentTime <= end) {
+          return true;
+        }
       }
     }
 
     return false;
   }
+
 
   calculateDistance(userLatitude: number, userLongitude: number) {
     const R = 6371; // Radius of the Earth in km

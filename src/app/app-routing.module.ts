@@ -25,6 +25,10 @@ const routes: Routes = [
     path: 'address-search',
     loadChildren: () => import('./pages/address-search/address-search.module').then( m => m.AddressSearchPageModule)
   },
+  {
+    path: 'settings',
+    loadChildren: () => import('./pages/settings/settings.module').then( m => m.SettingsPageModule)
+  },
 ];
 @NgModule({
   imports: [

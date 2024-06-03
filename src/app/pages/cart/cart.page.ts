@@ -1,15 +1,49 @@
 import { Component, OnInit } from '@angular/core';
+import { DataService } from '../../services/data.service';
+import { Order } from 'src/app/models/order.model';
+import { AuthService } from 'src/app/services/auth.service';
 
 @Component({
   selector: 'app-cart',
   templateUrl: './cart.page.html',
   styleUrls: ['./cart.page.scss'],
 })
+
 export class CartPage implements OnInit {
 
-  constructor() { }
+  orders: Order[] = [];
+  restaurantInfo: { [key: string]: any } = {};
+  isLoading: boolean = true;
+  error: string | null = null;
 
-  ngOnInit() {
+  constructor(
+    private data: DataService,
+    private authService: AuthService
+  ) { }
+
+  ngOnInit(): void {
+    this.loadOrders();
   }
 
+  async loadOrders() {
+    try {
+      const userId = this.authService.getCurrentUserId() || '';
+      this.orders = await this.data.getUserOrders(userId);
+
+      for (let order of this.orders) {
+        const restaurant = await this.data.getRestaurant(order.restaurant_id);
+        this.restaurantInfo[order.restaurant_id] = restaurant;
+      }
+
+      this.isLoading = false;
+    } catch (err) {
+      this.error = 'Failed to load orders';
+      console.error(err);
+      this.isLoading = false;
+    }
+  }
+
+  getRestaurantInfo(id: string) {
+    return this.restaurantInfo[id] || {};
+  }
 }

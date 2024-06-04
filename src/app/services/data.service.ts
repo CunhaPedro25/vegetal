@@ -178,4 +178,49 @@ export class DataService {
     if (error) throw error;
     return data as Favorite[];
   }
+
+  async getRecentOrder(user: string | null, restaurant: number): Promise<Order> {
+    const { data, error } = await this.supabase
+      .from('orders')
+      .select()
+      .eq('user', user)
+      .eq('restaurant', restaurant)
+      .is('status', "NULL");
+    if (error) throw error;
+    console.log(data);
+    return data[0] as Order;
+  }
+
+  // Create Order
+  async createOrder(user: string | null, restaurant: number): Promise<Order> {
+    const { data, error } = await this.supabase
+      .from('orders')
+      .insert({ user: user, restaurant: restaurant })
+      .select()
+      .single();
+    if (error) throw error;
+    return data as Order;
+  }
+
+  // Create Order Item
+  async createOrderItem(order: number, item: number, quantity: number): Promise<OrderItem> {
+    const { data, error } = await this.supabase
+      .from('order_item')
+      .insert({order: order, item: item, quantity: quantity})
+      .single();
+    if (error) throw error;
+    return data as OrderItem;
+  }
+
+  async updateOrderItem(id: number, quantity: number): Promise<OrderItem> {
+    const { data, error } = await this.supabase
+      .from('order_item')
+      .update({quantity: quantity})
+      .eq('id', id)
+      .select()
+      .single();
+    if (error) throw error;
+    return data as OrderItem;
+  }
+
 }

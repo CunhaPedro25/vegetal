@@ -3,7 +3,7 @@
     <ion-img class="absolute object-contain " [src]="restaurant?.image_url"></ion-img>
     <div class="flex h-fit p-2 w-full">
       <ion-buttons>
-        <ion-back-button class="bg-white dark:bg-black rounded-full" defaultHref="/"></ion-back-button>
+        <ion-back-button class="bg-white dark:bg-black rounded-full" defaultHref="/" (click)="goBack()"></ion-back-button>
       </ion-buttons>
 
       <ion-buttons class="flex-1 flex gap-2 justify-end">

@@ -55,7 +55,7 @@ jobs:
           name: app-release
           path: ${{ github.workspace }}/packages/app/android/app/build/outputs/bundle/release/*.aab
 
-       - name: Create GitHub Release
+      - name: Create GitHub Release
         id: create_release
         uses: ncipollo/release-action@v1
         with:

@@ -7,7 +7,7 @@
       </ion-buttons>
 
       <ion-buttons class="flex-1 flex gap-2 justify-end">
-        <ion-button class="bg-white dark:bg-black rounded-full">
+        <ion-button class="round-button">
           <ion-icon slot="icon-only" name="heart-outline" class="text-2xl"></ion-icon>
         </ion-button>
         <ion-button class="bg-white dark:bg-black rounded-full">
@@ -25,10 +25,10 @@
     <div class="text-2xl">{{ restaurant?.name }}</div>
     <div class="flex flex-col gap-1">
       <div class="flex gap-1 items-center text-lg text-yellow-400" (click)="openReviews()">
-        <div>{{ restaurant?.rating }}</div>
         <ion-icon name="star" *ngFor="let star of [].constructor(restaurant?.filledStars)"></ion-icon>
         <ion-icon name="star-half" *ngIf="restaurant?.semiFilledStars"></ion-icon>
         <ion-icon name="star-outline" *ngFor="let star of [].constructor(restaurant?.emptyStars)"></ion-icon>
+        <div>{{ restaurant?.rating }}</div>
       </div>
       <div class="flex gap-2 items-center">
         <p>{{ restaurant?.isOpen ? "Open" : "Closed" }}</p>
@@ -52,14 +52,17 @@
 
   <div [ngSwitch]="selectedSegment">
     <div *ngSwitchCase="'menu'">
+      <div class="text-2xl font-bold text-black dark:text-white mx-4 mt-2">Menu</div>
       <app-item-card *ngFor="let food of foods" [item]="food"></app-item-card>
     </div>
 
     <div *ngSwitchCase="'drinks'">
+      <div class="text-2xl font-bold text-black dark:text-white mx-4 mt-2">Drinks</div>
       <app-item-card *ngFor="let drink of drinks" [item]="drink"></app-item-card>
     </div>
 
     <div *ngSwitchCase="'desserts'">
+      <div class="text-2xl font-bold text-black dark:text-white mx-4 mt-2">Desserts</div>
       <app-item-card *ngFor="let dessert of desserts" [item]="dessert"></app-item-card>
     </div>
   </div>

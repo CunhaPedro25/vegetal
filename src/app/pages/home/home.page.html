@@ -1,0 +1,38 @@
+<ion-content [fullscreen]="true">
+  <div class="flex flex-col h-full w-full">
+    <div class="flex flex-col gap-2 px-2">
+      <ion-searchbar placeholder="Search"></ion-searchbar>
+
+      <div class="flex gap-2 w-full justify-center">
+        <ion-chip (click)="changePage($event)">Delivery</ion-chip>
+        <ion-chip (click)="changePage($event)" class="active">Pick-up / Dine-in</ion-chip>
+      </div>
+
+      <div class="flex justify-between items-center max-w-full">
+        <div class="flex flex-1 gap-2 items-center truncate" (click)="openAddressSearch()">
+          <div class="truncate">{{ data.getSelectedAddress().address }}</div>
+        </div>
+
+        <ion-button shape="round" fill="clear" color="dark">
+          <ion-icon slot="icon-only" name="options" class="text-2xl"></ion-icon>
+        </ion-button>
+      </div>
+    </div>
+
+    <div class="relative flex flex-col w-full h-full flex-1 items-end">
+      <app-map class="top-0 left-0 h-full z-0" />
+
+      <div class="floating-restaurants">
+        <div class="text-2xl px-2">Restaurants In the Area</div>
+
+        <div *ngIf="restaurants.length > 0" class="flex max-w-full overflow-x-scroll snap-mandatory snap-x">
+          <app-restaurant-card class="snap-center" *ngFor="let restaurant of restaurants" [restaurant]="restaurant"></app-restaurant-card>
+        </div>
+
+        <div *ngIf="restaurants.length === 0" class="flex w-full h-40 justify-center items-center">
+          <div>No available restaurants</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</ion-content>

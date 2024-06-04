@@ -1,0 +1,54 @@
+<ion-content [fullscreen]="true">
+  <form (ngSubmit)="createAccount()" [formGroup]="credentials" class="w-full h-screen flex flex-col p-8">
+    <ion-img src="/assets/icon/vegetal.svg" />
+
+    <div class="flex flex-col gap-2">
+      <div class="flex gap-2">
+        <div class="w-full">
+          <ion-label>First Name</ion-label>
+          <ion-input type="text" formControlName="firstName"></ion-input>
+        </div>
+        <div class="w-full">
+          <ion-label>Last Name</ion-label>
+          <ion-input type="text" formControlName="lastName"></ion-input>
+        </div>
+      </div>
+
+
+      <div class="w-full">
+        <ion-label>Email</ion-label>
+        <ion-input type="email" formControlName="email"></ion-input>
+        <ion-note
+          *ngIf="(email.dirty || email.touched) && email.errors"
+          slot="error"
+        >
+          Please insert email correctly
+        </ion-note>
+      </div>
+      <div class="w-full">
+        <ion-label>Password</ion-label>
+        <ion-input type="password" formControlName="password"></ion-input>
+        <ion-note
+          *ngIf="(password.dirty || password.touched) && password.errors"
+          slot="error"
+        >
+          Please insert password correctly
+        </ion-note>
+      </div>
+    </div>
+
+    <div class="flex justify-between">
+      <ion-button shape="round" class="w-fit" routerLink="/login" color="dark">
+        <ion-icon name="arrow-back-outline"></ion-icon>
+      </ion-button>
+      <ion-button
+        type="submit"
+        shape="round"
+        class="w-fit"
+        [disabled]="credentials.invalid">
+        Next
+        <ion-icon name="arrow-foward-outline"></ion-icon>
+      </ion-button>
+    </div>
+  </form>
+</ion-content>

@@ -43,15 +43,9 @@ jobs:
         working-directory: android
         run: ./gradlew bundle
 
-      - name: Sign app APK
-        uses: r0adkll/sign-android-release@v1
-        id: sign_app
-        with:
-          releaseDirectory: android/app/build/outputs/apk/release/
-          signingKeyBase64: ${{ secrets.SIGNING_KEY }}
-          alias: ${{ secrets.ALIAS }}
-          keyStorePassword: ${{ secrets.KEY_STORE_PASSWORD }}
-          keyPassword: ${{ secrets.KEY_PASSWORD }}
+      - name: Sign APK using Gradle
+        working-directory: android
+        run: ./gradlew assembleRelease -Pandroid.injected.signing.store.file=${{ secrets.KEYSTORE_PATH }} -Pandroid.injected.signing.store.password=${{ secrets.KEYSTORE_PASSWORD }} -Pandroid.injected.signing.key.alias=${{ secrets.KEY_ALIAS }} -Pandroid.injected.signing.key.password=${{ secrets.KEY_PASSWORD }}
 
       - name: Upload dev APK
         uses: actions/upload-artifact@v4
@@ -66,7 +60,7 @@ jobs:
           name: app-release
           path: |
             android/app/build/outputs/bundle/release/*.aab
-            ${{ steps.sign_app.outputs.signedReleaseFile }}
+            android/app/build/outputs/apk/release/*.apk
           if-no-files-found: error
 
       - name: Create GitHub Release
@@ -75,6 +69,6 @@ jobs:
         with:
           artifacts: |
             android/app/build/outputs/bundle/release/*.aab
-            ${{ steps.sign_app.outputs.signedReleaseFile }}
+            android/app/build/outputs/apk/release/*.apk
           tag: v${{ steps.read-version.outputs.version-number }}
           token: ${{ secrets.GH_TOKEN }}

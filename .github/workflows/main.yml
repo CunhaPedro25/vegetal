@@ -43,10 +43,6 @@ jobs:
         working-directory: android
         run: ./gradlew bundle
 
-      - name: Sign APK using Gradle
-        working-directory: android
-        run: ./gradlew assembleRelease -Pandroid.injected.signing.store.file=${{ secrets.KEYSTORE_PATH }} -Pandroid.injected.signing.store.password=${{ secrets.KEYSTORE_PASSWORD }} -Pandroid.injected.signing.key.alias=${{ secrets.KEY_ALIAS }} -Pandroid.injected.signing.key.password=${{ secrets.KEY_PASSWORD }}
-
       - name: Upload dev APK
         uses: actions/upload-artifact@v4
         with:

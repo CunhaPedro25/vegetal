@@ -3,64 +3,58 @@ name: Build Android
 on: [push, pull_request]
 
 jobs:
-  build:
-    name: Build APK
+  prepare_tools:
+    name: Prepare tools to generate the APK
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout source
-        uses: actions/checkout@v4
+      - name: Get code from the current repository
+        uses: actions/checkout@v2
 
-      - name: Setup Java
-        uses: actions/setup-java@v4
+      - name: Install Java
+        uses: actions/setup-java@v1
         with:
-          distribution: 'temurin'
-          java-version: '17'
+          java-version: 17
 
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
+      - name: Install Android SDK
+        uses: android-actions/setup-android@v2
+
+      - name: Install Node.js
+        uses: actions/setup-node@v1
         with:
-          node-version: '20.x'
+          node-version: 18.x
 
       - name: Install Ionic
         run: npm install -g @ionic/cli
 
       - name: Install app dependencies
-        run: npm install
+        run: npm install --legacy-peer-deps
 
-      - name: Build Ionic App
-        run: ionic build
+      - name: Convert Windows line endings to Linux from the gradlew file
+        run: sudo apt update && sudo apt install dos2unix && cd android && dos2unix ./gradlew && cd ..
 
-      - name: Copy Android
-        run: ionic capacitor copy android
+      - name: Make ./gradlew command executable
+        run: cd android && chmod +x ./gradlew && cd ..
 
-      - name: Build Android Dev APK
-        run: ionic capacitor build android
+      - name: Build Ionic assets
+        run: ionic capacitor build android --prod
 
-      - name: Build Android Release APK
-        run: ionic capacitor build android --release --prod
+      - name: Copy generated assets from Ionic to Capacitor Android platform
+        run: npx cap copy android && npx cap update android
 
-      - name: Generate the Android App Bundle
-        working-directory: ./android/
-        run: ./gradlew bundle
+      - name: Generate APK
+        run: cd android && ./gradlew assembleDebug && cd ..
 
-      - name: Upload dev APK
-        uses: actions/upload-artifact@v1
+      - name: Upload generated APK to Github
+        uses: actions/upload-artifact@v3
         with:
-          name: app-dev
-          path: ${{ github.workspace }}/packages/app/android/app/build/outputs/apk/release/*.apk
-
-      - name: Upload release bundle
-        uses: actions/upload-artifact@v1
-        with:
-          name: app-release
-          path: ${{ github.workspace }}/packages/app/android/app/build/outputs/bundle/release/*.aab
+          name: app-generator-notifier
+          path: ./android/app/build/outputs/apk/debug/app-debug.apk
+          retention-days: 3
 
       - name: Create GitHub Release
         id: create_release
         uses: ncipollo/release-action@v1
         with:
-          artifacts: |
-            ${{ github.workspace }}/packages/app/android/app/build/outputs/apk/release/*.apk
-            ${{ github.workspace }}/packages/app/android/app/build/outputs/bundle/release/*.aab
+          artifacts: ./android/app/build/outputs/apk/debug/app-debug.apk
           tag: v${{ steps.read-version.outputs.version-number }}
           token: ${{ secrets.GH_TOKEN }}

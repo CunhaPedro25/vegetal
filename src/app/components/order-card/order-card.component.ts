@@ -13,15 +13,20 @@ export class OrderCardComponent  implements OnInit {
   @Input() order!: Order;
   restaurant: Restaurant | undefined;
   items_length: number = 0;
+  delivery: boolean = false;
 
   constructor(protected data: DataService,private router: Router,) { }
 
   async ngOnInit() {
     this.restaurant = await this.data.getRestaurant(this.order.restaurant)
     this.items_length = (await this.data.getOrderItems(this.order.id)).length
+    this.delivery = this.order.status !== "" && this.order.status !== null;
   }
 
   async openOrder(id: number) {
-    await this.router.navigate([`/cart`, id]);
+    if(this.delivery){
+      return await this.router.navigate([`/delivery`, id]);
+    }
+    return await this.router.navigate([`/cart`, id]);
   }
 }

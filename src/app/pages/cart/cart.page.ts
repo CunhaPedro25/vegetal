@@ -11,7 +11,7 @@ import {AuthService} from "../../services/auth.service";
   styleUrls: ['./cart.page.scss'],
 })
 export class CartPage implements OnInit, OnDestroy {
-  order!: Order;
+  order?: Order;
   orderItems?: OrderItem[];
   subscription!: any;
 
@@ -51,7 +51,7 @@ export class CartPage implements OnInit, OnDestroy {
   }
 
   async controlOrders({ item, count }: { item: number; count: number }) {
-    let order_items = await this.data.getOrderItems(this.order?.id);
+    let order_items = await this.data.getOrderItems(this.order!.id);
     let orderItem = order_items.find(x => x.item === item);
     if (orderItem) {
       // If the item exists in both sets but the count is different, update it
@@ -65,9 +65,13 @@ export class CartPage implements OnInit, OnDestroy {
       }
     } else {
       // If the item only exists in Ionic Storage, insert it
-      await this.data.createOrderItem(this.order.id, item, count);
+      await this.data.createOrderItem(this.order!.id, item, count);
     }
     this.cdr.detectChanges();
+  }
+
+  async goToPayment(){
+    await this.router.navigate([`/payment`, this.order?.id]);
   }
 
   ngOnDestroy() {

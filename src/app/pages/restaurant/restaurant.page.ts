@@ -5,6 +5,7 @@ import { Restaurant } from "../../models/restaurant.model";
 import { Item } from "../../models/item.model";
 import { AuthService } from 'src/app/services/auth.service';
 import {Order} from "../../models/order.model";
+import {LoadingController} from "@ionic/angular";
 
 @Component({
   selector: 'app-restaurant',
@@ -22,6 +23,7 @@ export class RestaurantPage implements OnInit, OnDestroy {
   items: Item[] = [];
   showBasket!: boolean;
   order: Order | undefined;
+  loaded?: boolean;
 
   segmentChanged(event: any) {
     this.selectedSegment = event.detail.value;
@@ -33,10 +35,15 @@ export class RestaurantPage implements OnInit, OnDestroy {
     private auth: AuthService,
     private route: ActivatedRoute,
     private cdr: ChangeDetectorRef,
+    private loadingController: LoadingController,
     private router: Router,
   ) { }
 
   async ngOnInit() {
+    const loading = await this.loadingController.create();
+    await loading.present();
+    this.loaded = false;
+
     this.route.params.subscribe(async (params) => {
       this.restaurant = await this.data.getRestaurant(+params['id']);
 
@@ -47,6 +54,8 @@ export class RestaurantPage implements OnInit, OnDestroy {
       }
 
       this.subscribeToChanges();
+      await loading.dismiss();
+      this.loaded = true
     });
   }
 

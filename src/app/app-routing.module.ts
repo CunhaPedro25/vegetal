@@ -42,8 +42,18 @@ const routes: Routes = [
     canActivate: [AuthGuard]
   },
   {
-    path: 'payment',
+    path: 'payment/:id',
     loadChildren: () => import('./pages/payment/payment.module').then( m => m.PaymentPageModule),
+    canActivate: [AuthGuard]
+  },
+  {
+    path: 'delivery/:id',
+    loadChildren: () => import('./pages/delivery/delivery.module').then( m => m.DeliveryPageModule),
+    canActivate: [AuthGuard]
+  },
+  {
+    path: 'review',
+    loadChildren: () => import('./pages/review/review.module').then( m => m.ReviewPageModule),
     canActivate: [AuthGuard]
   },
   {

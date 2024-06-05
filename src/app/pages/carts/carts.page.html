@@ -5,6 +5,7 @@
 </ion-header>
 
 <ion-content [fullscreen]="true" >
+  <app-order-card *ngFor="let order of deliveries" [order]="order"></app-order-card>
   <app-order-card *ngFor="let order of orders" [order]="order"></app-order-card>
 
   <div class="h-full w-full flex flex-col items-center text-center gap-2 p-4" *ngIf="orders?.length === 0">

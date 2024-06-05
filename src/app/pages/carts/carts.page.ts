@@ -2,6 +2,7 @@ import {ChangeDetectorRef, Component, OnDestroy, OnInit} from '@angular/core';
 import {DataService} from '../../services/data.service';
 import {Order} from 'src/app/models/order.model';
 import {AuthService} from 'src/app/services/auth.service';
+import {LoadingController} from "@ionic/angular";
 
 @Component({
   selector: 'app-carts',
@@ -11,31 +12,40 @@ import {AuthService} from 'src/app/services/auth.service';
 
 export class CartsPage implements OnInit, OnDestroy {
 
-  orders!: Order[];
+  orders?: Order[];
+  deliveries?: Order[];
   subscription: any;
 
   constructor(
     private data: DataService,
     private authService: AuthService,
+    private loadingController: LoadingController,
     private cdr: ChangeDetectorRef
   ) { }
 
   async ngOnInit() {
-    const userId = this.authService.getCurrentUserId()
-    if(userId)
-      this.orders = await this.data.getUserOrders(userId);
-
-    this.subscribeToChanges()
-    this.cdr.detectChanges();
+    await this.getInformation()
   }
 
   async ionViewWillEnter(){
+    await this.getInformation()
+  }
+
+  async getInformation(){
+    const loading = await this.loadingController.create();
+    await loading.present();
+
     const userId = this.authService.getCurrentUserId()
-    if(userId)
+    if(userId) {
       this.orders = await this.data.getUserOrders(userId);
+      this.deliveries = this.orders.filter(x => x.status !== null && x.status !== "")
+      this.orders = this.orders.filter(x => x.status == null || x.status == "")
+    }
 
     this.subscribeToChanges()
     this.cdr.detectChanges();
+
+    await loading.dismiss();
   }
 
   subscribeToChanges() {
@@ -49,20 +59,20 @@ export class CartsPage implements OnInit, OnDestroy {
 
   async handleChanges(payload: any) {
     const orderId = payload.old.id;
-    const existingOrderIndex = this.orders.findIndex(x => x.id === orderId);
+    let existingOrderIndex = this.orders!.findIndex(x => x.id === orderId);
 
     switch(payload.eventType) {
       case 'INSERT':
-        this.orders.push(payload.new);
+        this.orders?.push(payload.new);
         break;
       case 'UPDATE':
         if (existingOrderIndex !== -1) {
-          this.orders[existingOrderIndex] = payload.new;
+          this.orders![existingOrderIndex] = payload.new;
         }
         break;
       case 'DELETE':
         if (existingOrderIndex !== -1) {
-          this.orders.splice(existingOrderIndex, 1);
+          this.orders?.splice(existingOrderIndex, 1);
         }
         break;
       default:

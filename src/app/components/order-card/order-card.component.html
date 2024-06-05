@@ -5,17 +5,18 @@
     </ion-thumbnail>
   </div>
 
-  <div class="flex-1 p-2 pb-1 truncate text-lg flex flex-col justify-center">
+  <div class="flex-1 p-2 pb-1 truncate flex flex-col justify-center" [class]="this.delivery ? 'text-md' : 'text-lg'">
     <div class="text-xl font-bold text-black dark:text-white truncate">{{ restaurant?.name }}</div>
     <div class="flex gap-1 items-center">
       <div class="text-medium truncate">{{ items_length }} item{{ items_length === 1 ? "" : "s"}}</div>
-      <ion-icon name="ellipse" class="text-xs"></ion-icon>
+      <ion-icon name="ellipse" class="text-[0.4rem]"></ion-icon>
       <div class="text-medium truncate">{{ order.total_price }} €</div>
     </div>
     <div class="text-xs text-medium truncate">Delivery at {{ data.getSelectedAddress().address }}</div>
+    <ion-button *ngIf="this.delivery">Follow delivery</ion-button>
   </div>
 
-  <div class="flex items-center p-2">
+  <div class="flex items-center p-2" *ngIf="!this.delivery">
     <ion-icon name="chevron-forward" size="large"></ion-icon>
   </div>
   <ion-ripple-effect></ion-ripple-effect>

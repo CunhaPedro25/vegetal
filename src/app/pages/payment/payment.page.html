@@ -8,14 +8,26 @@
 </ion-header>
 
 <ion-content [fullscreen]="true">
-
-  <ion-card>
-    <ion-card-title>Payment Methods</ion-card-title>
-  </ion-card>
-
   <ion-radio-group value="strawberries">
     <ion-radio value="Credit" label-placement="end">Credit card</ion-radio><br />
     <ion-radio value="Paypel" label-placement="end" >Paypal</ion-radio><br />
     <ion-radio value="PayementOnDelivery" label-placement="end">Payment on Delivery</ion-radio><br />
   </ion-radio-group>
+
+
+  <div class="flex flex-col fixed w-full bottom-0 px-4 py-6 bg-white dark:bg-black border-t-[0.1rem]">
+    <div class="flex justify-between">
+      <div>Subtotal</div>
+      <div>{{ order?.subtotal }}€</div>
+    </div>
+    <div class="flex justify-between">
+      <div>Delivery_fee</div>
+      <div>{{ order?.delivery_fee }}€</div>
+    </div>
+    <div class="flex justify-between text-2xl font-bold mb-4">
+      <div>Total</div>
+      <div>{{ order?.total_price }}€</div>
+    </div>
+    <ion-button routerLink="/delivery/{{order?.id}}">Pay order</ion-button>
+  </div>
 </ion-content>

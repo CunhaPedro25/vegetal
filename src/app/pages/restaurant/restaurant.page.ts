@@ -41,7 +41,6 @@ export class RestaurantPage implements OnInit, OnDestroy {
 
   async ngOnInit() {
     const loading = await this.loadingController.create();
-    await loading.present();
     this.loaded = false;
 
     this.route.params.subscribe(async (params) => {

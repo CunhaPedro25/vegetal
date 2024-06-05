@@ -1,30 +1,49 @@
-<ion-card class="w-[20rem] h-[12rem] flex flex-col ion-activatable ripple-parent rounded-rectangle" (click)="openRestaurant(restaurant.id)">
-  <div class="flex-1 overflow-hidden relative rounded-lg mx-2 mt-2 object-center">
+<ion-card class="w-[20rem] h-[12rem] flex flex-col ion-activatable ripple-parent rounded-rectangle" (click)="openRestaurant()">
+  <div class="flex-1 overflow-hidden relative rounded-lg mx-2 mt-2 object-center" *ngIf="!skeleton">
     <ion-thumbnail class="w-full h-full">
-      <ion-img [src]="restaurant.image_url"></ion-img>
+      <ion-img [src]="restaurant?.image_url"></ion-img>
     </ion-thumbnail>
-    <div class="absolute top-0 z-10 bg-black/50 w-full h-full flex justify-center items-center" *ngIf="!restaurant.isOpen()">
+    <div class="absolute top-0 z-10 bg-black/50 w-full h-full flex justify-center items-center" *ngIf="!restaurant?.isOpen()">
       <div class="text-xl text-white">Closed</div>
     </div>
     <ion-icon class="absolute z-20 top-2 right-2 text-2xl text-white" aria-hidden="true" name="heart-outline"></ion-icon>
   </div>
 
-  <div class="max-h-1/3 min-h-1/3 p-2 pb-1">
-    <div class="text-xl text-black dark:text-white">{{ restaurant.name }}</div>
+  <div class="flex-1 overflow-hidden relative rounded-lg mx-2 mt-2 object-center" *ngIf="skeleton">
+    <ion-thumbnail class="w-full h-full">
+      <ion-skeleton-text></ion-skeleton-text>
+    </ion-thumbnail>
+  </div>
+
+  <div class="max-h-1/3 min-h-1/3 p-2 pb-1" *ngIf="!skeleton">
+    <div class="text-xl text-black dark:text-white">{{ restaurant?.name }}</div>
     <div class="flex flex-col">
       <div class="flex gap-1 items-center text-sm text-yellow-400">
-        <ion-icon name="star" *ngFor="let star of [].constructor(restaurant.filledStars)"></ion-icon>
-        <ion-icon name="star-half" *ngIf="restaurant.semiFilledStars"></ion-icon>
-        <ion-icon name="star-outline" *ngFor="let star of [].constructor(restaurant.emptyStars)"></ion-icon>
-        <div>{{ restaurant.rating }}</div>
+        <ion-icon name="star" *ngFor="let star of [].constructor(restaurant?.filledStars)"></ion-icon>
+        <ion-icon name="star-half" *ngIf="restaurant?.semiFilledStars"></ion-icon>
+        <ion-icon name="star-outline" *ngFor="let star of [].constructor(restaurant?.emptyStars)"></ion-icon>
+        <div>{{ restaurant?.rating }}</div>
       </div>
 
       <div class="flex gap-2">
-        <p>{{ restaurant.isOpen() ? "Open" : "Closed" }}</p>
-        <p>{{ Math.round((restaurant.distance || 0 ) * 10) / 10 }} km</p>
-        <p>{{ restaurant.delivery_fee }} Delivery Fee</p>
+        <p>{{ restaurant?.isOpen() ? "Open" : "Closed" }}</p>
+        <p>{{ Math.round((restaurant?.distance || 0 ) * 10) / 10 }} km</p>
+        <p>{{ restaurant?.delivery_fee }} Delivery Fee</p>
       </div>
     </div>
   </div>
-  <ion-ripple-effect></ion-ripple-effect>
+
+  <div class="max-h-1/3 min-h-1/3 p-2 pb-1" *ngIf="skeleton">
+    <ion-skeleton-text class="h-6"></ion-skeleton-text>
+    <div class="flex flex-col">
+      <ion-skeleton-text></ion-skeleton-text>
+
+      <div class="flex gap-2">
+        <ion-skeleton-text></ion-skeleton-text>
+        <ion-skeleton-text></ion-skeleton-text>
+        <ion-skeleton-text></ion-skeleton-text>
+      </div>
+    </div>
+  </div>
+  <ion-ripple-effect *ngIf="skeleton"></ion-ripple-effect>
 </ion-card>

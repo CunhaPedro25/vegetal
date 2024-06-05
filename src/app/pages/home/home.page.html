@@ -25,11 +25,17 @@
       <div class="floating-restaurants">
         <div class="text-2xl px-2 pt-4   font-bold">Restaurants In the Area</div>
 
-        <div *ngIf="restaurants.length > 0" class="flex max-w-full overflow-x-scroll snap-mandatory snap-x">
+
+        <div *ngIf="restaurants.length > 0 && loaded" class="flex max-w-full overflow-x-scroll snap-mandatory snap-x">
           <app-restaurant-card class="snap-center" *ngFor="let restaurant of restaurants" [restaurant]="restaurant"></app-restaurant-card>
         </div>
+        <div *ngIf="!loaded" class="flex max-w-full overflow-x-scroll snap-mandatory snap-x">
+          <app-restaurant-card class="snap-center" [skeleton]="true"></app-restaurant-card>
+          <app-restaurant-card class="snap-center" [skeleton]="true"></app-restaurant-card>
+          <app-restaurant-card class="snap-center" [skeleton]="true"></app-restaurant-card>
+        </div>
 
-        <div *ngIf="restaurants.length === 0" class="flex w-full h-40 justify-center items-center">
+        <div *ngIf="restaurants.length === 0 && loaded" class="flex w-full h-40 justify-center items-center">
           <div>No available restaurants</div>
         </div>
       </div>

@@ -62,9 +62,7 @@ export class MapComponent implements OnInit {
     }).addTo(this.map);
 
     this.map.whenReady(() => {
-      setTimeout(() => {
         this.map!.invalidateSize();
-      }, 1);
     });
   }
 

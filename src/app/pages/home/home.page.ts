@@ -13,6 +13,7 @@ import {Address} from "../../models/address.model";
 export class HomePage implements OnInit {
   restaurants: Restaurant[] = [];
   error: string | null = null;
+  loaded?: boolean;
 
   constructor(
     protected data: DataService,
@@ -24,12 +25,13 @@ export class HomePage implements OnInit {
   async loadRestaurants(){
     this.restaurants = []
     const loading = await this.loadingController.create();
-    await loading.present();
+    this.loaded = false
 
     this.data.getRestaurantsWithinRadius().then(async (data) => {
-      await loading.dismiss();
       this.restaurants = data
+      await loading.dismiss();
       this.cdr.detectChanges();
+      this.loaded = true
     })
   }
 

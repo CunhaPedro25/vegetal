@@ -4,6 +4,11 @@ import {AuthGuard} from "./guards/auth.guard";
 
 const routes: Routes = [
   {
+    path: '',
+    loadChildren: () => import('./tabs/tabs.module').then(m => m.TabsPageModule),
+    canActivate: [AuthGuard]
+  },
+  {
     path: 'login',
     loadChildren: () => import('./pages/login/login.module').then( m => m.LoginPageModule)
   },
@@ -13,11 +18,6 @@ const routes: Routes = [
   },
   {
     path: 'tabs',
-    loadChildren: () => import('./tabs/tabs.module').then(m => m.TabsPageModule),
-    canActivate: [AuthGuard]
-  },
-  {
-    path: '',
     loadChildren: () => import('./tabs/tabs.module').then(m => m.TabsPageModule),
     canActivate: [AuthGuard]
   },
@@ -32,24 +32,25 @@ const routes: Routes = [
     canActivate: [AuthGuard]
   },
   {
-    path: 'settings',
-    loadChildren: () => import('./pages/settings/settings.module').then( m => m.SettingsPageModule),
-    canActivate: [AuthGuard]
-  },
-  {
-    path: 'payment',
-    loadChildren: () => import('./pages/payment/payment.module').then( m => m.PaymentPageModule)
-  },
-  {
     path: 'reviews/:id',
     loadChildren: () => import('./pages/reviews/restaurant-reviews.module').then(m => m.RestaurantReviewsPageModule),
     canActivate: [AuthGuard]
   },
   {
-    path: 'cart',
-    loadChildren: () => import('./pages/cart/restaurant-cart.module').then(m => m.RestaurantCartPageModule)
+    path: 'cart/:id',
+    loadChildren: () => import('./pages/cart/cart.module').then(m => m.CartPageModule),
+    canActivate: [AuthGuard]
   },
-
+  {
+    path: 'payment',
+    loadChildren: () => import('./pages/payment/payment.module').then( m => m.PaymentPageModule),
+    canActivate: [AuthGuard]
+  },
+  {
+    path: 'settings',
+    loadChildren: () => import('./pages/settings/settings.module').then( m => m.SettingsPageModule),
+    canActivate: [AuthGuard]
+  }
 ];
 
 @NgModule({

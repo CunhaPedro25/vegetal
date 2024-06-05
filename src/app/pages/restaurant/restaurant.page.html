@@ -1,19 +1,21 @@
 <ion-content>
   <div class="flex w-full h-40 relative overflow-hidden">
-    <ion-img class="absolute object-contain " [src]="restaurant?.image_url"></ion-img>
-    <div class="flex h-fit p-2 w-full">
+    <ion-thumbnail class="w-full h-full">
+      <ion-img  [src]="restaurant?.image_url"></ion-img>
+    </ion-thumbnail>
+    <div class="flex h-fit p-2 w-full absolute top-2">
       <ion-buttons>
-        <ion-back-button class="bg-white dark:bg-black rounded-full" defaultHref="/" (click)="goBack()"></ion-back-button>
+        <ion-back-button class="round-button" defaultHref="/"></ion-back-button>
       </ion-buttons>
 
       <ion-buttons class="flex-1 flex gap-2 justify-end">
         <ion-button class="round-button">
           <ion-icon slot="icon-only" name="heart-outline" class="text-2xl"></ion-icon>
         </ion-button>
-        <ion-button class="bg-white dark:bg-black rounded-full">
+        <ion-button class="round-button">
           <ion-icon slot="icon-only" name="share-social" class="text-2xl"></ion-icon>
         </ion-button>
-        <ion-button class="bg-white dark:bg-black rounded-full">
+        <ion-button class="round-button">
           <ion-icon slot="icon-only" name="information-circle" class="text-2xl"></ion-icon>
         </ion-button>
       </ion-buttons>
@@ -53,22 +55,31 @@
   <div [ngSwitch]="selectedSegment">
     <div *ngSwitchCase="'menu'">
       <div class="text-2xl font-bold text-black dark:text-white mx-4 mt-2">Menu</div>
-      <app-item-card *ngFor="let food of foods" [item]="food"></app-item-card>
+      <app-item-card *ngFor="let menu of menus" [item]="menu" (emitter)="controlOrders($event)"></app-item-card>
+      <div class="w-full h-full flex justify-center items-center px-4 pt-12">
+        <div>Menu items unavailable</div>
+      </div>
     </div>
 
     <div *ngSwitchCase="'drinks'">
       <div class="text-2xl font-bold text-black dark:text-white mx-4 mt-2">Drinks</div>
-      <app-item-card *ngFor="let drink of drinks" [item]="drink"></app-item-card>
+      <app-item-card *ngFor="let drink of drinks" [item]="drink" (emitter)="controlOrders($event)"></app-item-card>
+      <div class="w-full h-full flex justify-center items-center px-4 pt-12">
+        <div>Drink items unavailable</div>
+      </div>
     </div>
 
     <div *ngSwitchCase="'desserts'">
       <div class="text-2xl font-bold text-black dark:text-white mx-4 mt-2">Desserts</div>
-      <app-item-card *ngFor="let dessert of desserts" [item]="dessert"></app-item-card>
+      <app-item-card *ngFor="let dessert of desserts" [item]="dessert" (emitter)="controlOrders($event)"></app-item-card>
+      <div class="w-full h-full flex justify-center items-center px-4 pt-12">
+        <div>Dessert items unavailable</div>
+      </div>
     </div>
   </div>
 
-  <div class="absolute left-0 bottom-0 w-full p-2" *ngIf="counter > 0">
-    <ion-button class="w-full" routerLink="/cart">View Basket</ion-button>
+  <div class="absolute left-0 bottom-0 w-full p-2" *ngIf="showBasket">
+    <ion-button class="w-full" (click)="openCart()">View Basket</ion-button>
   </div>
 
 </ion-content>

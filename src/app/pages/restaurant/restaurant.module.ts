@@ -9,12 +9,15 @@ import { RestaurantPageRoutingModule } from './restaurant-routing.module';
 import { RestaurantPage } from './restaurant.page';
 
 @NgModule({
-  imports: [
-    CommonModule,
-    FormsModule,
-    IonicModule,
-    RestaurantPageRoutingModule
-  ],
-  declarations: [RestaurantPage, ItemCardComponent]
+    imports: [
+        CommonModule,
+        FormsModule,
+        IonicModule,
+        RestaurantPageRoutingModule
+    ],
+    exports: [
+        ItemCardComponent
+    ],
+    declarations: [RestaurantPage, ItemCardComponent]
 })
 export class RestaurantPageModule {}

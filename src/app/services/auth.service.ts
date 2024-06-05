@@ -8,7 +8,6 @@ import {environment} from "../../environments/environment"
 import {BehaviorSubject, Observable} from "rxjs"
 import {Router} from "@angular/router"
 import {Users} from '../models/users.model';
-import {Restaurant} from "../models/restaurant.model";
 
 @Injectable({
   providedIn: 'root'
@@ -112,7 +111,7 @@ export class AuthService {
     await this.router.navigateByUrl("/login", {replaceUrl: true})
   }
 
-  static getSupabaseClient() {
+  static client() {
     return AuthService.supabase
   }
 }

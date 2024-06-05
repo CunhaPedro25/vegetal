@@ -19,11 +19,7 @@ export class HomePage implements OnInit {
     private modalController: ModalController,
     private loadingController: LoadingController,
     private cdr: ChangeDetectorRef
-  ) { }
-
-  async ngOnInit() {
-    await this.loadRestaurants()
-  }
+  ) {}
 
   async loadRestaurants(){
     this.restaurants = []
@@ -62,5 +58,9 @@ export class HomePage implements OnInit {
 
   changePage(event: any){
     console.log(event);
+  }
+
+  async ngOnInit() {
+    await this.loadRestaurants()
   }
 }

@@ -1,0 +1,22 @@
+<ion-card class="h-fit flex ion-activatable ripple-parent rounded-rectangle" (click)="openOrder(order.id)">
+  <div class="h-[6rem] w-[6rem] overflow-hidden relative rounded-lg m-2">
+    <ion-thumbnail class="w-full h-full">
+      <ion-img [src]="restaurant?.image_url"></ion-img>
+    </ion-thumbnail>
+  </div>
+
+  <div class="flex-1 p-2 pb-1 truncate text-lg flex flex-col justify-center">
+    <div class="text-xl font-bold text-black dark:text-white truncate">{{ restaurant?.name }}</div>
+    <div class="flex gap-1 items-center">
+      <div class="text-medium truncate">{{ items_length }} item{{ items_length === 1 ? "" : "s"}}</div>
+      <ion-icon name="ellipse" class="text-xs"></ion-icon>
+      <div class="text-medium truncate">{{ order.total_price }} €</div>
+    </div>
+    <div class="text-xs text-medium truncate">Delivery at {{ data.getSelectedAddress().address }}</div>
+  </div>
+
+  <div class="flex items-center p-2">
+    <ion-icon name="chevron-forward" size="large"></ion-icon>
+  </div>
+  <ion-ripple-effect></ion-ripple-effect>
+</ion-card>

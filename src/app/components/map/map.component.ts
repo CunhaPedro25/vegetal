@@ -1,7 +1,6 @@
-import { Component, OnInit, Input } from '@angular/core';
+import {Component, OnInit, Input} from '@angular/core';
 import * as Leaflet from "leaflet";
 import { DataService } from "../../services/data.service";
-import { Restaurant } from "../../models/restaurant.model";
 
 @Component({
   selector: 'app-map',
@@ -25,7 +24,7 @@ export class MapComponent implements OnInit {
     });
 
     const tiles = Leaflet.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png', {
-      maxZoom: 18,
+      maxZoom: 30,
       attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
     });
 
@@ -61,6 +60,12 @@ export class MapComponent implements OnInit {
       }),
       title: "Your location"
     }).addTo(this.map);
+
+    this.map.whenReady(() => {
+      setTimeout(() => {
+        this.map!.invalidateSize();
+      }, 1);
+    });
   }
 
   async ngOnInit() {

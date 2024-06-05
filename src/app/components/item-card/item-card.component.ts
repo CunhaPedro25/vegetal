@@ -1,7 +1,8 @@
-import {ChangeDetectorRef, Component, Input, OnInit} from '@angular/core';
-import {Restaurant} from "../../models/restaurant.model";
+import {ChangeDetectorRef, Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {Item} from "../../models/item.model";
-import { Storage } from '@ionic/storage-angular';
+import {DataService} from "../../services/data.service";
+import {AuthService} from "../../services/auth.service";
+import {OrderItem} from "../../models/order-item.model";
 
 @Component({
   selector: 'app-item-card',
@@ -9,38 +10,40 @@ import { Storage } from '@ionic/storage-angular';
   styleUrls: ['./item-card.component.scss'],
 })
 export class ItemCardComponent  implements OnInit {
-  @Input() item!: Item;
+  @Input() item?: Item;
+  @Input() orderItem?: OrderItem;
+  @Output() emitter: any
   counter!: number;
 
-  constructor(private storage: Storage, private cdr: ChangeDetectorRef) { }
+  constructor(private data: DataService, private auth: AuthService, private cdr: ChangeDetectorRef) {
+    this.emitter = new EventEmitter<{ item: any, count: number }>()
+  }
 
   async ngOnInit() {
-    this.counter = 0;
-    await this.storage.create();
-    await this.storage.get(`item_${this.item.id}_counter`).then((value) => {
-      if (value !== null) {
-        this.counter = value;
+    if(this.item) {
+      this.counter = 0;
+      const order = await this.data.getRecentOrder(this.auth.getCurrentUserId(), this.item!.restaurant)
+      if (order) {
+        const orderItem = await this.data.getOrderItemByItem(order.id, this.item!.id)
+        if (orderItem) {
+          this.counter = orderItem.quantity;
+        }
       }
-    });
-    this.cdr.detectChanges();
+    }else if(this.orderItem){
+      this.counter = this.orderItem.quantity;
+      this.item = await this.data.getItem(this.orderItem.item)
+    }
   }
 
   async incrementCounter() {
-    this.counter++;
-    await this.saveCounter();
+    this.emitter?.emit({ item: this.item!.id, count: ++this.counter});
     this.cdr.detectChanges();
   }
 
   async decrementCounter() {
     if (this.counter > 0) {
-      this.counter--;
-      await this.saveCounter();
+      this.emitter?.emit({ item: this.item!.id, count: --this.counter});
       this.cdr.detectChanges();
     }
-  }
-
-   private async saveCounter() {
-    // Save the counter value to Ionic Storage
-    await this.storage.set(`item_${this.item.id}_counter`, this.counter);
   }
 }

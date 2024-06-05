@@ -9,7 +9,6 @@ import {Item} from '../models/item.model';
 import {Order} from '../models/order.model';
 import {OrderItem} from '../models/order-item.model';
 import {Delivery} from '../models/delivery.model';
-import {DeliveryType} from '../models/delivery-type.model';
 import {Category} from '../models/category.model';
 import {Favorite} from '../models/favorite.model';
 
@@ -35,7 +34,7 @@ export class DataService {
   }
 
   constructor() {
-    this.supabase = AuthService.getSupabaseClient();
+    this.supabase = AuthService.client();
   }
 
   // Restaurants
@@ -94,7 +93,9 @@ export class DataService {
     return data as UserAddress[];
   }
 
-  // Items
+
+
+  // ------ Items -------
   async getItems(restaurant: number): Promise<Item[]> {
     const { data, error } = await this.supabase
       .from('items')
@@ -104,25 +105,17 @@ export class DataService {
     return data as Item[];
   }
 
-  // Orders
-  async getUserOrders(user: string): Promise<Order[]> {
+  async getItem(id: number): Promise<Item> {
     const { data, error } = await this.supabase
-      .from('orders')
+      .from('items')
       .select('*')
-      .eq('user', user);
+      .eq('id', id)
+      .single();
     if (error) throw error;
-    return data as Order[];
+    return data as Item;
   }
 
-  // Order Items
-  async getOrderItems(order: number): Promise<OrderItem[]> {
-    const { data, error } = await this.supabase
-      .from('order_items')
-      .select('*')
-      .eq('order', order);
-    if (error) throw error;
-    return data as OrderItem[];
-  }
+
 
   // Deliveries
   async getDelivery(order: number): Promise<Delivery> {
@@ -133,15 +126,6 @@ export class DataService {
       .single();
     if (error) throw error;
     return data as Delivery;
-  }
-
-  // Delivery Types
-  async getDeliveryTypes(): Promise<DeliveryType[]> {
-    const { data, error } = await this.supabase
-      .from('delivery_types')
-      .select('*');
-    if (error) throw error;
-    return data as DeliveryType[];
   }
 
   // Categories
@@ -179,6 +163,26 @@ export class DataService {
     return data as Favorite[];
   }
 
+  // ------ Order ------
+  async getOrder(id: number): Promise<Order> {
+    const { data, error } = await this.supabase
+      .from('orders')
+      .select('*')
+      .eq('id', id)
+      .single();
+    if (error) throw error;
+    return data as Order;
+  }
+
+  async getUserOrders(user: string): Promise<Order[]> {
+    const { data, error } = await this.supabase
+      .from('orders')
+      .select('*')
+      .eq('user', user);
+    if (error) throw error;
+    return data as Order[];
+  }
+
   async getRecentOrder(user: string | null, restaurant: number): Promise<Order> {
     const { data, error } = await this.supabase
       .from('orders')
@@ -187,11 +191,9 @@ export class DataService {
       .eq('restaurant', restaurant)
       .is('status', "NULL");
     if (error) throw error;
-    console.log(data);
     return data[0] as Order;
   }
 
-  // Create Order
   async createOrder(user: string | null, restaurant: number): Promise<Order> {
     const { data, error } = await this.supabase
       .from('orders')
@@ -202,7 +204,28 @@ export class DataService {
     return data as Order;
   }
 
-  // Create Order Item
+
+
+  // ------ Order Items ------
+  async getOrderItems(order: number): Promise<OrderItem[]> {
+    const { data, error } = await this.supabase
+      .from('order_item')
+      .select('*')
+      .eq('"order"', order);
+    if (error) throw error;
+    return data as OrderItem[];
+  }
+
+  async getOrderItemByItem(order: number, item: number): Promise<OrderItem> {
+    const { data, error } = await this.supabase
+      .from('order_item')
+      .select('*')
+      .eq('"order"', order)
+      .eq('item', item);
+    if (error) throw error;
+    return data[0] as OrderItem;
+  }
+
   async createOrderItem(order: number, item: number, quantity: number): Promise<OrderItem> {
     const { data, error } = await this.supabase
       .from('order_item')
@@ -212,15 +235,12 @@ export class DataService {
     return data as OrderItem;
   }
 
-  async updateOrderItem(id: number, quantity: number): Promise<OrderItem> {
+  async updateOrderItem(id: number, quantity: number) {
     const { data, error } = await this.supabase
       .from('order_item')
       .update({quantity: quantity})
       .eq('id', id)
-      .select()
-      .single();
     if (error) throw error;
-    return data as OrderItem;
   }
 
 }

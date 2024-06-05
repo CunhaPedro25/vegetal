@@ -13,7 +13,7 @@ const routes: Routes = [
       },
       {
         path: 'carts',
-        loadChildren: () => import('../pages/carts/cart.module').then(m => m.CartPageModule)
+        loadChildren: () => import('../pages/carts/carts.module').then(m => m.CartsPageModule)
       },
       {
         path: 'activity',

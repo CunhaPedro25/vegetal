@@ -5,7 +5,7 @@ import { Restaurant } from "../../models/restaurant.model";
 import { Item } from "../../models/item.model";
 import { AuthService } from 'src/app/services/auth.service';
 import {Order} from "../../models/order.model";
-import {LoadingController} from "@ionic/angular";
+import {LoadingController, NavController} from "@ionic/angular";
 
 @Component({
   selector: 'app-restaurant',
@@ -37,6 +37,7 @@ export class RestaurantPage implements OnInit, OnDestroy {
     private cdr: ChangeDetectorRef,
     private loadingController: LoadingController,
     private router: Router,
+    private navCtrl: NavController,
   ) { }
 
   async ngOnInit() {
@@ -85,7 +86,7 @@ export class RestaurantPage implements OnInit, OnDestroy {
   }
 
   async openReviews() {
-    await this.router.navigate([`/reviews`, this.restaurant!.id]);
+    await this.navCtrl.navigateForward("/reviews")
   }
 
   async controlOrders({ item, count }: { item: number; count: number }) {

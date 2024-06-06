@@ -1,9 +1,9 @@
-<ion-card class="w-[20rem] h-[12rem] flex flex-col ion-activatable ripple-parent rounded-rectangle" (click)="openRestaurant()">
+<ion-card class="h-[12rem] flex flex-col ion-activatable ripple-parent rounded-rectangle" [class]="full_width ? 'w-full m-0' : 'w-[20rem]'" (click)="openRestaurant()">
   <div class="flex-1 overflow-hidden relative rounded-lg mx-2 mt-2 object-center" *ngIf="!skeleton">
     <ion-thumbnail class="w-full h-full">
       <ion-img [src]="restaurant?.image_url"></ion-img>
     </ion-thumbnail>
-    <div class="absolute top-0 z-10 bg-black/50 w-full h-full flex justify-center items-center" *ngIf="!restaurant?.isOpen()">
+    <div class="absolute top-0 z-10 bg-black/70 w-full h-full flex justify-center items-center" *ngIf="!restaurant?.isOpen()">
       <div class="text-xl text-white">Closed</div>
     </div>
     <ion-icon class="absolute z-20 top-2 right-2 text-2xl text-white" aria-hidden="true" name="heart-outline"></ion-icon>
@@ -45,5 +45,5 @@
       </div>
     </div>
   </div>
-  <ion-ripple-effect *ngIf="skeleton"></ion-ripple-effect>
+  <ion-ripple-effect *ngIf="!skeleton"></ion-ripple-effect>
 </ion-card>

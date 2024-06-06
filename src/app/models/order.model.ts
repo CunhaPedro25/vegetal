@@ -1,3 +1,5 @@
+import {Address} from "./address.model";
+
 export interface Order {
   id: number;
   user: string;
@@ -8,4 +10,6 @@ export interface Order {
   total_price: number;
   created_at: string;
   delivery_type: string;
+  delivery_info: Address;
+  delivery_time: string;
 }

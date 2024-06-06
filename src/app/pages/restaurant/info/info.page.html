@@ -1,0 +1,90 @@
+<ion-content [fullscreen]="true">
+  <div class="flex w-full h-48 relative overflow-hidden">
+    <ion-thumbnail class="w-full h-full relative">
+      <app-map *ngIf="loaded" [longitude]="restaurant?.longitude" [latitude]="restaurant?.latitude" [showControls]="false"></app-map>
+      <ion-skeleton-text *ngIf="!loaded" [animated]="true"></ion-skeleton-text>
+    </ion-thumbnail>
+
+    <div class="flex h-fit p-2 w-full absolute top-2 z-[1000]">
+      <ion-buttons>
+        <ion-back-button class="round-button" defaultHref="/"></ion-back-button>
+      </ion-buttons>
+
+      <ion-buttons class="flex-1 flex gap-2 justify-end">
+        <ion-button class="round-button">
+          <ion-icon slot="icon-only" name="heart-outline" class="text-2xl"></ion-icon>
+        </ion-button>
+        <ion-button class="round-button">
+          <ion-icon slot="icon-only" name="share-social" class="text-2xl"></ion-icon>
+        </ion-button>
+      </ion-buttons>
+    </div>
+  </div>
+
+  <div class="flex flex-col p-2">
+    <div *ngIf="loaded" class="text-2xl truncate">{{ restaurant?.name }}</div>
+    <ion-skeleton-text class="h-6 rounded-lg" *ngIf="!loaded" [animated]="true"></ion-skeleton-text>
+
+    <div class="flex flex-col gap-1">
+      <div class="flex gap-1 items-center text-lg text-yellow-400" *ngIf="loaded">
+        <ion-icon name="star" *ngFor="let star of [].constructor(restaurant?.filledStars)"></ion-icon>
+        <ion-icon name="star-half" *ngIf="restaurant?.semiFilledStars"></ion-icon>
+        <ion-icon name="star-outline" *ngFor="let star of [].constructor(restaurant?.emptyStars)"></ion-icon>
+        <div>{{ restaurant?.rating }}</div>
+      </div>
+      <ion-skeleton-text class="w-2/4 rounded-lg"  *ngIf="!loaded" [animated]="true"></ion-skeleton-text>
+
+      <div class="flex gap-2 items-center truncate text-black/60 dark:text-white/60" *ngIf="loaded">
+        <p class="truncate" [class]="restaurant?.isOpen() ? 'text-green-500' : ''">{{ restaurant?.isOpen() ? "Open" : "Closed" }}</p>
+        <ion-icon name="ellipse" class="text-[0.4rem]"></ion-icon>
+        <p class="truncate">{{ (restaurant?.distance !== undefined) ? Math.round((restaurant?.distance || 0 )* 10) / 10 : 'Unknown' }} km</p>
+        <ion-icon name="ellipse" class="text-[0.4rem]"></ion-icon>
+        <p class="truncate">{{ restaurant?.delivery_fee }} € Delivery Fee</p>
+      </div>
+      <div class="flex gap-2 items-center" *ngIf="!loaded">
+        <ion-skeleton-text class="w-1/4 rounded-lg" [animated]="true"></ion-skeleton-text>
+        <ion-skeleton-text class="w-1/4 rounded-lg" [animated]="true"></ion-skeleton-text>
+        <ion-skeleton-text class="w-1/4 rounded-lg" [animated]="true"></ion-skeleton-text>
+      </div>
+    </div>
+  </div>
+
+  <ion-list *ngIf="loaded">
+    <ion-item>
+      <ion-icon aria-hidden="true" name="location" color="primary" slot="start"></ion-icon>
+      <ion-label>{{ restaurant?.address }}</ion-label>
+    </ion-item>
+
+    <ion-item lines="none">
+      <ion-icon aria-hidden="true" name="time" color="primary" slot="start"></ion-icon>
+      <ion-label> {{ restaurant?.isOpen() ? "Open" : "Closed" }} </ion-label>
+    </ion-item>
+
+    <ion-item class="text-sm pl-16">
+      <div class="grid grid-cols-2 grid-flow-row gap-y-2 pb-4">
+        <ng-container *ngFor="let day of days">
+          <ion-label class="capitalize">{{ day }}</ion-label>
+
+          <div>
+            <div class="flex flex-col gap-1" *ngIf="opening_hours[day].length > 0">
+              <div *ngFor="let hours of opening_hours[day]">{{hours[0]}} - {{hours[1]}}</div>
+            </div>
+
+            <ion-label *ngIf="opening_hours[day].length === 0">Closed</ion-label>
+          </div>
+        </ng-container>
+      </div>
+    </ion-item>
+
+    <ion-item button detail="true"  routerLink="../reviews">
+      <ion-icon aria-hidden="true" color="primary" name="star" slot="start"></ion-icon>
+      <ion-label>{{ restaurant?.rating }}</ion-label>
+    </ion-item>
+    <ion-item button detail="true" color="primary"  routerLink="../review">
+      <ion-icon aria-hidden="true" name="create" slot="start"></ion-icon>
+      <ion-label>Write a review</ion-label>
+    </ion-item>
+  </ion-list>
+
+
+</ion-content>

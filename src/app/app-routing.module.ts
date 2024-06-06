@@ -32,28 +32,18 @@ const routes: Routes = [
     canActivate: [AuthGuard]
   },
   {
-    path: 'reviews/:id',
-    loadChildren: () => import('./pages/reviews/restaurant-reviews.module').then(m => m.RestaurantReviewsPageModule),
-    canActivate: [AuthGuard]
-  },
-  {
     path: 'cart/:id',
     loadChildren: () => import('./pages/cart/cart.module').then(m => m.CartPageModule),
     canActivate: [AuthGuard]
   },
   {
-    path: 'payment/:id',
-    loadChildren: () => import('./pages/payment/payment.module').then( m => m.PaymentPageModule),
+    path: 'checkout/:id',
+    loadChildren: () => import('./pages/checkout/checkout.module').then(m => m.CheckoutPageModule),
     canActivate: [AuthGuard]
   },
   {
     path: 'delivery/:id',
     loadChildren: () => import('./pages/delivery/delivery.module').then( m => m.DeliveryPageModule),
-    canActivate: [AuthGuard]
-  },
-  {
-    path: 'review',
-    loadChildren: () => import('./pages/review/review.module').then( m => m.ReviewPageModule),
     canActivate: [AuthGuard]
   },
   {

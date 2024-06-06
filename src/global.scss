@@ -39,3 +39,50 @@
 /* @import "@ionic/angular/css/palettes/dark.always.css"; */
 //@import "@ionic/angular/css/palettes/dark.class.css";
 @import "@ionic/angular/css/palettes/dark.system.css";
+
+/* Custom Global Styles */
+.round-button {
+  @apply rounded-full;
+  --background: var(--ion-background-color) !important;
+}
+
+ion-input, ion-textarea {
+  @apply rounded-xl bg-gray-200 dark:bg-white/20 flex-1;
+  --padding-start: 1rem !important;
+  --highlight-height: 0 !important;
+}
+
+ion-textarea {
+  --padding-end: 1rem !important;
+  --padding-bottom: 1rem !important;
+}
+
+ion-chip.active {
+  --background: var(--ion-color-primary);
+  --color: var(--ion-color-light);
+}
+
+ion-card {
+  box-shadow: 0 0;
+  @apply rounded-lg;
+}
+
+.sc-ion-searchbar-md-h, .sc-ion-searchbar-ios-h {
+  --background: var(--ion-card-background);
+  --box-shadow: 0 !important;
+  --border-radius: 2rem;
+}
+
+ion-button{
+  --box-shadow: 0 0;
+  --border-radius: 2rem;
+  @apply font-semibold capitalize;
+}
+
+ion-list {
+  background: var(--ion-background-color) !important;
+}
+
+ion-item {
+  --background: var(--ion-background-color) !important;
+}

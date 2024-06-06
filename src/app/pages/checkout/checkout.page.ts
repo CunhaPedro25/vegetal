@@ -5,11 +5,11 @@ import {DataService} from "../../services/data.service";
 import {ActivatedRoute, Router} from "@angular/router";
 
 @Component({
-  selector: 'app-payment',
-  templateUrl: './payment.page.html',
-  styleUrls: ['./payment.page.scss'],
+  selector: 'app-checkout',
+  templateUrl: './checkout.page.html',
+  styleUrls: ['./checkout.page.scss'],
 })
-export class PaymentPage implements OnInit {
+export class CheckoutPage implements OnInit {
   order?: Order;
   orderItems?: OrderItem[];
 

@@ -3,14 +3,19 @@
     <div class="flex flex-col gap-2 px-2">
       <ion-searchbar placeholder="Search"></ion-searchbar>
 
-      <div class="flex gap-2 w-full justify-center">
-        <ion-chip (click)="changePage($event)">Delivery</ion-chip>
-        <ion-chip (click)="changePage($event)" class="active">Pick-up / Dine-in</ion-chip>
-      </div>
+      <ion-radio-group [(ngModel)]="tab" (ngModelChange)="onTabChange()" name="reviewType" class="flex gap-2 w-full justify-center">
+        <ion-radio slot="start" value="delivery">
+          <ion-chip [class]=" tab === 'delivery' ?  'active' : ''">Delivery</ion-chip>
+        </ion-radio>
+        <ion-radio slot="start" value="dine-in">
+          <ion-chip [class]=" tab === 'dine-in' ?  'active' : ''">Pick-up / Dine-in</ion-chip>
+        </ion-radio>
+      </ion-radio-group>
 
-      <div class="flex justify-between items-center max-w-full">
+      <div class="flex justify-between items-center max-w-full gap-5">
         <div class="flex flex-1 gap-2 items-center truncate" (click)="openAddressSearch()">
           <div class="truncate">{{ data.getSelectedAddress().address }}</div>
+          <ion-icon name="chevron-down-outline"></ion-icon>
         </div>
 
         <ion-button shape="round" fill="clear" color="dark">
@@ -19,7 +24,17 @@
       </div>
     </div>
 
-    <div class="relative flex flex-col w-full h-full flex-1 items-end">
+    <div class="relative flex flex-col w-full h-full items-center p-2 gap-2" *ngIf="tab === 'delivery'">
+      <app-restaurant-card class="w-full" *ngFor="let restaurant of restaurants" [full_width]="true" [restaurant]="restaurant"></app-restaurant-card>
+
+      <app-restaurant-card class="w-full" [full_width]="true" [skeleton]="true" *ngIf="!loaded"></app-restaurant-card>
+      <app-restaurant-card class="w-full" [full_width]="true" [skeleton]="true" *ngIf="!loaded"></app-restaurant-card>
+      <app-restaurant-card class="w-full" [full_width]="true" [skeleton]="true" *ngIf="!loaded"></app-restaurant-card>
+
+      <div *ngIf="restaurants.length === 0 && loaded" >No available restaurants</div>
+    </div>
+
+    <div class="relative flex flex-col w-full h-full flex-1 items-end" *ngIf="tab === 'dine-in'">
       <app-map class="top-0 left-0 h-full z-0" />
 
       <div class="floating-restaurants">

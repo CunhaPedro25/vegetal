@@ -1,9 +1,11 @@
-import {ChangeDetectorRef, Component, OnInit} from '@angular/core';
+import {ChangeDetectorRef, Component, OnInit, ViewChild} from '@angular/core';
 import {LoadingController, ModalController} from '@ionic/angular';
 import { AddressSearchPage } from '../address-search/address-search.page';
 import { DataService } from '../../services/data.service';
 import { Restaurant } from '../../models/restaurant.model';
 import {Address} from "../../models/address.model";
+import {Storage} from "@ionic/storage-angular";
+import {MapComponent} from "../../components/map/map.component";
 
 @Component({
   selector: 'app-home',
@@ -11,14 +13,18 @@ import {Address} from "../../models/address.model";
   styleUrls: ['./home.page.scss'],
 })
 export class HomePage implements OnInit {
+  @ViewChild(MapComponent) mapComponent: MapComponent | undefined;
+
   restaurants: Restaurant[] = [];
   error: string | null = null;
   loaded?: boolean;
+  tab: string = "delivery";
 
   constructor(
     protected data: DataService,
     private modalController: ModalController,
     private loadingController: LoadingController,
+    private storage: Storage,
     private cdr: ChangeDetectorRef
   ) {}
 
@@ -52,17 +58,20 @@ export class HomePage implements OnInit {
 
         this.data.setSelectedAddress(address);
         await this.loadRestaurants()
+        this.mapComponent?.updateMap();
       }
     });
 
     return await modal.present();
   }
 
-  changePage(event: any){
-    console.log(event);
+  async onTabChange() {
+    await this.storage.set(`tab`, this.tab)
   }
 
   async ngOnInit() {
+    await this.storage.create()
+    this.tab = await this.storage.get(`tab`)
     await this.loadRestaurants()
   }
 }

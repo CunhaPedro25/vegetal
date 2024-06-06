@@ -12,7 +12,7 @@
       <ion-icon name="ellipse" class="text-[0.4rem]"></ion-icon>
       <div class="text-medium truncate">{{ order.total_price }} €</div>
     </div>
-    <div class="text-xs text-medium truncate">Delivery at {{ data.getSelectedAddress().address }}</div>
+    <div class="text-xs text-medium truncate">Delivery at {{ order.delivery_info.address }}</div>
     <ion-button *ngIf="this.delivery">Follow delivery</ion-button>
   </div>
 

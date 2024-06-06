@@ -1,16 +1,15 @@
-ion-searchbar{
-  --background: var(--ion-card-background);
-  --box-shadow: 0;
-  --border-radius: 2rem;
-}
-
-
-ion-chip.active {
-  --background: var(--ion-color-primary);
-  --color: var(--ion-color-light);
-}
-
 .floating-restaurants {
   @apply flex flex-col gap-1 w-full bottom-0;
   background-color: var(--ion-background-color);
+}
+
+ion-radio::part(container) {
+  width: 0;
+  height: 0;
+  display: none;
+  margin: 0;
+}
+
+ion-radio::part(label) {
+  margin: 0;
 }

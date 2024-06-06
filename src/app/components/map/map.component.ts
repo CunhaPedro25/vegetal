@@ -11,6 +11,7 @@ import { DataService } from "../../services/data.service";
 export class MapComponent implements OnInit {
   @Input() latitude?: number;
   @Input() longitude?: number;
+  @Input() showControls: boolean = true;
 
   constructor(private data: DataService) { }
 
@@ -18,52 +19,91 @@ export class MapComponent implements OnInit {
 
   // Metodo para inicializar o mapa com as configurtações necessárias
   async initMap() {
+    this.map?.off();
+    this.map?.remove();
+
     this.map = Leaflet.map('map', {
       center: [this.data.getSelectedAddress().latitude, this.data.getSelectedAddress().longitude],
-      zoom: 17
+      zoom: 17,
+      dragging: this.showControls,
+      scrollWheelZoom: this.showControls,
+      tap: this.showControls,
+      doubleClickZoom: this.showControls,
+      keyboard: this.showControls,
+      zoomControl: this.showControls,
+      attributionControl: this.showControls,
     });
 
+
     const tiles = Leaflet.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png', {
-      maxZoom: 30,
+      maxZoom: 40,
+      minZoom: 10,
       attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
     });
 
     this.map.addLayer(tiles);
 
+    const currentLocation = Leaflet.latLng(this.data.getSelectedAddress().latitude, this.data.getSelectedAddress().longitude);
     if(this.latitude && this.longitude) {
-      Leaflet.marker([this.latitude, this.longitude], {
+      const destination = Leaflet.latLng(this.latitude, this.longitude);
+      let bounds = Leaflet.latLngBounds([currentLocation, destination]);
+
+      bounds = bounds.pad(0.5);
+      this.map.fitBounds(bounds);
+
+      Leaflet.marker(currentLocation, {
         icon: new Leaflet.Icon({
-          iconSize: [30, 40],
-          iconAnchor: [13, 41],
-          iconUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/e/ed/Map_pin_icon.svg/352px-Map_pin_icon.svg.png',
+          iconSize: [30, 30],
+          iconAnchor: [12.5, 30],
+          iconUrl: 'assets/icons/location_map_pin.png',
         }),
-      }).addTo(this.map!);
+      }).addTo(this.map);
+
+      Leaflet.marker(destination, {
+        icon: new Leaflet.Icon({
+          iconSize: [30, 30],
+          iconAnchor: [12.5, 30],
+          iconUrl: 'assets/icons/location_map_pin.png',
+        }),
+      }).addTo(this.map);
+
+      Leaflet.polyline([currentLocation, destination], { color: "#25a749" }).addTo(this.map);
     }else{
       const restaurants = await this.data.getRestaurantsWithinRadius()
+      const markers = [];
+
       for (const restaurant of restaurants) {
-        Leaflet.marker([restaurant.latitude, restaurant.longitude], {
+        const marker = Leaflet.marker([restaurant.latitude, restaurant.longitude], {
           icon: new Leaflet.Icon({
-            iconSize: [30, 40],
-            iconAnchor: [13, 41],
-            iconUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/e/ed/Map_pin_icon.svg/352px-Map_pin_icon.svg.png',
+            iconSize: [30, 30],
+            iconAnchor: [12.5, 30],
+            iconUrl: 'assets/icons/location_map_pin.png',
           }),
           title: restaurant.name
         }).addTo(this.map);
+        markers.push(marker);
+
+        Leaflet.marker(currentLocation, {
+          icon: new Leaflet.Icon({
+            iconSize: [20, 20],
+            iconAnchor: [10, 10],
+            iconUrl: 'assets/icons/user_map_pin.png',
+          }),
+        }).addTo(this.map);
+
+        const bounds = Leaflet.latLngBounds(markers.map(marker => marker.getLatLng()));
+        const paddedBounds = bounds.pad(0.1);
+        this.map.fitBounds(paddedBounds);
       }
     }
-
-    Leaflet.marker([this.data.getSelectedAddress().latitude, this.data.getSelectedAddress().longitude], {
-      icon: new Leaflet.Icon({
-        iconSize: [30, 40],
-        iconAnchor: [13, 41],
-        iconUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/e/ed/Map_pin_icon.svg/352px-Map_pin_icon.svg.png',
-      }),
-      title: "Your location"
-    }).addTo(this.map);
 
     this.map.whenReady(() => {
         this.map!.invalidateSize();
     });
+  }
+
+  async updateMap() {
+    await this.initMap();
   }
 
   async ngOnInit() {

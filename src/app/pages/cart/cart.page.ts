@@ -70,8 +70,8 @@ export class CartPage implements OnInit, OnDestroy {
     this.cdr.detectChanges();
   }
 
-  async goToPayment(){
-    await this.router.navigate([`/payment`, this.order?.id]);
+  async goToCheckout(){
+    await this.router.navigate([`/checkout`, this.order?.id]);
   }
 
   ngOnDestroy() {

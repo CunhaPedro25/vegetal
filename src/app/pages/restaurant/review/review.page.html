@@ -1,0 +1,65 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button default-href="#"></ion-back-button>
+    </ion-buttons>
+    <ion-title>review</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <div class="flex flex-col p-2">
+    <div *ngIf="loaded" class="text-2xl truncate">{{ restaurant?.name }}</div>
+    <ion-skeleton-text class="h-6 rounded-lg" *ngIf="!loaded" [animated]="true"></ion-skeleton-text>
+
+    <div class="flex flex-col gap-1">
+      <div class="flex gap-1 items-center text-lg text-yellow-400" *ngIf="loaded">
+        <ion-icon name="star" *ngFor="let star of [].constructor(restaurant?.filledStars)"></ion-icon>
+        <ion-icon name="star-half" *ngIf="restaurant?.semiFilledStars"></ion-icon>
+        <ion-icon name="star-outline" *ngFor="let star of [].constructor(restaurant?.emptyStars)"></ion-icon>
+        <div>{{ restaurant?.rating }}</div>
+      </div>
+      <ion-skeleton-text class="w-2/4 rounded-lg"  *ngIf="!loaded" [animated]="true"></ion-skeleton-text>
+
+      <div class="flex gap-2 items-center truncate text-black/60 dark:text-white/60" *ngIf="loaded">
+        <p class="truncate" [class]="restaurant?.isOpen() ? 'text-green-500' : ''">{{ restaurant?.isOpen() ? "Open" : "Closed" }}</p>
+        <ion-icon name="ellipse" class="text-[0.4rem]"></ion-icon>
+        <p class="truncate">{{ (restaurant?.distance !== undefined) ? Math.round((restaurant?.distance || 0 )* 10) / 10 : 'Unknown' }} km</p>
+        <ion-icon name="ellipse" class="text-[0.4rem]"></ion-icon>
+        <p class="truncate">{{ restaurant?.delivery_fee }} € Delivery Fee</p>
+      </div>
+      <div class="flex gap-2 items-center" *ngIf="!loaded">
+        <ion-skeleton-text class="w-1/4 rounded-lg" [animated]="true"></ion-skeleton-text>
+        <ion-skeleton-text class="w-1/4 rounded-lg" [animated]="true"></ion-skeleton-text>
+        <ion-skeleton-text class="w-1/4 rounded-lg" [animated]="true"></ion-skeleton-text>
+      </div>
+    </div>
+  </div>
+
+  <form (ngSubmit)="submitReview()" class="flex flex-col items-center gap-2 p-6">
+    <!-- Add star prompt for review -->
+    <div *ngFor="let category of ratingCategories" class="w-full">
+      <div *ngIf="shouldDisplayCategory(category.key)" class="flex justify-between text-xl w-full gap-2 border-b pb-2 pt-4">
+        <label class="truncate">{{ category.label }}</label>
+        <div class="flex justify-center gap-1 text-3xl text-yellow-400">
+          <ion-icon
+            *ngFor="let star of [1, 2, 3, 4, 5]"
+            [name]="(getRating(category.key) >= star) ? 'star' : 'star-outline'"
+            (click)="setRating(category.key, star)">
+          </ion-icon>
+        </div>
+      </div>
+    </div>
+
+    <ion-textarea
+      label="Comment"
+      labelPlacement="floating"
+      [counter]="true"
+      maxlength="2000"
+      [autoGrow]="true"
+      [(ngModel)]="comment"
+      name="comment">
+    </ion-textarea>
+    <ion-button type="submit" class="w-fit">Submit</ion-button>
+  </form>
+</ion-content>

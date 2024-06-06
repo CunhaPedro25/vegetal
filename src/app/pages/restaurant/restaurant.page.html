@@ -23,32 +23,38 @@
     </div>
   </div>
 
-  <div class="flex flex-col p-2">
-    <div *ngIf="loaded" class="text-2xl">{{ restaurant?.name }}</div>
-    <ion-skeleton-text class="h-6 rounded-lg" *ngIf="!loaded" [animated]="true"></ion-skeleton-text>
+  <div class="flex flex-col">
+    <div *ngIf="loaded" class="text-2xl px-2 pt-2">{{ restaurant?.name }}</div>
+    <ion-skeleton-text class="h-6 rounded-lg w-2/3 mx-2 mt-2" *ngIf="!loaded" [animated]="true"></ion-skeleton-text>
 
-    <div class="flex flex-col gap-1">
-      <div class="flex gap-1 items-center text-lg text-yellow-400" (click)="openReviews()" *ngIf="loaded">
+    <ion-card class="information-card ion-activatable ripple-parent rectangle" routerLink="info">
+      <div class="flex gap-1 items-center text-lg text-yellow-400" *ngIf="loaded">
         <ion-icon name="star" *ngFor="let star of [].constructor(restaurant?.filledStars)"></ion-icon>
         <ion-icon name="star-half" *ngIf="restaurant?.semiFilledStars"></ion-icon>
         <ion-icon name="star-outline" *ngFor="let star of [].constructor(restaurant?.emptyStars)"></ion-icon>
         <div>{{ restaurant?.rating }}</div>
       </div>
-      <ion-skeleton-text class="w-2/4 rounded-lg"  *ngIf="!loaded" [animated]="true"></ion-skeleton-text>
+      <ion-skeleton-text class="w-2/4 rounded-lg" *ngIf="!loaded" [animated]="true"></ion-skeleton-text>
 
-      <div class="flex gap-2 items-center text-black/60" *ngIf="loaded">
-        <p [class]="restaurant?.isOpen ? 'text-green-500' : ''">{{ restaurant?.isOpen ? "Open" : "Closed" }}</p>
+      <div class="flex gap-2 items-center text-black/60 dark:text-white/60" *ngIf="loaded">
+        <p [class]="restaurant?.isOpen() ? 'text-green-500' : ''">{{ restaurant?.isOpen() ? "Open" : "Closed" }}</p>
         <ion-icon name="ellipse" class="text-[0.4rem]"></ion-icon>
         <p>{{ (restaurant?.distance !== undefined) ? Math.round((restaurant?.distance || 0 )* 10) / 10 : 'Unknown' }} km</p>
         <ion-icon name="ellipse" class="text-[0.4rem]"></ion-icon>
         <p>{{ restaurant?.delivery_fee }} € Delivery Fee</p>
+        <ion-icon name="chevron-forward"></ion-icon>
       </div>
+      <div class="text-sm text-black/60 dark:text-white/60" *ngIf="loaded"> Tap for hours, info and to review</div>
+
       <div class="flex gap-2 items-center" *ngIf="!loaded">
         <ion-skeleton-text class="w-1/4 rounded-lg" [animated]="true"></ion-skeleton-text>
         <ion-skeleton-text class="w-1/4 rounded-lg" [animated]="true"></ion-skeleton-text>
         <ion-skeleton-text class="w-1/4 rounded-lg" [animated]="true"></ion-skeleton-text>
       </div>
-    </div>
+      <ion-skeleton-text class="w-1/4 rounded-lg" [animated]="true" *ngIf="!loaded"></ion-skeleton-text>
+
+      <ion-ripple-effect *ngIf="loaded"></ion-ripple-effect>
+    </ion-card>
   </div>
 
   <ion-segment [(ngModel)]="selectedSegment" (ionChange)="segmentChanged($event)">
@@ -63,11 +69,12 @@
     </ion-segment-button>
   </ion-segment>
 
-  <div [ngSwitch]="selectedSegment" *ngIf="loaded">
+  <div [ngSwitch]="selectedSegment">
     <div *ngSwitchCase="'menu'">
       <div class="text-2xl font-bold text-black dark:text-white mx-4 mt-2">Menu</div>
       <app-item-card *ngFor="let menu of menus" [item]="menu" (emitter)="controlOrders($event)"></app-item-card>
-      <div class="w-full h-full flex justify-center items-center px-4 pt-12" *ngIf="menus.length === 0">
+      <app-item-card [skeleton]="true" *ngIf="!loaded"></app-item-card>
+      <div class="w-full h-full flex justify-center items-center px-4 pt-12" *ngIf="menus.length === 0  && loaded">
         <div>Menu items unavailable</div>
       </div>
     </div>
@@ -75,7 +82,8 @@
     <div *ngSwitchCase="'drinks'">
       <div class="text-2xl font-bold text-black dark:text-white mx-4 mt-2">Drinks</div>
       <app-item-card *ngFor="let drink of drinks" [item]="drink" (emitter)="controlOrders($event)"></app-item-card>
-      <div class="w-full h-full flex justify-center items-center px-4 pt-12" *ngIf="drinks.length === 0">
+      <app-item-card [skeleton]="true" *ngIf="!loaded"></app-item-card>
+      <div class="w-full h-full flex justify-center items-center px-4 pt-12" *ngIf="drinks.length === 0 && loaded">
         <div>Drink items unavailable</div>
       </div>
     </div>
@@ -83,7 +91,8 @@
     <div *ngSwitchCase="'desserts'">
       <div class="text-2xl font-bold text-black dark:text-white mx-4 mt-2">Desserts</div>
       <app-item-card *ngFor="let dessert of desserts" [item]="dessert" (emitter)="controlOrders($event)"></app-item-card>
-      <div class="w-full h-full flex justify-center items-center px-4 pt-12" *ngIf="desserts.length === 0">
+      <app-item-card [skeleton]="true" *ngIf="!loaded"></app-item-card>
+      <div class="w-full h-full flex justify-center items-center px-4 pt-12" *ngIf="desserts.length === 0  && loaded">
         <div>Dessert items unavailable</div>
       </div>
     </div>

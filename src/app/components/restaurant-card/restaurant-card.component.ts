@@ -1,7 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import {Restaurant} from "../../models/restaurant.model";
 import {Router} from "@angular/router";
-import {restaurant} from "ionicons/icons";
 
 @Component({
   selector: 'app-restaurant-card',
@@ -11,6 +10,7 @@ import {restaurant} from "ionicons/icons";
 export class RestaurantCardComponent  implements OnInit {
   @Input() restaurant?: Restaurant;
   @Input() skeleton?: boolean
+  @Input() full_width?: boolean
 
   constructor(
     private router: Router,
@@ -23,6 +23,6 @@ export class RestaurantCardComponent  implements OnInit {
 
   async openRestaurant() {
     if(!this.skeleton)
-      await this.router.navigate([`/restaurant`, this.restaurant?.id]);
+      await this.router.navigate([`/restaurant`, this.restaurant?.id], { replaceUrl: true });
   }
 }

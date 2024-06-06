@@ -1,4 +1,4 @@
-import {Injectable} from '@angular/core';
+import {Injectable, OnInit} from '@angular/core';
 import {SupabaseClient} from '@supabase/supabase-js';
 import {AuthService} from './auth.service';
 import {Restaurant} from '../models/restaurant.model';
@@ -8,14 +8,14 @@ import {Address} from '../models/address.model';
 import {Item} from '../models/item.model';
 import {Order} from '../models/order.model';
 import {OrderItem} from '../models/order-item.model';
-import {Delivery} from '../models/delivery.model';
 import {Category} from '../models/category.model';
 import {Favorite} from '../models/favorite.model';
+import {Storage} from "@ionic/storage-angular";
 
 @Injectable({
   providedIn: 'root'
 })
-export class DataService {
+export class DataService implements OnInit{
   private supabase: SupabaseClient;
   private selectedAddress: Address = {
     address: 'Av. do Atlântico 644 4900, Viana do Castelo',
@@ -25,16 +25,17 @@ export class DataService {
     zip_code: "644-4900"
   };
 
-  setSelectedAddress(address: Address): void {
+  constructor(private storage: Storage) {
+    this.supabase = AuthService.client();
+  }
+
+  async setSelectedAddress(address: Address) {
     this.selectedAddress = address;
+    await this.storage.set("selectedAddress", address);
   }
 
   getSelectedAddress(): Address {
-    return this.selectedAddress;
-  }
-
-  constructor() {
-    this.supabase = AuthService.client();
+    return this.selectedAddress
   }
 
   // Restaurants
@@ -83,6 +84,16 @@ export class DataService {
     return data as Review[];
   }
 
+  async uploadReview(restaurant: number, user: string, comment: string, rating: number, delivery_type: string): Promise<Review> {
+    const { data, error } = await this.supabase
+      .from('reviews')
+      .insert({ restaurant: restaurant, user: user, comment: comment, rating: rating, delivery_type: delivery_type })
+      .select()
+      .single();
+    if (error) throw error;
+    return data as Review;
+  }
+
   // Addresses
   async getUserAddresses(user: string): Promise<Address[]> {
     const { data, error } = await this.supabase
@@ -116,17 +127,6 @@ export class DataService {
   }
 
 
-
-  // Deliveries
-  async getDelivery(order: number): Promise<Delivery> {
-    const { data, error } = await this.supabase
-      .from('deliveries')
-      .select('*')
-      .eq('order', order)
-      .single();
-    if (error) throw error;
-    return data as Delivery;
-  }
 
   // Categories
   async getCategories(): Promise<Category[]> {
@@ -197,13 +197,12 @@ export class DataService {
   async createOrder(user: string | null, restaurant: number): Promise<Order> {
     const { data, error } = await this.supabase
       .from('orders')
-      .insert({ user: user, restaurant: restaurant })
+      .insert({ user: user, restaurant: restaurant, delivery_info: this.selectedAddress })
       .select()
       .single();
     if (error) throw error;
     return data as Order;
   }
-
 
 
   // ------ Order Items ------

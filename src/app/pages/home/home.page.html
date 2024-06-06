@@ -12,11 +12,16 @@
         </ion-radio>
       </ion-radio-group>
 
-      <div class="flex justify-between items-center max-w-full gap-5">
-        <div class="flex flex-1 gap-2 items-center truncate" (click)="openAddressSearch()">
-          <div class="truncate">{{ data.getSelectedAddress().address }}</div>
-          <ion-icon name="chevron-down-outline"></ion-icon>
-        </div>
+      <div class="flex justify-between items-center max-w-full gap-5 pb-2">
+        <ion-card class="delivery-card ion-activatable ripple-parent rectangle" (click)="openAddressSearch()">
+          <div class="text-xs">{{ tab === 'dine-in' ? "Near" : "Delivering" }} to:</div>
+          <div class="flex gap-2 items-center truncate">
+            <div class="truncate" *ngIf="loaded">{{ data.getSelectedAddress().address }}</div>
+            <ion-skeleton-text class="h-6 rounded-lg" *ngIf="!loaded" [animated]="true"></ion-skeleton-text>
+            <ion-icon class="text-2xl" name="chevron-down-outline"></ion-icon>
+          </div>
+          <ion-ripple-effect></ion-ripple-effect>
+        </ion-card>
 
         <ion-button shape="round" fill="clear" color="dark">
           <ion-icon slot="icon-only" name="options" class="text-2xl"></ion-icon>
@@ -35,10 +40,13 @@
     </div>
 
     <div class="relative flex flex-col w-full h-full flex-1 items-end" *ngIf="tab === 'dine-in'">
-      <app-map class="top-0 left-0 h-full z-0" />
+      <app-map class="top-0 left-0 h-full z-0" *ngIf="loaded" />
+      <ion-thumbnail class="h-full w-full" *ngIf="!loaded">
+        <ion-skeleton-text [animated]="true"></ion-skeleton-text>
+      </ion-thumbnail>
 
       <div class="floating-restaurants">
-        <div class="text-2xl px-2 pt-4   font-bold">Restaurants In the Area</div>
+        <div class="text-2xl px-2 pt-4 font-bold">Restaurants In the Area</div>
 
 
         <div *ngIf="restaurants.length > 0 && loaded" class="flex max-w-full overflow-x-scroll snap-mandatory snap-x">

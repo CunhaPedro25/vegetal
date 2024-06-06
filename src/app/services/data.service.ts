@@ -1,4 +1,4 @@
-import {Injectable, OnInit} from '@angular/core';
+import {Injectable} from '@angular/core';
 import {SupabaseClient} from '@supabase/supabase-js';
 import {AuthService} from './auth.service';
 import {Restaurant} from '../models/restaurant.model';
@@ -15,7 +15,7 @@ import {Storage} from "@ionic/storage-angular";
 @Injectable({
   providedIn: 'root'
 })
-export class DataService implements OnInit{
+export class DataService {
   private supabase: SupabaseClient;
   private selectedAddress: Address = {
     address: 'Av. do Atlântico 644 4900, Viana do Castelo',

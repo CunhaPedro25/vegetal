@@ -1,6 +1,6 @@
 import {ChangeDetectorRef, Component, OnInit, ViewChild} from '@angular/core';
 import {LoadingController, ModalController} from '@ionic/angular';
-import { AddressSearchPage } from '../address-search/address-search.page';
+import { AddressesPage } from '../addresses/addresses.page';
 import { DataService } from '../../services/data.service';
 import { Restaurant } from '../../models/restaurant.model';
 import {Address} from "../../models/address.model";
@@ -43,7 +43,7 @@ export class HomePage implements OnInit {
 
   async openAddressSearch() {
     const modal = await this.modalController.create({
-      component: AddressSearchPage
+      component: AddressesPage
     });
 
     modal.onDidDismiss().then(async (data) => {
@@ -56,7 +56,7 @@ export class HomePage implements OnInit {
           zip_code: data.data.address.postcode
         };
 
-        this.data.setSelectedAddress(address);
+        await this.data.setSelectedAddress(address);
         await this.loadRestaurants()
         this.mapComponent?.updateMap();
       }

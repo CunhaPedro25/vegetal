@@ -95,7 +95,7 @@ export class MapComponent implements OnInit {
         }
 
         const bounds = Leaflet.latLngBounds(markers.map(marker => marker.getLatLng()));
-        const paddedBounds = bounds.pad(0.1);
+        const paddedBounds = bounds.pad(0.2);
         this.map.fitBounds(paddedBounds);
       }
     }

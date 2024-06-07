@@ -6,7 +6,7 @@ import { Observable } from 'rxjs';
   providedIn: 'root'
 })
 export class GeocodingService {
-  private apiUrl = 'https://nominatim.openstreetmap.org/search';
+  private apiUrl = 'https://nominatim.openstreetmap.org/';
 
   constructor(private http: HttpClient) {}
 
@@ -17,6 +17,15 @@ export class GeocodingService {
       addressdetails: '1',
       countrycodes: 'pt'
     };
-    return this.http.get<any[]>(this.apiUrl, { params });
+    return this.http.get<any[]>(this.apiUrl + "search", { params });
+  }
+
+  getAddress(latitude: number, longitude: number) {
+    const params = {
+      format: 'json',
+      lat: latitude,
+      lon: longitude
+    };
+    return this.http.get<any[]>(this.apiUrl + "reverse", { params });
   }
 }

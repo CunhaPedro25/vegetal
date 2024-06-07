@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { PreloadAllModules, RouterModule, Routes } from '@angular/router';
 import {AuthGuard} from "./guards/auth.guard";
+import {AddressesPageModule} from "./pages/addresses/addresses.module";
 
 const routes: Routes = [
   {
@@ -22,8 +23,8 @@ const routes: Routes = [
     canActivate: [AuthGuard]
   },
   {
-    path: 'address-search',
-    loadChildren: () => import('./pages/address-search/address-search.module').then( m => m.AddressSearchPageModule),
+    path: 'addresses',
+    loadChildren: () => import('./pages/addresses/addresses.module').then(m => m.AddressesPageModule),
     canActivate: [AuthGuard]
   },
   {
@@ -50,6 +51,10 @@ const routes: Routes = [
     path: 'settings',
     loadChildren: () => import('./pages/settings/settings.module').then( m => m.SettingsPageModule),
     canActivate: [AuthGuard]
+  },
+  {
+    path: 'address-details',
+    loadChildren: () => import('./pages/address-details/address-details.module').then( m => m.AddressDetailsPageModule)
   }
 ];
 

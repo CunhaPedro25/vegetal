@@ -5,11 +5,11 @@ import { Subject, of } from 'rxjs';
 import { debounceTime, distinctUntilChanged, switchMap, catchError } from 'rxjs/operators';
 
 @Component({
-  selector: 'app-address-search',
-  templateUrl: './address-search.page.html',
-  styleUrls: ['./address-search.page.scss'],
+  selector: 'app-addresses',
+  templateUrl: './addresses.page.html',
+  styleUrls: ['./addresses.page.scss'],
 })
-export class AddressSearchPage implements OnInit {
+export class AddressesPage implements OnInit {
   query: string = '';
   searchResults: any[] = [];
   private searchTerms = new Subject<string>();

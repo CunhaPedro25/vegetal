@@ -7,14 +7,16 @@ import { IonicModule } from '@ionic/angular';
 import { DeliveryPageRoutingModule } from './delivery-routing.module';
 
 import { DeliveryPage } from './delivery.page';
+import {MapComponent} from "../../components/map/map.component";
 
 @NgModule({
-  imports: [
-    CommonModule,
-    FormsModule,
-    IonicModule,
-    DeliveryPageRoutingModule
-  ],
+    imports: [
+        CommonModule,
+        FormsModule,
+        IonicModule,
+        DeliveryPageRoutingModule,
+        MapComponent
+    ],
   declarations: [DeliveryPage]
 })
 export class DeliveryPageModule {}

@@ -41,6 +41,10 @@
 @import "@ionic/angular/css/palettes/dark.system.css";
 
 /* Custom Global Styles */
+* {
+  @apply transition-colors duration-300;
+}
+
 .round-button {
   @apply rounded-full;
   --background: var(--ion-background-color) !important;
@@ -85,4 +89,10 @@ ion-list {
 
 ion-item {
   --background: var(--ion-background-color) !important;
+}
+
+.dark-theme .leaflet-control-zoom-in, .dark-theme .leaflet-control-zoom-out{
+  background-color: #333 !important;
+  color: #fff !important;
+  border: 1px solid #444 !important;
 }

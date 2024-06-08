@@ -22,7 +22,9 @@ export class DataService {
     latitude: 41.69427867398096,  // Default latitude
     longitude: -8.846855462371082,  // Default longitude
     city: "Viana do Castelo",
-    zip_code: "644-4900"
+    zip_code: "644-4900",
+    door: 45,
+    info: "Big school"
   };
 
   constructor(private storage: Storage) {
@@ -202,6 +204,14 @@ export class DataService {
       .single();
     if (error) throw error;
     return data as Order;
+  }
+
+  async updateOrderStatus(id: number, status: string) {
+    const { data, error } = await this.supabase
+      .from('orders')
+      .update({status: status})
+      .eq('id', id)
+    if (error) throw error;
   }
 
 

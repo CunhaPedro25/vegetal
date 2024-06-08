@@ -38,8 +38,9 @@ export class CartsPage implements OnInit, OnDestroy {
     const userId = this.authService.getCurrentUserId()
     if(userId) {
       this.orders = await this.data.getUserOrders(userId);
-      this.deliveries = this.orders.filter(x => x.status !== null && x.status !== "")
-      this.orders = this.orders.filter(x => x.status == null || x.status == "")
+      this.deliveries = this.orders.filter(x => x.status !== null && x.status !== "" && x.status !== "delivered")
+      this.orders = this.orders.filter(x => (x.status === null || x.status === "") )
+      this.orders = this.orders.filter(x => x.status !== "delivered" )
     }
 
     this.subscribeToChanges()

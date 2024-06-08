@@ -3,11 +3,16 @@ import {Order} from "../../models/order.model";
 import {DataService} from "../../services/data.service";
 import {Restaurant} from "../../models/restaurant.model";
 import {Router} from "@angular/router";
+import {IonicModule} from "@ionic/angular";
 
 @Component({
   selector: 'app-order-card',
   templateUrl: './order-card.component.html',
   styleUrls: ['./order-card.component.scss'],
+  imports: [
+    IonicModule
+  ],
+  standalone: true
 })
 export class OrderCardComponent  implements OnInit {
   @Input() order!: Order;

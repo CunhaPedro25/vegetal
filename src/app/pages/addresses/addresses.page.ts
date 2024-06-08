@@ -1,8 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { GeocodingService } from '../../services/geocoding.service';
-import { ModalController } from '@ionic/angular';
 import { Subject, of } from 'rxjs';
 import { debounceTime, distinctUntilChanged, switchMap, catchError } from 'rxjs/operators';
+import {DataService} from "../../services/data.service";
+import {Address} from "../../models/address.model";
+import {Router} from "@angular/router";
 
 @Component({
   selector: 'app-addresses',
@@ -15,8 +17,9 @@ export class AddressesPage implements OnInit {
   private searchTerms = new Subject<string>();
 
   constructor(
+    private router: Router,
     private geocodingService: GeocodingService,
-    private modalController: ModalController
+    private data: DataService
   ) {}
 
   ngOnInit() {
@@ -44,11 +47,30 @@ export class AddressesPage implements OnInit {
     this.searchTerms.next(query);
   }
 
-  selectAddress(address: any) {
-    this.modalController.dismiss(address);
+  async selectAddress(data: any) {
+    const address: Address = {
+      address: data.data.display_name,
+      latitude: parseFloat(data.data.lat),  // Default latitude
+      longitude: parseFloat(data.data.lon),  // Default longitude
+      city: data.data.address.town,
+      zip_code: data.data.address.postcode,
+      door: 0,
+      info: ""
+    };
+    await this.data.setSelectedAddress(address)
   }
 
-  close() {
-    this.modalController.dismiss();
+  async openDetails(data: any | undefined) {
+    const address: Address = data ? {
+      address: data.data.display_name,
+      latitude: parseFloat(data.data.lat),  // Default latitude
+      longitude: parseFloat(data.data.lon),  // Default longitude
+      city: data.data.address.town,
+      zip_code: data.data.address.postcode,
+      door: 0,
+      info: ""
+    } : this.data.getSelectedAddress()
+
+    await this.router.navigate(["address-details"], {queryParams: {address: address}})
   }
 }

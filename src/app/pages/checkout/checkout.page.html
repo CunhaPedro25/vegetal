@@ -28,6 +28,6 @@
       <div>Total</div>
       <div>{{ order?.total_price }}€</div>
     </div>
-    <ion-button routerLink="/delivery/{{order?.id}}">Pay order</ion-button>
+    <ion-button (click)="payOrder()">Pay order</ion-button>
   </div>
 </ion-content>

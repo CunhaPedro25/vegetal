@@ -1,9 +1,9 @@
 <ion-header>
   <ion-toolbar>
     <ion-buttons slot="start">
-      <ion-back-button (click)="close()" default-href="#"></ion-back-button>
+      <ion-back-button default-href="#"></ion-back-button>
     </ion-buttons>
-    <ion-title>Select Address</ion-title>
+    <ion-title>Addresses</ion-title>
   </ion-toolbar>
 </ion-header>
 
@@ -12,11 +12,10 @@
 
   <div *ngIf="searchResults.length === 0">
     <div class="text-xl">Current Location</div>
-    <ion-item detail="true">
+    <ion-item detail="true" (click)="openDetails(undefined)">
       <ion-label>lol</ion-label>
     </ion-item>
   </div>
-
 
   <ion-list>
     <ion-item *ngFor="let result of searchResults" (click)="selectAddress(result)">

@@ -29,4 +29,8 @@ export class CheckoutPage implements OnInit {
     });
   }
 
+  async payOrder() {
+    await this.data.updateOrderStatus(this.order!.id, "pending")
+    await this.router.navigate(['/delivery', this.order?.id])
+  }
 }

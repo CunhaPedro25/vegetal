@@ -1,4 +1,11 @@
-#map {
-  min-height: 100%;
-  width: 100vw;
+.dark-theme .leaflet-control-zoom-in, .dark-theme .leaflet-control-zoom-out{
+  background-color: #333 !important;
+  color: #fff !important;
+  border: 1px solid #444 !important;
+}
+
+.light-theme .leaflet-control-zoom a {
+  background-color: #fff;
+  color: #000;
+  border: 1px solid #ccc;
 }

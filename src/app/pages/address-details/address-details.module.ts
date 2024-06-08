@@ -7,14 +7,19 @@ import { IonicModule } from '@ionic/angular';
 import { AddressDetailsPageRoutingModule } from './address-details-routing.module';
 
 import { AddressDetailsPage } from './address-details.page';
+import {MapComponent} from "../../components/map/map.component";
 
 @NgModule({
   imports: [
     CommonModule,
     FormsModule,
     IonicModule,
-    AddressDetailsPageRoutingModule
+    AddressDetailsPageRoutingModule,
+    MapComponent
   ],
-  declarations: [AddressDetailsPage]
+    exports: [
+        AddressDetailsPage
+    ],
+    declarations: [AddressDetailsPage]
 })
 export class AddressDetailsPageModule {}

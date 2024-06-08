@@ -4,4 +4,6 @@ export interface Address {
   zip_code: string;
   latitude: number;
   longitude: number;
+  door: number;
+  info: string;
 }

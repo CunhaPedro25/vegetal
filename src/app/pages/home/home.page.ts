@@ -1,11 +1,10 @@
 import {ChangeDetectorRef, Component, OnInit, ViewChild} from '@angular/core';
 import {LoadingController, ModalController} from '@ionic/angular';
-import { AddressesPage } from '../addresses/addresses.page';
 import { DataService } from '../../services/data.service';
 import { Restaurant } from '../../models/restaurant.model';
-import {Address} from "../../models/address.model";
 import {Storage} from "@ionic/storage-angular";
 import {MapComponent} from "../../components/map/map.component";
+import {Router} from "@angular/router";
 
 @Component({
   selector: 'app-home',
@@ -24,6 +23,7 @@ export class HomePage implements OnInit {
     protected data: DataService,
     private modalController: ModalController,
     private loadingController: LoadingController,
+    private router: Router,
     private storage: Storage,
     private cdr: ChangeDetectorRef
   ) {}
@@ -42,27 +42,7 @@ export class HomePage implements OnInit {
   }
 
   async openAddressSearch() {
-    const modal = await this.modalController.create({
-      component: AddressesPage
-    });
-
-    modal.onDidDismiss().then(async (data) => {
-      if (data.data) {
-        const address: Address = {
-          address: data.data.display_name,
-          latitude: parseFloat(data.data.lat),  // Default latitude
-          longitude: parseFloat(data.data.lon),  // Default longitude
-          city: data.data.address.town,
-          zip_code: data.data.address.postcode
-        };
-
-        await this.data.setSelectedAddress(address);
-        await this.loadRestaurants()
-        this.mapComponent?.updateMap();
-      }
-    });
-
-    return await modal.present();
+    await this.router.navigate(['addresses']);
   }
 
   async onTabChange() {
@@ -72,6 +52,7 @@ export class HomePage implements OnInit {
   async ngOnInit() {
     await this.storage.create()
     this.tab = await this.storage.get(`tab`)
+    if (!this.tab) this.tab = "delivery"
     await this.loadRestaurants()
   }
 }

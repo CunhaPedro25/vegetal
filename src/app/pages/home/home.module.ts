@@ -8,6 +8,7 @@ import { HomePageRoutingModule } from './home-routing.module';
 
 import { HomePage } from './home.page';
 import {RestaurantCardComponent} from "../../components/restaurant-card/restaurant-card.component";
+import {StarRatingComponent} from "../../components/star-rating/star-rating.component";
 
 @NgModule({
   imports: [
@@ -16,8 +17,9 @@ import {RestaurantCardComponent} from "../../components/restaurant-card/restaura
     IonicModule,
     HomePageRoutingModule,
     MapComponent,
-    LeafletModule
+    LeafletModule,
+    StarRatingComponent
   ],
-    declarations: [HomePage, RestaurantCardComponent]
+  declarations: [HomePage, RestaurantCardComponent]
 })
 export class HomePageModule {}

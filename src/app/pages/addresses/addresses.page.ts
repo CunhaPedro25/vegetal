@@ -14,12 +14,12 @@ import {Router} from "@angular/router";
 export class AddressesPage implements OnInit {
   query: string = '';
   searchResults: any[] = [];
-  private searchTerms = new Subject<string>();
+  searchTerms = new Subject<string>();
 
   constructor(
     private router: Router,
     private geocodingService: GeocodingService,
-    private data: DataService
+    protected data: DataService,
   ) {}
 
   ngOnInit() {
@@ -47,30 +47,17 @@ export class AddressesPage implements OnInit {
     this.searchTerms.next(query);
   }
 
-  async selectAddress(data: any) {
+  async selectAddress(data: any): Promise<any> {
     const address: Address = {
-      address: data.data.display_name,
-      latitude: parseFloat(data.data.lat),  // Default latitude
-      longitude: parseFloat(data.data.lon),  // Default longitude
-      city: data.data.address.town,
-      zip_code: data.data.address.postcode,
+      address: data.display_name,
+      latitude: parseFloat(data.lat),  // Default latitude
+      longitude: parseFloat(data.lon),  // Default longitude
+      city: data.address.town,
+      zip_code: data.address.postcode,
       door: 0,
       info: ""
-    };
+    }
     await this.data.setSelectedAddress(address)
-  }
-
-  async openDetails(data: any | undefined) {
-    const address: Address = data ? {
-      address: data.data.display_name,
-      latitude: parseFloat(data.data.lat),  // Default latitude
-      longitude: parseFloat(data.data.lon),  // Default longitude
-      city: data.data.address.town,
-      zip_code: data.data.address.postcode,
-      door: 0,
-      info: ""
-    } : this.data.getSelectedAddress()
-
-    await this.router.navigate(["address-details"], {queryParams: {address: address}})
+    await this.router.navigate(["/"])
   }
 }

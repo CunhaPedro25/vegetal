@@ -4,4 +4,5 @@ export interface OrderItem {
   item: number;
   quantity: number;
   price: number;
+  total_price: number;
 }

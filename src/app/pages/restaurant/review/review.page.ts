@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import {ActivatedRoute} from "@angular/router";
+import {ActivatedRoute, Router} from "@angular/router";
 import {DataService} from "../../../services/data.service";
 import {AuthService} from "../../../services/auth.service";
 import {Restaurant} from "../../../models/restaurant.model";
@@ -27,13 +27,15 @@ export class ReviewPage implements OnInit {
     { key: 'service', label: 'Service' },
     { key: 'delivery', label: 'Delivery' }
   ];
-  reviewType: string = "dine-in";
+  reviewType: string = "Dine-in";
   comment = '';
+  submitted: boolean = false;
 
   constructor(
     private data: DataService,
     private auth: AuthService,
     private route: ActivatedRoute,
+    private router: Router,
     private loadingController: LoadingController,
   ) { }
 
@@ -46,6 +48,12 @@ export class ReviewPage implements OnInit {
       await loading.dismiss();
       this.loaded = true
     });
+
+    this.route.queryParams.subscribe(async params => {
+      if (params["type"] !== undefined) {
+        this.reviewType = params["type"]
+      }
+    })
   }
 
   setRating(category: string, star: number) {
@@ -58,10 +66,10 @@ export class ReviewPage implements OnInit {
 
   shouldDisplayCategory(category: string) {
     if (category === 'atmosphere' || category === 'service') {
-      return this.reviewType === 'dine-in';
+      return this.reviewType === 'Dine-in';
     }
     if (category === 'delivery') {
-      return this.reviewType === 'delivery' || this.reviewType === 'pick-up';
+      return this.reviewType === 'Delivery' || this.reviewType === 'Pick-up';
     }
     return true;
   }
@@ -69,9 +77,9 @@ export class ReviewPage implements OnInit {
   calculateFinalRating(): number {
     let ratingsArray = [this.ratings["overall"], this.ratings["food"]];
 
-    if (this.reviewType === 'dine-in') {
+    if (this.reviewType === 'Dine-in') {
       ratingsArray.push(this.ratings["atmosphere"], this.ratings["service"]);
-    } else if (this.reviewType === 'delivery' || this.reviewType === 'pick-up') {
+    } else if (this.reviewType === 'Delivery' || this.reviewType === 'Pick-up') {
       ratingsArray.push(this.ratings["delivery"]);
     }
 
@@ -80,13 +88,10 @@ export class ReviewPage implements OnInit {
   }
 
   async submitReview() {
-    const finalRating = this.calculateFinalRating();
-    console.log('Final Rating:', finalRating);
-    console.log('Comment:', this.comment);
-
-    const review = await this.data.uploadReview(this.restaurant!.id, this.auth.getCurrentUserId()!, this.comment, this.calculateFinalRating(), "Dine-in")
+    const review = await this.data.uploadReview(this.restaurant!.id, this.auth.getCurrentUserId()!, this.comment, this.calculateFinalRating(), this.reviewType)
     if (review){
-      console.log(review)
+      this.submitted = true;
+      await this.router.navigate(['../'])
     }
   }
   protected readonly Math = Math;

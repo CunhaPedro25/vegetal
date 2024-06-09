@@ -14,8 +14,10 @@ import {OrderCardComponent} from "../../components/order-card/order-card.compone
     FormsModule,
     IonicModule,
     CartsPageRoutingModule,
+  ],
+  exports: [
     OrderCardComponent
   ],
-  declarations: [CartsPage]
+  declarations: [CartsPage, OrderCardComponent]
 })
 export class CartsPageModule {}

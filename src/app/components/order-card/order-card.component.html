@@ -16,8 +16,8 @@
     <ion-button *ngIf="this.delivery">Follow delivery</ion-button>
   </div>
 
-  <div class="flex items-center p-2" *ngIf="!this.delivery">
+  <div class="flex items-center p-2" *ngIf="!this.delivery && order.status !== 'delivered'">
     <ion-icon name="chevron-forward" size="large"></ion-icon>
   </div>
-  <ion-ripple-effect></ion-ripple-effect>
+  <ion-ripple-effect *ngIf="order.status !== 'delivered'"></ion-ripple-effect>
 </ion-card>

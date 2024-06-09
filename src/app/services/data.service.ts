@@ -33,7 +33,6 @@ export class DataService {
 
   async setSelectedAddress(address: Address) {
     this.selectedAddress = address;
-    await this.storage.set("selectedAddress", address);
   }
 
   getSelectedAddress(): Address {
@@ -197,9 +196,10 @@ export class DataService {
   }
 
   async createOrder(user: string | null, restaurant: number): Promise<Order> {
+    const type = await this.storage.get(`tab`)
     const { data, error } = await this.supabase
       .from('orders')
-      .insert({ user: user, restaurant: restaurant, delivery_info: this.selectedAddress })
+      .insert({ user: user, restaurant: restaurant, delivery_info: this.selectedAddress, delivery_type: type })
       .select()
       .single();
     if (error) throw error;

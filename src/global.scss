@@ -38,7 +38,7 @@
 
 /* @import "@ionic/angular/css/palettes/dark.always.css"; */
 //@import "@ionic/angular/css/palettes/dark.class.css";
-@import "@ionic/angular/css/palettes/dark.system.css";
+//@import "@ionic/angular/css/palettes/dark.system.css";
 
 /* Custom Global Styles */
 * {
@@ -83,6 +83,11 @@ ion-button{
   @apply font-semibold capitalize;
 }
 
+.dark-button {
+  --background: var(--ion-color-step-950) !important;
+  --color: var(--ion-color-step-50) !important;
+}
+
 ion-list {
   background: var(--ion-background-color) !important;
 }
@@ -95,4 +100,16 @@ ion-item {
   background-color: #333 !important;
   color: #fff !important;
   border: 1px solid #444 !important;
+}
+
+ion-progress-bar {
+  @apply h-4 rounded-xl
+}
+
+ion-progress-bar::part(progress) {
+  border-radius: 0.75rem !important;
+}
+
+.logo-text{
+  @apply fill-black dark:fill-white;
 }

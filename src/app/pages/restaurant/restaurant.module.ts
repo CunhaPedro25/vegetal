@@ -7,13 +7,17 @@ import { ItemCardComponent } from "../../components/item-card/item-card.componen
 import { RestaurantPageRoutingModule } from './restaurant-routing.module';
 
 import { RestaurantPage } from './restaurant.page';
+import {HomePageModule} from "../home/home.module";
+import {StarRatingComponent} from "../../components/star-rating/star-rating.component";
 
 @NgModule({
     imports: [
         CommonModule,
         FormsModule,
         IonicModule,
-        RestaurantPageRoutingModule
+        RestaurantPageRoutingModule,
+        HomePageModule,
+        StarRatingComponent
     ],
     exports: [
         ItemCardComponent

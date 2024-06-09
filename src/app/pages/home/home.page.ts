@@ -1,10 +1,10 @@
 import {ChangeDetectorRef, Component, OnInit, ViewChild} from '@angular/core';
-import {LoadingController, ModalController} from '@ionic/angular';
+import {AlertController, IonModal, LoadingController} from '@ionic/angular';
 import { DataService } from '../../services/data.service';
 import { Restaurant } from '../../models/restaurant.model';
 import {Storage} from "@ionic/storage-angular";
 import {MapComponent} from "../../components/map/map.component";
-import {Router} from "@angular/router";
+import {ActivatedRoute, Router} from "@angular/router";
 
 @Component({
   selector: 'app-home',
@@ -13,17 +13,23 @@ import {Router} from "@angular/router";
 })
 export class HomePage implements OnInit {
   @ViewChild(MapComponent) mapComponent: MapComponent | undefined;
+  @ViewChild('reviewModal') reviewModal: IonModal | undefined;
 
   restaurants: Restaurant[] = [];
   error: string | null = null;
   loaded?: boolean;
   tab: string = "delivery";
+  reviewAlert: boolean = false;
+  param: number = 0;
+  type: string = ""
+  restaurantName: string = ""
 
   constructor(
     protected data: DataService,
-    private modalController: ModalController,
     private loadingController: LoadingController,
+    private alertController: AlertController,
     private router: Router,
+    private route: ActivatedRoute,
     private storage: Storage,
     private cdr: ChangeDetectorRef
   ) {}
@@ -38,7 +44,26 @@ export class HomePage implements OnInit {
       await loading.dismiss();
       this.cdr.detectChanges();
       this.loaded = true
+
+      this.route.queryParams.subscribe(async params => {
+        if (params["id"] !== undefined) {
+          this.param = params["id"]
+          this.type = params["type"]
+          this.restaurantName = this.restaurants[this.param].name
+          this.reviewAlert = true
+        }
+      })
     })
+  }
+
+  async openReview() {
+    this.reviewModal?.dismiss().then(() => {
+      this.router.navigate([`/restaurant/${this.param}/review`], { queryParams: { type: this.type } });
+    });
+  }
+
+  async closeModal() {
+    await this.reviewModal?.dismiss();
   }
 
   async openAddressSearch() {
@@ -52,7 +77,7 @@ export class HomePage implements OnInit {
   async ngOnInit() {
     await this.storage.create()
     this.tab = await this.storage.get(`tab`)
-    if (!this.tab) this.tab = "delivery"
+    if (!this.tab) this.tab = "Delivery"
     await this.loadRestaurants()
   }
 }

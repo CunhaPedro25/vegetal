@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import {Address} from "../../models/address.model";
+import {DataService} from "../../services/data.service";
 
 @Component({
   selector: 'app-address-details',
@@ -6,10 +8,14 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./address-details.page.scss'],
 })
 export class AddressDetailsPage implements OnInit {
+  address?: Address;
+  loaded = false;
 
   constructor(
+    private data: DataService,
   ) { }
 
-  ngOnInit() {
+  async ngOnInit() {
+    this.address = this.data.getSelectedAddress()
   }
 }

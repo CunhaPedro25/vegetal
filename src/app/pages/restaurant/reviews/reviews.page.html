@@ -8,75 +8,60 @@
 </ion-header>
 
 <ion-content [fullscreen]="true">
-<!--  <div *ngFor="let review of reviews">-->
-<!--    {{review.comment}}-->
-<!--  </div>-->
-  <ion-card>
-    <ion-item>
-      <ion-label>
-        <h2>Alberto Pereira</h2>
-        <p>(Dine-in)</p>
-      </ion-label>
-    </ion-item>
-    <ion-card-content>
-      <ion-row>
-        <ion-col size="auto">
-          <ion-icon name="star" color="warning"></ion-icon>
-          <ion-icon name="star" color="warning"></ion-icon>
-          <ion-icon name="star" color="warning"></ion-icon>
-          <ion-icon name="star" color="warning"></ion-icon>
-          <ion-icon name="star" color="warning"></ion-icon>
-        </ion-col>
-        <ion-col>
-          <p>Adorei a comida deste restaurante espetacular!</p>
-        </ion-col>
-      </ion-row>
-    </ion-card-content>
-  </ion-card>
+  <div class="flex flex-col w-full px-6 py-4 gap-4">
+    <div class="text-2xl">Summary</div>
 
-  <ion-card>
-    <ion-item>
-      <ion-label>
-        <h2>Jorge Campos</h2>
-        <p>(Dine-in)</p>
-      </ion-label>
-    </ion-item>
-    <ion-card-content>
-      <ion-row>
-        <ion-col size="auto">
-          <ion-icon name="star" color="warning"></ion-icon>
-          <ion-icon name="star" color="warning"></ion-icon>
-          <ion-icon name="star" color="warning"></ion-icon>
-          <ion-icon name="star" color="warning"></ion-icon>
-          <ion-icon name="star" color="warning"></ion-icon>
-        </ion-col>
-        <ion-col>
-          <p>Adorei a comida deste restaurante espetacular!</p>
-        </ion-col>
-      </ion-row>
-    </ion-card-content>
-  </ion-card>
+    <div class="flex w-full gap-6 items-center justify-center">
+      <div class="flex flex-col flex-1">
+        <div class="flex items-center gap-2" *ngFor="let i of [5, 4, 3, 2, 1]">
+          <div class="text-xl">{{ i }}</div>
+          <ion-progress-bar type="determinate" [value]="reviewStats[i-1]" [id]="i" *ngIf="loaded"></ion-progress-bar>
+          <ion-skeleton-text class="rounded-lg" [animated]="true" *ngIf="!loaded"></ion-skeleton-text>
+        </div>
+      </div>
+      <div class="flex flex-col justify-center items-center p-4 gap-2">
+        <div class="text-4xl" *ngIf="loaded">{{ restaurant?.rating }}</div>
+        <ion-skeleton-text class="w-8 h-10 rounded-lg" [animated]="true" *ngIf="!loaded"></ion-skeleton-text>
 
-  <ion-card>
-    <ion-item>
-      <ion-label>
-        <h2>Filipa Silva</h2>
-        <p>(Dine-in)</p>
-      </ion-label>
-    </ion-item>
-    <ion-card-content>
-      <ion-row>
-        <ion-col size="auto">
-          <ion-icon name="star" color="warning"></ion-icon>
-          <ion-icon name="star" color="warning"></ion-icon>
-          <ion-icon name="star" color="warning"></ion-icon>
-          <ion-icon name="star" color="warning"></ion-icon>
-          <ion-icon name="star" color="warning"></ion-icon>
-        </ion-col>
-        <ion-col>
-          <p>Adorei a comida deste restaurante espetacular!</p>
-        </ion-col>
-      </ion-row>
-    </ion-card-content>
-  </ion-card>
+        <app-star-rating class="text-lg" [rating]="restaurant?.rating" [showRating]="false" *ngIf="loaded"/>
+        <ion-skeleton-text class="rounded-lg w-32" [animated]="true" *ngIf="!loaded"></ion-skeleton-text>
+
+        <div class="text-xl" *ngIf="loaded">{{ reviews!.length }} Review{{ reviews!.length == 1 ? "" : "s" }}</div>
+        <ion-skeleton-text class="rounded-lg w-16" [animated]="true" *ngIf="!loaded"></ion-skeleton-text>
+      </div>
+    </div>
+  </div>
+
+  <div class="flex flex-col gap-2 border-y dark:border-white/10 p-6">
+    <div class="text-2xl">Rate</div>
+    <div class="flex gap-4">
+      <ion-avatar class="h-10 w-10">
+        <ion-img *ngIf="loaded" src="https://ionicframework.com/docs/img/demos/avatar.svg" />
+        <ion-skeleton-text class="rounded-lg w-full h-full" [animated]="true" *ngIf="!loaded"></ion-skeleton-text>
+      </ion-avatar>
+      <app-star-rating routerLink="../review" class="text-4xl" [rating]="0" [showRating]="false" />
+    </div>
+  </div>
+
+  <div class="flex flex-col pt-6">
+    <div class="text-2xl pl-6 pb-2">Reviews</div>
+    <div class="flex flex-col p-4 border-b dark:border-white/10 gap-4" *ngFor="let review of dineReviews">
+      <div class="flex items-center gap-2">
+        <ion-avatar class="h-10 w-10">
+          <ion-img src="https://ionicframework.com/docs/img/demos/avatar.svg" />
+        </ion-avatar>
+        <div class="flex flex-col text-xl truncate">
+          <div>{{ review.user_name }}</div>
+          <app-star-rating class="text-sm" [rating]="review.rating" [showRating]="false" />
+        </div>
+      </div>
+      <div class="line-clamp-3 text-xl">
+        {{ review.comment }}
+      </div>
+    </div>
+
+    <div class="flex w-full items-center justify-center" *ngIf="dineReviews.length === 0 && loaded">
+      <div>No dine-in reviews for this restaurant</div>
+    </div>
+  </div>
 </ion-content>

@@ -1,0 +1,7 @@
+ion-radio {
+  @apply border;
+}
+
+ion-radio.radio-checked{
+  border-color: var(--ion-color-primary);
+}

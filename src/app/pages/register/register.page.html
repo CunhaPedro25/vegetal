@@ -1,6 +1,6 @@
 <ion-content [fullscreen]="true">
   <form (ngSubmit)="createAccount()" [formGroup]="credentials" class="w-full h-screen flex flex-col p-8">
-    <ion-img src="/assets/icon/vegetal.svg" />
+    <ion-img src="/assets/icons/vegetal.svg" />
 
     <div class="flex flex-col gap-2">
       <div class="flex gap-2">
@@ -38,7 +38,7 @@
     </div>
 
     <div class="flex justify-between">
-      <ion-button shape="round" class="w-fit" routerLink="/login" color="dark">
+      <ion-button shape="round" class="dark-button w-fit" routerLink="/login">
         <ion-icon name="arrow-back-outline"></ion-icon>
       </ion-button>
       <ion-button

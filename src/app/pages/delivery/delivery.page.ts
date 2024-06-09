@@ -18,6 +18,7 @@ export class DeliveryPage implements OnInit {
   loaded: boolean = false;
   order_status = ["pending", "on-the-way", "almost", "ready", "delivered"]
   counter = 1
+  isOpen: boolean = false;
 
   constructor(
     private data: DataService,
@@ -39,7 +40,7 @@ export class DeliveryPage implements OnInit {
 
       setInterval(async () => {
         await this.data.updateOrderStatus(this.order!.id, this.order_status[this.counter++])
-      }, Math.floor(Math.random() * (25000 - 5000 + 1)) + 5000)
+      }, Math.floor(Math.random() * (1000 - 500 + 1)) + 500)
     });
   }
 
@@ -56,7 +57,7 @@ export class DeliveryPage implements OnInit {
     if (payload.eventType === 'INSERT' || payload.eventType === 'UPDATE') {
       this.order = payload.new;
       if (this.order!.status === 'delivered') {
-        await this.router.navigate(["/"])
+        await this.router.navigate(["/tabs/home"], { queryParams: { id: this.order?.restaurant, type: this.order?.delivery_type } });
       }
     } else if (payload.eventType === 'DELETE') {
       this.order = undefined

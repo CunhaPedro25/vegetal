@@ -3,16 +3,11 @@ import {Order} from "../../models/order.model";
 import {DataService} from "../../services/data.service";
 import {Restaurant} from "../../models/restaurant.model";
 import {Router} from "@angular/router";
-import {IonicModule} from "@ionic/angular";
 
 @Component({
   selector: 'app-order-card',
   templateUrl: './order-card.component.html',
   styleUrls: ['./order-card.component.scss'],
-  imports: [
-    IonicModule
-  ],
-  standalone: true
 })
 export class OrderCardComponent  implements OnInit {
   @Input() order!: Order;
@@ -25,13 +20,15 @@ export class OrderCardComponent  implements OnInit {
   async ngOnInit() {
     this.restaurant = await this.data.getRestaurant(this.order.restaurant)
     this.items_length = (await this.data.getOrderItems(this.order.id)).length
-    this.delivery = this.order.status !== "" && this.order.status !== null;
+    this.delivery = this.order.status !== "" && this.order.status !== null && this.order.status !== "delivered";
   }
 
   async openOrder(id: number) {
     if(this.delivery){
       return await this.router.navigate([`/delivery`, id]);
+    }else if(this.order.status !== "delivered"){
+      return await this.router.navigate([`/cart`, id]);
     }
-    return await this.router.navigate([`/cart`, id]);
+    return undefined
   }
 }

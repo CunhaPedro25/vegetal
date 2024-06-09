@@ -5,6 +5,10 @@
 </ion-header>
 
 <ion-content [fullscreen]="true" >
+  <ion-refresher slot="fixed" (ionRefresh)="handleRefresh($event)">
+    <ion-refresher-content></ion-refresher-content>
+  </ion-refresher>
+
   <div class="flex flex-col" *ngIf="loaded">
     <app-order-card *ngFor="let order of deliveries" [order]="order"></app-order-card>
     <app-order-card *ngFor="let order of orders" [order]="order" ></app-order-card>

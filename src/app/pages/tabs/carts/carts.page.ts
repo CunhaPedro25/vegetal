@@ -86,6 +86,12 @@ export class CartsPage implements OnInit, OnDestroy {
     this.cdr.detectChanges(); // Trigger change detection to update the view
   }
 
+  handleRefresh(event: { target: { complete: () => void; }; }) {
+    this.getInformation().then(x =>{
+      event.target.complete()
+    })
+  }
+
 
   ngOnDestroy() {
     if (this.subscription) {

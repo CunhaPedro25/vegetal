@@ -5,13 +5,17 @@
 </ion-header>
 
 <ion-content [fullscreen]="true" >
+  <ion-refresher slot="fixed" (ionRefresh)="handleRefresh($event)">
+    <ion-refresher-content></ion-refresher-content>
+  </ion-refresher>
+
   <app-order-card *ngFor="let order of deliveries" [order]="order"></app-order-card>
   <app-order-card [skeleton]="true" *ngIf="!loaded"></app-order-card>
 
   <div class="h-full w-full flex flex-col items-center text-center gap-2 p-4" *ngIf="deliveries?.length === 0">
     <ion-img src="/assets/images/empty-cart.png" class="w-[15rem] mt-24"></ion-img>
-    <div class="text-xl font-semibold">Add items to start a cart!</div>
-    <div>Once you add items from a restaurant, your cart will appear here</div>
+    <div class="text-xl font-semibold">Order from restaurants!</div>
+    <div>Once you get an order delivered, you will see them here.</div>
     <ion-button shape="round" routerLink="/">Start Shopping</ion-button>
   </div>
 </ion-content>

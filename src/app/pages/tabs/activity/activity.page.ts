@@ -38,6 +38,12 @@ export class ActivityPage implements OnInit {
     this.loaded = true
   }
 
+  handleRefresh(event: { target: { complete: () => void; }; }) {
+    this.getInformation().then(x =>{
+      event.target.complete()
+    })
+  }
+
   async ngOnInit() {
     await this.getInformation()
   }

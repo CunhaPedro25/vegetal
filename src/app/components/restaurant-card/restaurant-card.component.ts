@@ -23,6 +23,6 @@ export class RestaurantCardComponent  implements OnInit {
 
   async openRestaurant() {
     if(!this.skeleton)
-      await this.router.navigate([`/restaurant`, this.restaurant?.id], { replaceUrl: true });
+      await this.router.navigate([`/restaurant`, this.restaurant?.id]);
   }
 }

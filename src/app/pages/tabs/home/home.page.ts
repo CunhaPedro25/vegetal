@@ -1,9 +1,9 @@
 import {ChangeDetectorRef, Component, OnInit, ViewChild} from '@angular/core';
 import {AlertController, IonModal, LoadingController} from '@ionic/angular';
-import { DataService } from '../../services/data.service';
-import { Restaurant } from '../../models/restaurant.model';
+import { DataService } from '../../../services/data.service';
+import { Restaurant } from '../../../models/restaurant.model';
 import {Storage} from "@ionic/storage-angular";
-import {MapComponent} from "../../components/map/map.component";
+import {MapComponent} from "../../../components/map/map.component";
 import {ActivatedRoute, Router} from "@angular/router";
 
 @Component({
@@ -49,7 +49,7 @@ export class HomePage implements OnInit {
         if (params["id"] !== undefined) {
           this.param = params["id"]
           this.type = params["type"]
-          this.restaurantName = this.restaurants[this.param].name
+          this.restaurantName = this.restaurants!.find(x => x.id = params["id"])!.name
           this.reviewAlert = true
         }
       })
@@ -64,6 +64,11 @@ export class HomePage implements OnInit {
 
   async closeModal() {
     await this.reviewModal?.dismiss();
+    await this.router.navigate(["/"], {
+      relativeTo: this.route,
+      queryParams: {},
+      queryParamsHandling: 'merge',
+    });
   }
 
   async openAddressSearch() {

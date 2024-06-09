@@ -8,7 +8,7 @@ import { InfoPageRoutingModule } from './info-routing.module';
 
 import { InfoPage } from './info.page';
 import {MapComponent} from "../../../components/map/map.component";
-import {HomePageModule} from "../../home/home.module";
+import {HomePageModule} from "../../tabs/home/home.module";
 import {StarRatingComponent} from "../../../components/star-rating/star-rating.component";
 
 @NgModule({

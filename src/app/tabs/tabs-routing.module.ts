@@ -9,19 +9,19 @@ const routes: Routes = [
     children: [
       {
         path: 'home',
-        loadChildren: () => import('../pages/home/home.module').then(m => m.HomePageModule)
+        loadChildren: () => import('../pages/tabs/home/home.module').then(m => m.HomePageModule)
       },
       {
         path: 'carts',
-        loadChildren: () => import('../pages/carts/carts.module').then(m => m.CartsPageModule)
+        loadChildren: () => import('../pages/tabs/carts/carts.module').then(m => m.CartsPageModule)
       },
       {
         path: 'activity',
-        loadChildren: () => import('../pages/activity/activity.module').then(m => m.ActivityPageModule)
+        loadChildren: () => import('../pages/tabs/activity/activity.module').then(m => m.ActivityPageModule)
       },
       {
         path: 'menu',
-        loadChildren: () => import('../pages/menu/menu.module').then(m => m.MenuPageModule)
+        loadChildren: () => import('../pages/tabs/menu/menu.module').then(m => m.MenuPageModule)
       },
       {
         path: '',

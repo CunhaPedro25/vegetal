@@ -1,0 +1,33 @@
+<ion-content [fullscreen]="true">
+  <ion-card class="flex gap-2 p-4 justify-between">
+    <div class="flex flex-col gap-2 text-black dark:text-white">
+      <div class="text-2xl">{{user?.name}}</div>
+      <div>{{user?.email}}</div>
+      <div>{{user?.phone}}</div>
+    </div>
+    <div>
+      <ion-avatar>
+        <ion-img src="https://ionicframework.com/docs/img/demos/avatar.svg" />
+      </ion-avatar>
+    </div>
+  </ion-card>
+
+  <div class="grid">
+    <ion-item button detail>
+      <ion-icon color="primary" name="location" slot="start"></ion-icon>
+      <ion-label>Addresses</ion-label>
+    </ion-item>
+    <ion-item button detail>
+      <ion-icon color="primary" name="heart" slot="start"></ion-icon>
+      <ion-label>Favorites</ion-label>
+    </ion-item>
+    <ion-item button routerLink="settings" detail>
+      <ion-icon color="primary" name="settings" slot="start"></ion-icon>
+      <ion-label>Settings</ion-label>
+    </ion-item>
+    <ion-item button (click)='logout()'>
+      <ion-icon color="danger" name="log-out" slot="start"></ion-icon>
+      <ion-label color="danger">Logout</ion-label>
+    </ion-item>
+  </div>
+</ion-content>

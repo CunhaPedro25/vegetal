@@ -1,8 +1,8 @@
 import {ChangeDetectorRef, Component, OnDestroy, OnInit} from '@angular/core';
-import {DataService} from '../../services/data.service';
+import {DataService} from '../../../services/data.service';
 import {Order} from 'src/app/models/order.model';
 import {AuthService} from 'src/app/services/auth.service';
-import {LoadingController} from "@ionic/angular";
+import {Storage} from "@ionic/storage-angular";
 
 @Component({
   selector: 'app-carts',
@@ -12,14 +12,15 @@ import {LoadingController} from "@ionic/angular";
 
 export class CartsPage implements OnInit, OnDestroy {
 
-  orders?: Order[];
-  deliveries?: Order[];
+  orders: Order[] = [];
+  deliveries: Order[] = [];
   subscription: any;
+  loaded: boolean = false
 
   constructor(
     private data: DataService,
     private authService: AuthService,
-    private loadingController: LoadingController,
+    private storage: Storage,
     private cdr: ChangeDetectorRef
   ) { }
 
@@ -32,11 +33,14 @@ export class CartsPage implements OnInit, OnDestroy {
   }
 
   async getInformation(){
-    const loading = await this.loadingController.create();
-    await loading.present();
+    this.loaded = false
 
-    const userId = this.authService.getCurrentUserId()
+    await this.storage.create()
+    let userId = this.authService.getCurrentUserId()
+    if(!userId) userId = await this.storage.get("user_id")
+
     if(userId) {
+      await this.storage.set("user_id", userId)
       this.orders = await this.data.getUserOrders(userId);
       this.deliveries = this.orders.filter(x => x.status !== null && x.status !== "" && x.status !== "delivered")
       this.orders = this.orders.filter(x => (x.status === null || x.status === "") )
@@ -45,8 +49,7 @@ export class CartsPage implements OnInit, OnDestroy {
 
     this.subscribeToChanges()
     this.cdr.detectChanges();
-
-    await loading.dismiss();
+    this.loaded = true
   }
 
   subscribeToChanges() {

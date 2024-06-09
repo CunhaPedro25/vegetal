@@ -214,6 +214,16 @@ export class DataService {
     if (error) throw error;
   }
 
+  async updateOrderDeliveryTime(id: number, deliveryTime?: string) {
+    const time = deliveryTime ? deliveryTime : new Date().toISOString();
+    const { data, error } = await this.supabase
+      .from('orders')
+      .update({ delivery_time: time })
+      .eq('id', id);
+    if (error) throw error;
+  }
+
+
 
   // ------ Order Items ------
   async getOrderItems(order: number): Promise<OrderItem[]> {

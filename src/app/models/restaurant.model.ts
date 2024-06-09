@@ -24,7 +24,7 @@ export class Restaurant {
     this.phone = data.phone;
     this.opening_hours = data.opening_hours;
     this.created_at = data.created_at;
-    this.rating = parseFloat(Number.parseFloat(data.rating).toFixed(2));
+    this.rating = parseFloat(data.rating.toFixed(1));
     this.delivery_fee = data.delivery_fee;
     this.latitude = data.latitude;
     this.longitude = data.longitude;

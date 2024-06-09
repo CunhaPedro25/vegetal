@@ -6,7 +6,7 @@ import { IonicModule } from '@ionic/angular';
 import { CartsPageRoutingModule } from './carts-routing.module';
 
 import { CartsPage } from './carts.page';
-import {OrderCardComponent} from "../../components/order-card/order-card.component";
+import {OrderCardComponent} from "../../../components/order-card/order-card.component";
 
 @NgModule({
   imports: [

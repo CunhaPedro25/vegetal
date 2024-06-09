@@ -50,11 +50,6 @@ const routes: Routes = [
     path: 'delivery/:id',
     loadChildren: () => import('./pages/delivery/delivery.module').then( m => m.DeliveryPageModule),
     canActivate: [AuthGuard]
-  },
-  {
-    path: 'settings',
-    loadChildren: () => import('./pages/settings/settings.module').then( m => m.SettingsPageModule),
-    canActivate: [AuthGuard]
   }
 ];
 

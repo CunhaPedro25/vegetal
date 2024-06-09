@@ -6,6 +6,7 @@
 
 <ion-content [fullscreen]="true" >
   <app-order-card *ngFor="let order of deliveries" [order]="order"></app-order-card>
+  <app-order-card [skeleton]="true" *ngIf="!loaded"></app-order-card>
 
   <div class="h-full w-full flex flex-col items-center text-center gap-2 p-4" *ngIf="deliveries?.length === 0">
     <ion-img src="/assets/images/empty-cart.png" class="w-[15rem] mt-24"></ion-img>

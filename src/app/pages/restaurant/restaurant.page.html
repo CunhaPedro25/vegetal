@@ -1,4 +1,4 @@
-<ion-content>
+<ion-content [fullscreen]="true">
   <div class="flex w-full h-40 relative overflow-hidden">
     <ion-thumbnail class="w-full h-full">
       <ion-img *ngIf="loaded" [src]="restaurant?.image_url"></ion-img>
@@ -6,7 +6,7 @@
     </ion-thumbnail>
     <div class="flex h-fit p-2 w-full absolute top-2">
       <ion-buttons>
-        <ion-back-button class="round-button" defaultHref="/"></ion-back-button>
+        <ion-back-button class="round-button" defaultHref="#"></ion-back-button>
       </ion-buttons>
 
       <ion-buttons class="flex-1 flex gap-2 justify-end">
@@ -24,7 +24,7 @@
   </div>
 
   <div class="flex flex-col">
-    <div *ngIf="loaded" class="text-2xl px-2 pt-2">{{ restaurant?.name }}</div>
+    <div *ngIf="loaded" class="text-2xl font-semibold px-2 pt-2 truncate">{{ restaurant?.name }}</div>
     <ion-skeleton-text class="h-6 rounded-lg w-2/3 mx-2 mt-2" *ngIf="!loaded" [animated]="true"></ion-skeleton-text>
 
     <ion-card class="information-card ion-activatable ripple-parent rectangle" routerLink="info">
@@ -32,14 +32,14 @@
       <ion-skeleton-text class="w-2/4 rounded-lg" *ngIf="!loaded" [animated]="true"></ion-skeleton-text>
 
       <div class="flex gap-2 items-center text-black/60 dark:text-white/60" *ngIf="loaded">
-        <p [class]="restaurant?.isOpen() ? 'text-green-500' : ''">{{ restaurant?.isOpen() ? "Open" : "Closed" }}</p>
+        <p class="truncate" [class]="restaurant?.isOpen() ? 'text-green-500' : ''">{{ restaurant?.isOpen() ? "Open" : "Closed" }}</p>
         <ion-icon name="ellipse" class="text-[0.4rem]"></ion-icon>
-        <p>{{ (restaurant?.distance !== undefined) ? Math.round((restaurant?.distance || 0 )* 10) / 10 : 'Unknown' }} km</p>
+        <p class="truncate">{{ (restaurant?.distance !== undefined) ? Math.round((restaurant?.distance || 0 )* 10) / 10 : 'Unknown' }} km</p>
         <ion-icon name="ellipse" class="text-[0.4rem]"></ion-icon>
-        <p>{{ restaurant?.delivery_fee }} € Delivery Fee</p>
+        <p class="truncate">{{ restaurant?.delivery_fee }} € Delivery Fee</p>
         <ion-icon name="chevron-forward"></ion-icon>
       </div>
-      <div class="text-sm text-black/60 dark:text-white/60" *ngIf="loaded"> Tap for hours, info and to review</div>
+      <div class="text-sm text-black/60 dark:text-white/60 truncate" *ngIf="loaded"> Tap for hours, info and to review</div>
 
       <div class="flex gap-2 items-center" *ngIf="!loaded">
         <ion-skeleton-text class="w-1/4 rounded-lg" [animated]="true"></ion-skeleton-text>

@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Users } from 'src/app/models/users.model';
 import { AuthService } from 'src/app/services/auth.service';
 import {Storage} from "@ionic/storage-angular";
+import {AlertController} from "@ionic/angular";
 
 @Component({
   selector: 'app-menu',
@@ -13,8 +14,9 @@ export class MenuPage implements OnInit {
 
   constructor(
     private authService: AuthService,
+    private alertController: AlertController,
     private storage: Storage
-    ) { }
+  ) { }
 
   async ngOnInit() {
     const userId = this.authService.getCurrentUserId()
@@ -24,8 +26,28 @@ export class MenuPage implements OnInit {
   }
 
   async logout() {
-    await this.storage.clear();
-    await this.authService.signOut()
+    await this.storage.create()
+    let alertButtons = [
+      {
+        text: 'Cancel',
+        role: 'cancel',
+      },
+      {
+        text: 'OK',
+        role: 'confirm',
+        handler: async () => {
+          await this.storage.clear();
+          await this.authService.signOut()
+        },
+      },
+    ];
+
+    const alert = await this.alertController.create({
+      header: 'Logging Out',
+      message: 'Are you sure you want to logout?',
+      buttons: alertButtons,
+    });
+    await alert.present()
   }
 
 }

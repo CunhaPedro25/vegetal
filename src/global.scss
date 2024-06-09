@@ -113,3 +113,9 @@ ion-progress-bar::part(progress) {
 .logo-text{
   @apply fill-black dark:fill-white;
 }
+
+ion-header, ion-header *, ion-toolbar, ion-toolbar * {
+  box-shadow: 0 0 !important;
+  --background: var(--ion-background-color) !important;
+  @apply font-semibold text-2xl
+}

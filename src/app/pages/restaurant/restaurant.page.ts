@@ -41,7 +41,6 @@ export class RestaurantPage implements OnInit, OnDestroy {
   ) { }
 
   async ngOnInit() {
-    const loading = await this.loadingController.create();
     this.loaded = false;
 
     this.route.params.subscribe(async (params) => {
@@ -54,7 +53,6 @@ export class RestaurantPage implements OnInit, OnDestroy {
       }
 
       this.subscribeToChanges();
-      await loading.dismiss();
       this.loaded = true
     });
   }

@@ -2,6 +2,7 @@ import {Component, OnInit} from '@angular/core';
 import {Storage} from "@ionic/storage-angular";
 import { StatusBar, Style } from '@capacitor/status-bar';
 import {Capacitor} from "@capacitor/core";
+import {Platform} from "@ionic/angular";
 
 @Component({
   selector: 'app-root',
@@ -12,29 +13,32 @@ export class AppComponent implements OnInit {
   paletteToggle = false;
 
   constructor(
-    private storage: Storage
+    private storage: Storage,
+    private platform: Platform,
   ) {}
 
   async ngOnInit() {
-    await this.storage.create()
-    this.paletteToggle = await this.storage.get("theme");
-    if( !this.paletteToggle ) { this.paletteToggle = false; }
+    this.platform.ready().then(async () => {
+      await this.storage.create()
+      this.paletteToggle = await this.storage.get("theme");
+      if( !this.paletteToggle ) { this.paletteToggle = false; }
 
-    const prefersDark = window.matchMedia('(prefers-color-scheme: dark)');
-    await this.initializeDarkPalette(this.paletteToggle);
-    prefersDark.addEventListener('change', (mediaQuery) => this.initializeDarkPalette(mediaQuery.matches));
-    await this.storage.set("theme", this.paletteToggle)
-    this.storage.get("theme").then(async (isDark) => {
+      const prefersDark = window.matchMedia('(prefers-color-scheme: dark)');
+      prefersDark.addEventListener('change', (mediaQuery) => this.initializeDarkPalette(mediaQuery.matches));
+
+      await this.initializeDarkPalette(this.paletteToggle);
+      await this.storage.set("theme", this.paletteToggle)
+
       if(Capacitor.isNativePlatform()) {
-        if (isDark) {
-          await StatusBar.setStyle({style: Style.Dark});
-          await StatusBar.setBackgroundColor({color: "#0e150e"});
-        } else {
-          await StatusBar.setStyle({style: Style.Light});
-          await StatusBar.setBackgroundColor({color: "#f4fcef"});
-        }
+      if (this.paletteToggle) {
+        await StatusBar.setStyle({style: Style.Dark});
+        await StatusBar.setBackgroundColor({color: "#0e150e"});
+      } else {
+        await StatusBar.setStyle({style: Style.Light});
+        await StatusBar.setBackgroundColor({color: "#f4fcef"});
       }
-    })
+      }
+    });
   }
 
   async initializeDarkPalette(isDark: boolean) {

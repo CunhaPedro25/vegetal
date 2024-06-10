@@ -23,9 +23,10 @@ export class AppComponent implements OnInit {
     const prefersDark = window.matchMedia('(prefers-color-scheme: dark)');
     await this.initializeDarkPalette(this.paletteToggle);
     prefersDark.addEventListener('change', (mediaQuery) => this.initializeDarkPalette(mediaQuery.matches));
-    this.storage.set("theme", this.paletteToggle).then(async () => {
+    await this.storage.set("theme", this.paletteToggle)
+    this.storage.get("theme").then(async (isDark) => {
       if(Capacitor.isNativePlatform()) {
-        if (this.paletteToggle) {
+        if (isDark) {
           await StatusBar.setStyle({style: Style.Dark});
           await StatusBar.setBackgroundColor({color: "#0e150e"});
         } else {

@@ -4,6 +4,8 @@ import {AuthService} from "../../services/auth.service";
 import {AlertController, LoadingController} from "@ionic/angular";
 import {Router} from "@angular/router";
 import {Storage} from "@ionic/storage-angular";
+import {Capacitor} from "@capacitor/core";
+import {StatusBar, Style} from "@capacitor/status-bar";
 
 @Component({
   selector: 'app-login',
@@ -62,6 +64,18 @@ export class LoginPage implements OnInit {
     await alert.present();
   }
 
-  ngOnInit() {
+  async ngOnInit() {
+    await this.storage.create()
+    this.storage.get("theme").then(async (isDark) => {
+      if(Capacitor.isNativePlatform()) {
+        if (isDark) {
+          await StatusBar.setStyle({style: Style.Dark});
+          await StatusBar.setBackgroundColor({color: "#0e150e"});
+        } else {
+          await StatusBar.setStyle({style: Style.Light});
+          await StatusBar.setBackgroundColor({color: "#f4fcef"});
+        }
+      }
+    })
   }
 }

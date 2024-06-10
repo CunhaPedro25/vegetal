@@ -13,7 +13,7 @@
     <ion-skeleton-text class="h-6 rounded-lg" *ngIf="!loaded" [animated]="true"></ion-skeleton-text>
 
     <div class="flex flex-col gap-1">
-      <app-star-rating class="text-lg" [rating]="restaurant?.rating" />
+      <app-star-rating class="text-lg" [rating]="restaurant?.rating" *ngIf="loaded"/>
       <ion-skeleton-text class="w-2/4 rounded-lg"  *ngIf="!loaded" [animated]="true"></ion-skeleton-text>
 
       <div class="flex gap-2 items-center truncate text-black/60 dark:text-white/60" *ngIf="loaded">

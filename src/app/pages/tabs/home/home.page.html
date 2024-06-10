@@ -23,7 +23,7 @@
       </ion-card>
     </div>
 
-    <div class="relative flex flex-col w-full h-full items-center p-2 gap-2" *ngIf="tab === 'Delivery'">
+    <div class="relative flex flex-col w-full h-fit items-center p-2 gap-2 pb-20" *ngIf="tab === 'Delivery'">
       <app-restaurant-card class="w-full" *ngFor="let restaurant of restaurants" [full_width]="true" [restaurant]="restaurant"></app-restaurant-card>
 
       <app-restaurant-card class="w-full" [full_width]="true" [skeleton]="true" *ngIf="!loaded"></app-restaurant-card>

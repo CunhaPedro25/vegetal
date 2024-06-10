@@ -40,7 +40,7 @@ export class DeliveryPage implements OnInit {
 
       setInterval(async () => {
         await this.data.updateOrderStatus(this.order!.id, this.order_status[this.counter++])
-      }, Math.floor(Math.random() * (1000 - 500 + 1)) + 500)
+      }, Math.floor(Math.random() * (2000 - 1000 + 1)) + 1000)
     });
   }
 

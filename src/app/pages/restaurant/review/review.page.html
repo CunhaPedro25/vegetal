@@ -56,8 +56,12 @@
       name="comment"
       *ngIf="reviewType == 'Dine-in'">
     </ion-textarea>
-    <ion-button type="submit" class="w-fit">Submit</ion-button>
+
+    <ion-button type="submit" class="w-fit">
+      <div *ngIf="!submitting">Submit</div>
+      <ion-spinner *ngIf="submitting"></ion-spinner>
+    </ion-button>
   </form>
 
-  <ion-toast [isOpen]="submitted" message="Review submitted" [duration]="5000"></ion-toast>
+  <ion-toast #toast message="Review submitted" [duration]="500"></ion-toast>
 </ion-content>

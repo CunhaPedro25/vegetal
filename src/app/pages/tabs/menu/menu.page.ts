@@ -33,7 +33,7 @@ export class MenuPage implements OnInit {
         role: 'cancel',
       },
       {
-        text: 'OK',
+        text: 'Yes',
         role: 'confirm',
         handler: async () => {
           await this.storage.clear();

@@ -22,16 +22,6 @@ const routes: Routes = [
     canActivate: [AuthGuard]
   },
   {
-    path: 'addresses',
-    loadChildren: () => import('./pages/addresses/addresses.module').then(m => m.AddressesPageModule),
-    canActivate: [AuthGuard]
-  },
-  {
-    path: 'address-details',
-    loadChildren: () => import('./pages/address-details/address-details.module').then( m => m.AddressDetailsPageModule),
-    canActivate: [AuthGuard]
-  },
-  {
     path: 'restaurant/:id',
     loadChildren: () => import('./pages/restaurant/restaurant.module').then( m => m.RestaurantPageModule),
     canActivate: [AuthGuard]
@@ -50,7 +40,27 @@ const routes: Routes = [
     path: 'delivery/:id',
     loadChildren: () => import('./pages/delivery/delivery.module').then( m => m.DeliveryPageModule),
     canActivate: [AuthGuard]
-  }
+  },
+  {
+    path: 'settings',
+    loadChildren: () => import('./pages/settings/settings.module').then(m => m.SettingsPageModule),
+    canActivate: [AuthGuard]
+  },
+  {
+    path: 'favorites',
+    loadChildren: () => import('./pages/favorites/favorites.module').then( m => m.FavoritesPageModule),
+    canActivate: [AuthGuard]
+  },
+  {
+    path: 'addresses',
+    loadChildren: () => import('./pages/addresses/addresses.module').then(m => m.AddressesPageModule),
+    canActivate: [AuthGuard]
+  },
+  {
+    path: 'address-details',
+    loadChildren: () => import('./pages/address-details/address-details.module').then( m => m.AddressDetailsPageModule),
+    canActivate: [AuthGuard]
+  },
 ];
 
 @NgModule({

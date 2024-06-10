@@ -6,7 +6,7 @@
     </ion-thumbnail>
   </div>
 
-  <div class="flex-1 p-2 pb-1 truncate flex flex-col justify-center" [class]="carts ? 'text-md' : 'text-lg'">
+  <div class="flex-1 p-2 pb-1 truncate flex flex-col justify-center" [class]="delivery ? 'text-md' : 'text-lg'">
     <div class="text-xl font-bold text-black dark:text-white truncate" *ngIf="!skeleton">{{ restaurant?.name }}</div>
     <ion-skeleton-text class="h-6" [animated]="true" *ngIf="skeleton" />
 
@@ -19,14 +19,14 @@
       <div class="text-medium truncate" *ngIf="!skeleton">{{ order?.total_price }} €</div>
       <ion-skeleton-text [animated]="true" *ngIf="skeleton" />
     </div>
-    <div class="text-xs text-medium truncate" *ngIf="!carts">{{ formatDeliveryTime(order?.delivery_time) }}</div>
-    <div class="text-xs text-medium truncate" *ngIf="!skeleton && carts">Delivery at {{ order!.delivery_info.address }}</div>
+    <div class="text-xs text-medium truncate" *ngIf="!cartPage">{{ formatDeliveryTime(order?.delivery_time) }}</div>
+    <div class="text-xs text-medium truncate" *ngIf="!skeleton && cartPage">Delivery at {{ order!.delivery_info.address }}</div>
     <ion-skeleton-text [animated]="true" *ngIf="skeleton"/>
 
-    <ion-button *ngIf="this.carts">Follow delivery</ion-button>
+    <ion-button *ngIf="this.delivery">Follow delivery</ion-button>
   </div>
 
-  <div class="flex items-center p-2" *ngIf="!carts && order?.status !== 'delivered' && !skeleton">
+  <div class="flex items-center p-2" *ngIf="!delivery && order?.status !== 'delivered' && !skeleton">
     <ion-icon name="chevron-forward" size="large"></ion-icon>
   </div>
   <ion-ripple-effect *ngIf="order?.status !== 'delivered'"></ion-ripple-effect>

@@ -75,30 +75,11 @@ export class AuthService {
       password: credentials.password,
       options: {
         data: {
-          firstName: credentials.firstName,
-          lastName: credentials.lastName,
+          full_name: credentials.firstName + " " + credentials.lastName,
         }
       }
     });
-
     const user = data.user;
-
-    if (user) {
-      // Insert user details into the `users` table
-      const { error: insertError } = await AuthService.supabase
-        .from('users')
-        .insert([{
-          id: user.id,
-          email: user.email,
-          phone: credentials.phone,
-          name: `${credentials.firstName} ${credentials.lastName}`
-        }]);
-
-      if (insertError) {
-        throw insertError;
-      }
-    }
-
     return { user, error };
   }
 

@@ -4,6 +4,7 @@ import {DataService} from "../../services/data.service";
 import {Restaurant} from "../../models/restaurant.model";
 import {Router} from "@angular/router";
 import {DatePipe} from "@angular/common";
+import {OrderItem} from "../../models/order-item.model";
 
 @Component({
   selector: 'app-order-card',
@@ -14,9 +15,10 @@ import {DatePipe} from "@angular/common";
 export class OrderCardComponent  implements OnInit {
   @Input() order?: Order;
   @Input() skeleton?: boolean;
+  @Input() cartPage?: boolean;
   restaurant: Restaurant | undefined;
   items_length: number = 0;
-  carts: boolean = false;
+  delivery: boolean = false;
 
   constructor(
     protected data: DataService,
@@ -28,7 +30,7 @@ export class OrderCardComponent  implements OnInit {
     if(this.order) {
       this.restaurant = await this.data.getRestaurant(this.order.restaurant)
       this.items_length = (await this.data.getOrderItems(this.order.id)).length
-      this.carts = this.order.status !== "" && this.order.status !== null && this.order.status !== "delivered";
+      this.delivery = this.order.status !== "" && this.order.status !== null && this.order.status !== "delivered";
     }
   }
 
@@ -37,7 +39,7 @@ export class OrderCardComponent  implements OnInit {
   }
 
   async openOrder(id: number) {
-    if(this.carts){
+    if(this.delivery){
       return await this.router.navigate([`/delivery`, id]);
     }else if(this.order?.status !== "delivered"){
       return await this.router.navigate([`/cart`, id]);

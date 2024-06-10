@@ -10,8 +10,12 @@
       </ion-buttons>
 
       <ion-buttons class="flex-1 flex gap-2 justify-end">
-        <ion-button class="round-button">
-          <ion-icon slot="icon-only" name="heart-outline" class="text-2xl"></ion-icon>
+        <ion-button class="round-button" (click)="toggleFavorite()">
+          <ion-icon
+            slot="icon-only"
+            [name]="isFavorite ? 'heart' : 'heart-outline'"
+            [class]="isFavorite ? 'text-red-500' : ''"
+            class="text-2xl"></ion-icon>
         </ion-button>
         <ion-button class="round-button">
           <ion-icon slot="icon-only" name="share-social" class="text-2xl"></ion-icon>

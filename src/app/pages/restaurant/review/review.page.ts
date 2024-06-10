@@ -1,9 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit, ViewChild} from '@angular/core';
 import {ActivatedRoute, Router} from "@angular/router";
 import {DataService} from "../../../services/data.service";
 import {AuthService} from "../../../services/auth.service";
 import {Restaurant} from "../../../models/restaurant.model";
-import {LoadingController} from "@ionic/angular";
+import {IonToast, LoadingController} from "@ionic/angular";
 
 @Component({
   selector: 'app-review',
@@ -11,6 +11,8 @@ import {LoadingController} from "@ionic/angular";
   styleUrls: ['./review.page.scss'],
 })
 export class ReviewPage implements OnInit {
+  @ViewChild('toast') toast: IonToast | undefined;
+
   restaurant?: Restaurant;
   loaded?: boolean;
   ratings: { [key: string]: number } = {
@@ -29,7 +31,7 @@ export class ReviewPage implements OnInit {
   ];
   reviewType: string = "Dine-in";
   comment = '';
-  submitted: boolean = false;
+  submitting: boolean = false;
 
   constructor(
     private data: DataService,
@@ -88,11 +90,15 @@ export class ReviewPage implements OnInit {
   }
 
   async submitReview() {
-    const review = await this.data.uploadReview(this.restaurant!.id, this.auth.getCurrentUserId()!, this.comment, this.calculateFinalRating(), this.reviewType)
-    if (review){
-      this.submitted = true;
-      await this.router.navigate(['../'])
-    }
+    this.submitting = true
+    this.data.uploadReview(this.restaurant!.id, this.auth.getCurrentUserId()!, this.comment, this.calculateFinalRating(), this.reviewType).then((res: any) => {
+      this.submitting = false
+
+      this.toast?.present()
+      this.toast?.onDidDismiss().then(async () => {
+        await this.router.navigate(['../'])
+      })
+    })
   }
   protected readonly Math = Math;
 }

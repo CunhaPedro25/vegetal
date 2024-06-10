@@ -5,7 +5,8 @@ import { Restaurant } from "../../models/restaurant.model";
 import { Item } from "../../models/item.model";
 import { AuthService } from 'src/app/services/auth.service';
 import {Order} from "../../models/order.model";
-import {LoadingController, NavController} from "@ionic/angular";
+import {AlertController} from "@ionic/angular";
+import {Storage} from "@ionic/storage-angular";
 
 @Component({
   selector: 'app-restaurant',
@@ -24,6 +25,8 @@ export class RestaurantPage implements OnInit, OnDestroy {
   showBasket!: boolean;
   order: Order | undefined;
   loaded?: boolean;
+  isFavorite: boolean = false;
+  userId: string | null = "";
 
   segmentChanged(event: any) {
     this.selectedSegment = event.detail.value;
@@ -35,21 +38,29 @@ export class RestaurantPage implements OnInit, OnDestroy {
     private auth: AuthService,
     private route: ActivatedRoute,
     private cdr: ChangeDetectorRef,
-    private loadingController: LoadingController,
+    private storage: Storage,
+    private alertController: AlertController,
     private router: Router,
-    private navCtrl: NavController,
   ) { }
 
   async ngOnInit() {
+    await this.storage.create()
     this.loaded = false;
 
     this.route.params.subscribe(async (params) => {
       this.restaurant = await this.data.getRestaurant(+params['id']);
+      this.userId = this.auth.getCurrentUserId()
+      if (!this.userId) this.userId = await this.storage.get("user_id")
 
-      this.order = await this.data.getRecentOrder(this.auth.getCurrentUserId(), this.restaurant.id);
+      this.order = await this.data.getRecentOrder(this.userId, this.restaurant.id);
       await this.getItems();
       if(this.order) {
         this.showBasket = true
+      }
+
+      if(this.userId) {
+        const favorite = await this.data.getUserFavorite(this.userId, this.restaurant.id);
+        this.isFavorite = favorite !== null;
       }
 
       this.subscribeToChanges();
@@ -83,10 +94,6 @@ export class RestaurantPage implements OnInit, OnDestroy {
     this.desserts = this.items.filter(item => item.type === 'Dessert');
   }
 
-  async openReviews() {
-    await this.navCtrl.navigateForward("/reviews")
-  }
-
   async controlOrders({ item, count }: { item: number; count: number }) {
     if(!this.order) {
       this.order = await this.data.createOrder(this.auth.getCurrentUserId(), this.restaurant!.id);
@@ -110,6 +117,39 @@ export class RestaurantPage implements OnInit, OnDestroy {
   async openCart(){
     if(this.order){
       await this.router.navigate([`/cart`, this.order!.id]);
+    }
+  }
+
+  async toggleFavorite() {
+    if (!this.restaurant) return;
+
+    if (this.isFavorite) {
+      // Show alert before removing from favorites
+      const alert = await this.alertController.create({
+        header: 'Remove Favorite',
+        message: 'Are you sure you want to remove this restaurant from your favorites?',
+        buttons: [
+          {
+            text: 'Cancel',
+            role: 'cancel',
+            cssClass: 'secondary',
+            handler: () => {}
+          },
+          {
+            text: 'Remove',
+            role: 'confirm',
+            handler: async () => {
+              await this.data.deleteUserFavorite(this.userId!, this.restaurant!.id);
+              this.isFavorite = false;
+            }
+          }
+        ]
+      });
+
+      await alert.present();
+    } else {
+      await this.data.setUserFavorite(this.userId!, this.restaurant!.id);
+      this.isFavorite = true;
     }
   }
 

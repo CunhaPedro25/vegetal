@@ -11,8 +11,12 @@
       </ion-buttons>
 
       <ion-buttons class="flex-1 flex gap-2 justify-end">
-        <ion-button class="round-button">
-          <ion-icon slot="icon-only" name="heart-outline" class="text-2xl"></ion-icon>
+        <ion-button class="round-button" (click)="toggleFavorite()">
+          <ion-icon
+            slot="icon-only"
+            [name]="isFavorite ? 'heart' : 'heart-outline'"
+            [class]="isFavorite ? 'text-red-500' : ''"
+            class="text-2xl"></ion-icon>
         </ion-button>
         <ion-button class="round-button">
           <ion-icon slot="icon-only" name="share-social" class="text-2xl"></ion-icon>
@@ -45,9 +49,10 @@
   </div>
 
   <ion-list *ngIf="loaded">
-    <ion-item>
+    <ion-item button (click)="copyAddress()">
       <ion-icon aria-hidden="true" name="location" color="primary" slot="start"></ion-icon>
       <ion-label>{{ restaurant?.address }}</ion-label>
+      <ion-icon aria-hidden="true" name="copy-outline" color="primary" slot="end"></ion-icon>
     </ion-item>
 
     <ion-item lines="none">
@@ -73,7 +78,7 @@
 
     <ion-item button detail="true"  routerLink="../reviews">
       <ion-icon aria-hidden="true" color="primary" name="star" slot="start"></ion-icon>
-      <ion-label>{{ restaurant?.rating }}</ion-label>
+      <ion-label>{{ restaurant?.rating }} <span class="text-xs">({{ reviewsCount }} review{{ reviewsCount == 1 ? "" : "s"}})</span></ion-label>
     </ion-item>
     <ion-item button detail="true" color="primary" class="sticky bottom-0 z-50" routerLink="../review">
       <ion-icon aria-hidden="true" name="create" slot="start"></ion-icon>
@@ -81,5 +86,5 @@
     </ion-item>
   </ion-list>
 
-
+  <ion-toast #toast message="Address Copied" [duration]="500"></ion-toast>
 </ion-content>

@@ -9,3 +9,8 @@
   color: #000;
   border: 1px solid #ccc;
 }
+
+.map {
+  @apply min-h-full h-full w-screen;
+  background-color: var(--ion-background-color);
+}

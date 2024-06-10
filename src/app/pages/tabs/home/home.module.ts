@@ -11,15 +11,18 @@ import {RestaurantCardComponent} from "../../../components/restaurant-card/resta
 import {StarRatingComponent} from "../../../components/star-rating/star-rating.component";
 
 @NgModule({
-  imports: [
-    CommonModule,
-    FormsModule,
-    IonicModule,
-    HomePageRoutingModule,
-    MapComponent,
-    LeafletModule,
-    StarRatingComponent
-  ],
-  declarations: [HomePage, RestaurantCardComponent]
+    imports: [
+        CommonModule,
+        FormsModule,
+        IonicModule,
+        HomePageRoutingModule,
+        MapComponent,
+        LeafletModule,
+        StarRatingComponent
+    ],
+    exports: [
+        RestaurantCardComponent
+    ],
+    declarations: [HomePage, RestaurantCardComponent]
 })
 export class HomePageModule {}

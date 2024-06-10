@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
+import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 
 import { IonicModule } from '@ionic/angular';
 
@@ -10,13 +10,14 @@ import { AddressDetailsPage } from './address-details.page';
 import {MapComponent} from "../../components/map/map.component";
 
 @NgModule({
-  imports: [
-    CommonModule,
-    FormsModule,
-    IonicModule,
-    AddressDetailsPageRoutingModule,
-    MapComponent
-  ],
+    imports: [
+        CommonModule,
+        FormsModule,
+        IonicModule,
+        AddressDetailsPageRoutingModule,
+        MapComponent,
+        ReactiveFormsModule
+    ],
     exports: [
         AddressDetailsPage
     ],

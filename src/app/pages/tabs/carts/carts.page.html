@@ -10,8 +10,8 @@
   </ion-refresher>
 
   <div class="flex flex-col" *ngIf="loaded">
-    <app-order-card *ngFor="let order of deliveries" [order]="order"></app-order-card>
-    <app-order-card *ngFor="let order of orders" [order]="order" ></app-order-card>
+    <app-order-card *ngFor="let order of deliveries" [order]="order" [cartPage]="true"></app-order-card>
+    <app-order-card *ngFor="let order of orders" [order]="order" [cartPage]="true"></app-order-card>
   </div>
   <app-order-card [skeleton]="true" *ngIf="!loaded"></app-order-card>
 

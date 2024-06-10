@@ -1,0 +1,28 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+  <ion-buttons slot="start">
+    <ion-back-button default-href="#"></ion-back-button>
+  </ion-buttons>
+  <ion-title>Settings</ion-title>
+</ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <div class="flex flex-col border-b pb-2 mb-4">
+    <ion-label color="primary" class="px-4 text-xl">Appearance</ion-label>
+    <ion-item lines="none">
+      <ion-icon name="contrast" slot="start"/>
+      <ion-select label="Theme" [value]="paletteToggle ? 'dark' : 'light'" interface="popover" (ionChange)="handleChange($event)">
+        <ion-select-option value="light">Light</ion-select-option>
+        <ion-select-option value="dark">Dark</ion-select-option>
+      </ion-select>
+    </ion-item>
+  </div>
+  <div class="flex flex-col border-b pb-2 mb-4">
+    <ion-label color="primary" class="px-4 text-xl">System</ion-label>
+    <ion-item button lines="none" (click)="clearCache()">
+      <ion-icon name="trash-bin" color="danger" slot="start" />
+      <ion-label color="danger" class="flex-1 flex items-center">Clear Cache</ion-label>
+    </ion-item>
+  </div>
+</ion-content>

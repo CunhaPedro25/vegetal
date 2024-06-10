@@ -11,32 +11,39 @@ import {OrderItem} from '../models/order-item.model';
 import {Category} from '../models/category.model';
 import {Favorite} from '../models/favorite.model';
 import {Storage} from "@ionic/storage-angular";
+import {BehaviorSubject} from "rxjs";
 
 @Injectable({
   providedIn: 'root'
 })
 export class DataService {
   private supabase: SupabaseClient;
-  private selectedAddress: Address = {
-    address: 'Av. do Atlântico 644 4900, Viana do Castelo',
-    latitude: 41.69427867398096,  // Default latitude
-    longitude: -8.846855462371082,  // Default longitude
-    city: "Viana do Castelo",
-    zip_code: "644-4900",
-    door: 45,
-    info: "Big school"
-  };
+  private selectedAddressSubject: BehaviorSubject<Address>;
 
   constructor(private storage: Storage) {
     this.supabase = AuthService.client();
+    const initialAddress: Address = {
+      address: 'Av. do Atlântico 644 4900, Viana do Castelo',
+      latitude: 41.69427867398096,
+      longitude: -8.846855462371082,
+      city: "Viana do Castelo",
+      zip_code: "644-4900",
+      door: 45,
+      info: "Big school"
+    };
+    this.selectedAddressSubject = new BehaviorSubject<Address>(initialAddress);
   }
 
   async setSelectedAddress(address: Address) {
-    this.selectedAddress = address;
+    this.selectedAddressSubject.next(address);
   }
 
   getSelectedAddress(): Address {
-    return this.selectedAddress
+    return this.selectedAddressSubject.value;
+  }
+
+  getSelectedAddressObservable() {
+    return this.selectedAddressSubject.asObservable();
   }
 
   // Restaurants
@@ -54,7 +61,7 @@ export class DataService {
 
     data.forEach(item => {
       const restaurant = new Restaurant(item);
-      restaurant.calculateDistance(this.selectedAddress.latitude, this.selectedAddress.longitude);
+      restaurant.calculateDistance(this.getSelectedAddress().latitude, this.getSelectedAddress().longitude);
       if (restaurant.distance < maxDistance) {
         restaurants.push(restaurant);
       }
@@ -71,7 +78,7 @@ export class DataService {
       .single();
     if (error) throw error;
     const restaurant = new Restaurant(data);
-    restaurant.calculateDistance(this.selectedAddress.latitude, this.selectedAddress.longitude);
+    restaurant.calculateDistance(this.getSelectedAddress().latitude, this.getSelectedAddress().longitude);
     return restaurant;
   }
 
@@ -103,6 +110,42 @@ export class DataService {
       .eq('user', user);
     if (error) throw error;
     return data as UserAddress[];
+  }
+
+  async checkAddressExists(user: string, address: string): Promise<Address | null> {
+    const { data, error } = await this.supabase
+      .from('addresses')
+      .select('*')
+      .eq('user', user)
+      .eq('address', address)
+      .limit(1)
+      .maybeSingle();
+
+    if (error) throw error;
+    return data ? (data as Address) : null;
+  }
+
+  async createAddress(user: string, address: Address): Promise<Address> {
+    const { data, error } = await this.supabase
+      .from('addresses')
+      .insert({ ...address, user: user })
+      .select()
+      .single();
+
+    if (error) throw error;
+    return data as Address;
+  }
+
+  async updateAddress(id: number | undefined, address: Address): Promise<Address> {
+    const { data, error } = await this.supabase
+      .from('addresses')
+      .update(address)
+      .eq('id', id)
+      .select()
+      .single();
+
+    if (error) throw error;
+    return data as Address;
   }
 
 
@@ -154,7 +197,7 @@ export class DataService {
     return categories.data as Category[];
   }
 
-  // Favorites
+  // ------ Favorites ------
   async getUserFavorites(user: string): Promise<Favorite[]> {
     const { data, error } = await this.supabase
       .from('favorites')
@@ -162,6 +205,34 @@ export class DataService {
       .eq('user', user);
     if (error) throw error;
     return data as Favorite[];
+  }
+
+  async getUserFavorite(user: string, restaurant: number): Promise<Favorite | null> {
+    const { data, error } = await this.supabase
+      .from('favorites')
+      .select('*')
+      .eq('user', user)
+      .eq('restaurant', restaurant)
+      .limit(1)
+      .maybeSingle();
+    if (error) throw error;
+    return data ? (data as Favorite) : null;
+  }
+
+  async setUserFavorite(user: string, restaurant: number): Promise<void> {
+    const { data, error } = await this.supabase
+      .from('favorites')
+      .insert({ restaurant: restaurant, user: user });
+    if (error) throw error;
+  }
+
+  async deleteUserFavorite(user: string, restaurant: number): Promise<void> {
+    const { data, error } = await this.supabase
+      .from('favorites')
+      .delete()
+      .eq('user', user)
+      .eq('restaurant', restaurant);
+    if (error) throw error;
   }
 
   // ------ Order ------
@@ -199,7 +270,7 @@ export class DataService {
     const type = await this.storage.get(`tab`)
     const { data, error } = await this.supabase
       .from('orders')
-      .insert({ user: user, restaurant: restaurant, delivery_info: this.selectedAddress, delivery_type: type })
+      .insert({ user: user, restaurant: restaurant, delivery_info: this.getSelectedAddress(), delivery_type: type })
       .select()
       .single();
     if (error) throw error;

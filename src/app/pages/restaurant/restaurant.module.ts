@@ -20,7 +20,8 @@ import {StarRatingComponent} from "../../components/star-rating/star-rating.comp
         StarRatingComponent
     ],
     exports: [
-        ItemCardComponent
+        ItemCardComponent,
+        RestaurantPage
     ],
     declarations: [RestaurantPage, ItemCardComponent]
 })

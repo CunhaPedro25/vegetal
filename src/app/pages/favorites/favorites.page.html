@@ -1,0 +1,25 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button default-href="#"></ion-back-button>
+    </ion-buttons>
+    <ion-title>Favorites</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <div class="flex flex-col gap-2 w-full px-4 py-2" *ngIf="loaded">
+    <app-restaurant-card [full_width]="true" *ngFor="let restaurant of favorites" [restaurant]="restaurant" />
+  </div>
+
+  <div *ngIf="!loaded" class="flex flex-col gap-2 w-full px-4 py-2">
+    <app-restaurant-card [full_width]="true" [skeleton]="true"></app-restaurant-card>
+  </div>
+
+  <div *ngIf="loaded && favorites.length == 0" class="h-full w-full flex flex-col items-center text-center gap-2 p-4">
+    <ion-img src="/assets/images/heart-notes.png" class="w-[15rem] mt-24"></ion-img>
+    <div class="text-xl font-semibold">Check your favorite restaurants!</div>
+    <div>You can set restaurants as favorites, and quickly access them here</div>
+    <ion-button shape="round" routerLink="/">Start Exploring</ion-button>
+  </div>
+</ion-content>

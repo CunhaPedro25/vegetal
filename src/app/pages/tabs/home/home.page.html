@@ -1,0 +1,75 @@
+<ion-content [fullscreen]="true">
+  <div class="flex flex-col h-full w-full">
+    <div class="flex flex-col gap-2">
+      <ion-searchbar placeholder="Search" (ionInput)="search($event)"></ion-searchbar>
+
+      <ion-radio-group [(ngModel)]="tab" (ngModelChange)="onTabChange()" name="reviewType" class="flex gap-2 w-full justify-center">
+        <ion-radio slot="start" value="Delivery">
+          <ion-chip [class]=" tab === 'Delivery' ?  'active' : ''">Delivery</ion-chip>
+        </ion-radio>
+        <ion-radio slot="start" value="Pick-up">
+          <ion-chip [class]=" tab === 'Pick-up' ?  'active' : ''">Pick-up / Dine-in</ion-chip>
+        </ion-radio>
+      </ion-radio-group>
+
+      <ion-card class="delivery-card ion-activatable ripple-parent rectangle" (click)="openAddressSearch()">
+        <div class="text-xs">{{ tab === 'dine-in' ? "Near" : "Delivering" }} to:</div>
+        <div class="flex gap-2 items-center truncate">
+          <div class="truncate" *ngIf="loaded">{{ data.getSelectedAddress().address }}</div>
+          <ion-skeleton-text class="h-6 rounded-lg" *ngIf="!loaded" [animated]="true"></ion-skeleton-text>
+          <ion-icon class="text-2xl" name="chevron-down-outline"></ion-icon>
+        </div>
+        <ion-ripple-effect></ion-ripple-effect>
+      </ion-card>
+    </div>
+
+    <div class="relative flex flex-col w-full h-full items-center p-2 gap-2" *ngIf="tab === 'Delivery'">
+      <app-restaurant-card class="w-full" *ngFor="let restaurant of restaurants" [full_width]="true" [restaurant]="restaurant"></app-restaurant-card>
+
+      <app-restaurant-card class="w-full" [full_width]="true" [skeleton]="true" *ngIf="!loaded"></app-restaurant-card>
+      <app-restaurant-card class="w-full" [full_width]="true" [skeleton]="true" *ngIf="!loaded"></app-restaurant-card>
+      <app-restaurant-card class="w-full" [full_width]="true" [skeleton]="true" *ngIf="!loaded"></app-restaurant-card>
+
+      <div *ngIf="restaurants.length === 0 && loaded" >No available restaurants</div>
+    </div>
+
+    <div class="relative flex flex-col w-full h-full flex-1 items-end" *ngIf="tab === 'Pick-up'">
+      <app-map class="top-0 left-0 h-full z-0" *ngIf="loaded" />
+      <ion-thumbnail class="h-full w-full" *ngIf="!loaded">
+        <ion-skeleton-text [animated]="true"></ion-skeleton-text>
+      </ion-thumbnail>
+
+      <div class="floating-restaurants">
+        <div class="text-2xl px-2 pt-4 font-bold">Restaurants In the Area</div>
+
+
+        <div *ngIf="restaurants.length > 0 && loaded" class="flex max-w-full overflow-x-scroll snap-mandatory snap-x">
+          <app-restaurant-card class="snap-center" *ngFor="let restaurant of restaurants" [restaurant]="restaurant"></app-restaurant-card>
+        </div>
+        <div *ngIf="!loaded" class="flex max-w-full overflow-x-scroll snap-mandatory snap-x">
+          <app-restaurant-card class="snap-center" [skeleton]="true"></app-restaurant-card>
+          <app-restaurant-card class="snap-center" [skeleton]="true"></app-restaurant-card>
+          <app-restaurant-card class="snap-center" [skeleton]="true"></app-restaurant-card>
+        </div>
+
+        <div *ngIf="restaurants.length === 0 && loaded" class="flex w-full h-40 justify-center items-center">
+          <div>No available restaurants</div>
+        </div>
+      </div>
+    </div>
+
+      <ion-modal class="popover" #reviewModal [isOpen]="reviewAlert" *ngIf="loaded">
+        <ng-template>
+          <div class="flex flex-col items-center justify-center p-4 gap-4">
+            <div class="text-4xl">Enjoy your order</div>
+            <div class="text-lg">Your order from {{ restaurantName }} was delivered. Please take a minute to review your order</div>
+            <div class="flex flex-col w-full gap-1">
+              <ion-button class="w-full h-14" (click)="openReview()">Review Order</ion-button>
+              <ion-button class="dark-button w-full" (click)="closeModal()">Close</ion-button>
+            </div>
+          </div>
+        </ng-template>
+      </ion-modal>
+
+  </div>
+</ion-content>

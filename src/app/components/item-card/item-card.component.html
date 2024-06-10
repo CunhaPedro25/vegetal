@@ -1,19 +1,42 @@
-<ion-card class="flex h-[8rem] bg-white/10 dark:bg-black/20">
-  <div class="w-1/3 h-full overflow-hidden">
-    <ion-img class="object-cover h-full" [src]="item.image_url"></ion-img>
+<div class="flex h-[8rem] m-2">
+  <div class="w-1/3 h-full p-2 overflow-hidden" *ngIf="!skeleton">
+    <ion-thumbnail class="w-full h-full overflow-hidden rounded-lg">
+      <ion-img [src]="item?.image_url"></ion-img>
+    </ion-thumbnail>
   </div>
 
-  <div class="flex flex-col flex-1 p-2">
-    <div class="text-2xl text-black dark:text-white">{{ item.name }}</div>
-    <div class="text-xl" >{{ item.price }} €</div>
+  <div class="w-1/3 h-full p-2 overflow-hidden" *ngIf="skeleton">
+    <ion-thumbnail class="w-full h-full overflow-hidden rounded-lg">
+      <ion-skeleton-text [animated]="true"></ion-skeleton-text>
+    </ion-thumbnail>
+  </div>
+
+  <div class="flex flex-col flex-1 p-2" *ngIf="!skeleton">
+    <div class="text-2xl text-black dark:text-white">{{ item?.name }}</div>
+    <div class="text-lg text-black/60 dark:text-white/60" >{{ item?.price }} €</div>
+    <div class="text-black/40 dark:text-white/40 line-clamp-2" >{{ item?.description }}</div>
+  </div>
+
+  <div class="flex flex-col w-2/4 p-2 justify-center" *ngIf="skeleton">
+    <ion-skeleton-text class="h-4 rounded-md" [animated]="true"></ion-skeleton-text>
+    <ion-skeleton-text class="w-10 rounded-md" [animated]="true"></ion-skeleton-text>
+    <ion-skeleton-text class="rounded-md" [animated]="true"></ion-skeleton-text>
+    <ion-skeleton-text class="rounded-md" [animated]="true"></ion-skeleton-text>
+    <ion-skeleton-text class="rounded-md" [animated]="true"></ion-skeleton-text>
   </div>
 
 
-  <div class="flex justify-center items-center p-2">
-    <ion-icon (click)="decrementCounter()" color="primary" class="text-2xl" name="remove-circle" *ngIf="counter > 0"></ion-icon>
+
+  <div class="flex justify-center items-center p-2" *ngIf="!skeleton">
+    <ion-button (click)="decrementCounter()" shape="round" color="primary" size="small" *ngIf="counter > 0">
+      <ion-icon slot="icon-only" class="text-2xl" name="remove"></ion-icon>
+    </ion-button>
 
     <div class="text-xl mx-2" *ngIf="counter > 0">{{ counter }}</div>
 
-    <ion-icon (click)="incrementCounter()" color="primary" [class]=" counter > 0 ? 'text-2xl' : 'text-6xl'" name="add-circle"></ion-icon>
+    <ion-button (click)="incrementCounter()" shape="round" color="primary" [size]=" counter > 0 ? 'small' : 'large'">
+      <ion-icon slot="icon-only" [class]=" counter > 0 ? 'text-2xl' : 'text-4xl'" name="add"></ion-icon>
+    </ion-button>
   </div>
-</ion-card>
+</div>
+<hr class="border-[0.1rem] dark:opacity-20">

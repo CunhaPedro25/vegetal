@@ -3,6 +3,7 @@ import {FormBuilder, Validators} from "@angular/forms";
 import {AuthService} from "../../services/auth.service";
 import {AlertController, LoadingController} from "@ionic/angular";
 import {Router} from "@angular/router";
+import {Storage} from "@ionic/storage-angular";
 
 @Component({
   selector: 'app-login',
@@ -18,12 +19,15 @@ export class LoginPage implements OnInit {
   constructor(
     private fb: FormBuilder,
     private authService: AuthService,
+    private storage: Storage,
     private loadingController: LoadingController,
     private alertController: AlertController,
     private router: Router
   ) {
+    this.storage.create()
     this.authService.getCurrentUser().subscribe((user) => {
       if (user) {
+        this.storage.set("user_id", this.authService.getCurrentUser())
         this.router.navigate(["/"], {replaceUrl: true});
       }
     })

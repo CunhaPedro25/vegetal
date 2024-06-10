@@ -1,0 +1,19 @@
+.floating-restaurants {
+  @apply flex flex-col gap-1 w-full bottom-0;
+  background-color: var(--ion-background-color);
+}
+
+ion-radio::part(container) {
+  width: 0;
+  height: 0;
+  display: none;
+  margin: 0;
+}
+
+ion-radio::part(label) {
+  margin: 0;
+}
+
+.delivery-card {
+  @apply bg-transparent rounded-none p-0 m-0 flex flex-col flex-1 gap-1 truncate text-lg text-black dark:text-white p-2;
+}

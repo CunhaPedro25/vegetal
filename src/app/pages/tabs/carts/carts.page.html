@@ -1,0 +1,24 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title size="large">Carts</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true" >
+  <ion-refresher slot="fixed" (ionRefresh)="handleRefresh($event)">
+    <ion-refresher-content></ion-refresher-content>
+  </ion-refresher>
+
+  <div class="flex flex-col" *ngIf="loaded">
+    <app-order-card *ngFor="let order of deliveries" [order]="order" [cartPage]="true"></app-order-card>
+    <app-order-card *ngFor="let order of orders" [order]="order" [cartPage]="true"></app-order-card>
+  </div>
+  <app-order-card [skeleton]="true" *ngIf="!loaded"></app-order-card>
+
+  <div class="h-full w-full flex flex-col items-center text-center gap-2 p-4" *ngIf="orders?.length === 0 && deliveries?.length === 0 && loaded">
+    <ion-img src="/assets/images/empty-cart.png" class="w-[15rem] mt-24"></ion-img>
+    <div class="text-xl font-semibold">Add items to start a cart!</div>
+    <div>Once you add items from a restaurant, your cart will appear here</div>
+    <ion-button shape="round" routerLink="/">Start Shopping</ion-button>
+  </div>
+</ion-content>

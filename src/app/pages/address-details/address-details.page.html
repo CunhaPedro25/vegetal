@@ -1,0 +1,62 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button default-href="#"></ion-back-button>
+    </ion-buttons>
+    <ion-title>Address Details</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <div class="flex relative h-60 justify-center">
+    <app-map class="z-10" [selectLocationMode]="true" [showControls]="false" />
+    <ion-button id="open-modal" class="absolute z-50  bottom-2">Edit location</ion-button>
+  </div>
+
+  <form (ngSubmit)="saveAddress()" [formGroup]="fields" class="mb-20">
+    <div class="flex flex-col p-6 gap-4">
+      <div class="flex flex-col gap-1">
+        <div class="text-xl">Door number <span class="text-xs">(Required)</span> </div>
+        <ion-input type="text" formControlName="door" ></ion-input>
+        <ion-note
+          *ngIf="(door.dirty || door.touched) && door.errors"
+          slot="error"
+        >
+          Please insert email correctly
+        </ion-note>
+      </div>
+      <div class="flex flex-col gap-1">
+        <div class="text-xl">More information</div>
+        <ion-input type="text" formControlName="info"></ion-input>
+      </div>
+    </div>
+
+    <ion-modal #modal trigger="open-modal">
+      <ng-template >
+        <div class="flex flex-col h-screen w-screen justify-end">
+          <ion-buttons class="absolute top-2 left-2 z-[1000]">
+            <ion-button class="round-button" (click)="closeModal()">
+              <ion-icon slot="icon-only" name="arrow-back" class="text-2xl"></ion-icon>
+            </ion-button>
+          </ion-buttons>
+
+          <app-map class="flex-1" [selectLocationMode]="true" (centerChanged)="checkCenter($event)"/>
+
+          <div class="p-2 w-full flex bg-[#f4fcef] dark:bg-[#0e150e] z-[1000]">
+            <ion-button
+              type="submit"
+              class="w-full"
+              (click)="setCoords()">Save Address</ion-button>
+          </div>
+        </div>
+      </ng-template>
+    </ion-modal>
+
+    <div class="p-2 w-full fixed bottom-0 flex z-20 bg-[#f4fcef] dark:bg-[#0e150e]">
+      <ion-button
+        type="submit"
+        class="w-full"
+        [disabled]="fields.invalid">Save Address</ion-button>
+    </div>
+  </form>
+</ion-content>

@@ -7,14 +7,22 @@ import { ItemCardComponent } from "../../components/item-card/item-card.componen
 import { RestaurantPageRoutingModule } from './restaurant-routing.module';
 
 import { RestaurantPage } from './restaurant.page';
+import {HomePageModule} from "../tabs/home/home.module";
+import {StarRatingComponent} from "../../components/star-rating/star-rating.component";
 
 @NgModule({
-  imports: [
-    CommonModule,
-    FormsModule,
-    IonicModule,
-    RestaurantPageRoutingModule
-  ],
-  declarations: [RestaurantPage, ItemCardComponent]
+    imports: [
+        CommonModule,
+        FormsModule,
+        IonicModule,
+        RestaurantPageRoutingModule,
+        HomePageModule,
+        StarRatingComponent
+    ],
+    exports: [
+        ItemCardComponent,
+        RestaurantPage
+    ],
+    declarations: [RestaurantPage, ItemCardComponent]
 })
 export class RestaurantPageModule {}

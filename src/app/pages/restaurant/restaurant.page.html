@@ -1,41 +1,59 @@
-<ion-content>
+<ion-content [fullscreen]="true">
   <div class="flex w-full h-40 relative overflow-hidden">
-    <ion-img class="absolute object-contain " [src]="restaurant?.image_url"></ion-img>
-    <div class="flex h-fit p-2 w-full">
+    <ion-thumbnail class="w-full h-full">
+      <ion-img *ngIf="loaded" [src]="restaurant?.image_url"></ion-img>
+      <ion-skeleton-text *ngIf="!loaded" [animated]="true"></ion-skeleton-text>
+    </ion-thumbnail>
+    <div class="flex h-fit p-2 w-full absolute top-2">
       <ion-buttons>
-        <ion-back-button class="bg-white dark:bg-black rounded-full" defaultHref="/"></ion-back-button>
+        <ion-back-button class="round-button" defaultHref="#"></ion-back-button>
       </ion-buttons>
 
       <ion-buttons class="flex-1 flex gap-2 justify-end">
-        <ion-button class="bg-white dark:bg-black rounded-full">
-          <ion-icon slot="icon-only" name="heart-outline" class="text-2xl"></ion-icon>
+        <ion-button class="round-button" (click)="toggleFavorite()">
+          <ion-icon
+            slot="icon-only"
+            [name]="isFavorite ? 'heart' : 'heart-outline'"
+            [class]="isFavorite ? 'text-red-500' : ''"
+            class="text-2xl"></ion-icon>
         </ion-button>
-        <ion-button class="bg-white dark:bg-black rounded-full">
+        <ion-button class="round-button">
           <ion-icon slot="icon-only" name="share-social" class="text-2xl"></ion-icon>
         </ion-button>
-        <ion-button class="bg-white dark:bg-black rounded-full">
-          <ion-icon slot="icon-only" name="information-circle" class="text-2xl"></ion-icon>
+        <ion-button class="round-button" routerLink="info">
+          <ion-icon slot="icon-only" name="information-circle" class="text-2xl" ></ion-icon>
         </ion-button>
       </ion-buttons>
     </div>
   </div>
 
+  <div class="flex flex-col">
+    <div *ngIf="loaded" class="text-2xl font-semibold px-2 pt-2 truncate">{{ restaurant?.name }}</div>
+    <ion-skeleton-text class="h-6 rounded-lg w-2/3 mx-2 mt-2" *ngIf="!loaded" [animated]="true"></ion-skeleton-text>
 
-  <div class="flex flex-col p-2">
-    <div class="text-2xl">{{ restaurant?.name }}</div>
-    <div class="flex flex-col gap-1">
-      <div class="flex gap-1 items-center text-lg text-yellow-400" (click)="openReviews()">
-        <div>{{ restaurant?.rating }}</div>
-        <ion-icon name="star" *ngFor="let star of [].constructor(restaurant?.filledStars)"></ion-icon>
-        <ion-icon name="star-half" *ngIf="restaurant?.semiFilledStars"></ion-icon>
-        <ion-icon name="star-outline" *ngFor="let star of [].constructor(restaurant?.emptyStars)"></ion-icon>
+    <ion-card class="information-card ion-activatable ripple-parent rectangle" routerLink="info">
+      <app-star-rating class="text-lg" [rating]="restaurant?.rating" *ngIf="loaded" />
+      <ion-skeleton-text class="w-2/4 rounded-lg" *ngIf="!loaded" [animated]="true"></ion-skeleton-text>
+
+      <div class="flex gap-2 items-center text-black/60 dark:text-white/60" *ngIf="loaded">
+        <p class="truncate" [class]="restaurant?.isOpen() ? 'text-green-500' : ''">{{ restaurant?.isOpen() ? "Open" : "Closed" }}</p>
+        <ion-icon name="ellipse" class="text-[0.4rem]"></ion-icon>
+        <p class="truncate">{{ (restaurant?.distance !== undefined) ? Math.round((restaurant?.distance || 0 )* 10) / 10 : 'Unknown' }} km</p>
+        <ion-icon name="ellipse" class="text-[0.4rem]"></ion-icon>
+        <p class="truncate">{{ restaurant?.delivery_fee }} € Delivery Fee</p>
+        <ion-icon name="chevron-forward"></ion-icon>
       </div>
-      <div class="flex gap-2 items-center">
-        <p>{{ restaurant?.isOpen ? "Open" : "Closed" }}</p>
-        <p>{{ (restaurant?.distance !== undefined) ? Math.round((restaurant?.distance || 0 )* 10) / 10 : 'Unknown' }} km</p>
-        <p>{{ restaurant?.delivery_fee }} Delivery Fee</p>
+      <div class="text-sm text-black/60 dark:text-white/60 truncate" *ngIf="loaded"> Tap for hours, info and to review</div>
+
+      <div class="flex gap-2 items-center" *ngIf="!loaded">
+        <ion-skeleton-text class="w-1/4 rounded-lg" [animated]="true"></ion-skeleton-text>
+        <ion-skeleton-text class="w-1/4 rounded-lg" [animated]="true"></ion-skeleton-text>
+        <ion-skeleton-text class="w-1/4 rounded-lg" [animated]="true"></ion-skeleton-text>
       </div>
-    </div>
+      <ion-skeleton-text class="w-1/4 rounded-lg" [animated]="true" *ngIf="!loaded"></ion-skeleton-text>
+
+      <ion-ripple-effect *ngIf="loaded"></ion-ripple-effect>
+    </ion-card>
   </div>
 
   <ion-segment [(ngModel)]="selectedSegment" (ionChange)="segmentChanged($event)">
@@ -52,20 +70,34 @@
 
   <div [ngSwitch]="selectedSegment">
     <div *ngSwitchCase="'menu'">
-      <app-item-card *ngFor="let food of foods" [item]="food"></app-item-card>
+      <div class="text-2xl font-bold text-black dark:text-white mx-4 mt-2">Menu</div>
+      <app-item-card *ngFor="let menu of menus" [item]="menu" (emitter)="controlOrders($event)"></app-item-card>
+      <app-item-card [skeleton]="true" *ngIf="!loaded"></app-item-card>
+      <div class="w-full h-full flex justify-center items-center px-4 pt-12" *ngIf="menus.length === 0  && loaded">
+        <div>Menu items unavailable</div>
+      </div>
     </div>
 
     <div *ngSwitchCase="'drinks'">
-      <app-item-card *ngFor="let drink of drinks" [item]="drink"></app-item-card>
+      <div class="text-2xl font-bold text-black dark:text-white mx-4 mt-2">Drinks</div>
+      <app-item-card *ngFor="let drink of drinks" [item]="drink" (emitter)="controlOrders($event)"></app-item-card>
+      <app-item-card [skeleton]="true" *ngIf="!loaded"></app-item-card>
+      <div class="w-full h-full flex justify-center items-center px-4 pt-12" *ngIf="drinks.length === 0 && loaded">
+        <div>Drink items unavailable</div>
+      </div>
     </div>
 
     <div *ngSwitchCase="'desserts'">
-      <app-item-card *ngFor="let dessert of desserts" [item]="dessert"></app-item-card>
+      <div class="text-2xl font-bold text-black dark:text-white mx-4 mt-2">Desserts</div>
+      <app-item-card *ngFor="let dessert of desserts" [item]="dessert" (emitter)="controlOrders($event)"></app-item-card>
+      <app-item-card [skeleton]="true" *ngIf="!loaded"></app-item-card>
+      <div class="w-full h-full flex justify-center items-center px-4 pt-12" *ngIf="desserts.length === 0  && loaded">
+        <div>Dessert items unavailable</div>
+      </div>
     </div>
   </div>
 
-  <div class="absolute left-0 bottom-0 w-full p-2" *ngIf="counter > 0">
-    <ion-button class="w-full" routerLink="/cart">View Basket</ion-button>
+  <div class="absolute left-0 bottom-0 w-full p-2" *ngIf="showBasket">
+    <ion-button class="w-full" (click)="openCart()">View Basket</ion-button>
   </div>
-
 </ion-content>

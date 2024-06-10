@@ -1,0 +1,33 @@
+<ion-card class="h-fit flex ion-activatable ripple-parent rounded-rectangle" (click)="openOrder(order!.id)">
+  <div class="h-[6rem] w-[6rem] overflow-hidden relative rounded-lg m-2">
+    <ion-thumbnail class="w-full h-full">
+      <ion-img [src]="restaurant?.image_url" *ngIf="!skeleton"></ion-img>
+      <ion-skeleton-text class="w-full h-full" [animated]="true" *ngIf="skeleton" />
+    </ion-thumbnail>
+  </div>
+
+  <div class="flex-1 p-2 pb-1 truncate flex flex-col justify-center" [class]="delivery ? 'text-md' : 'text-lg'">
+    <div class="text-xl font-bold text-black dark:text-white truncate" *ngIf="!skeleton">{{ restaurant?.name }}</div>
+    <ion-skeleton-text class="h-6" [animated]="true" *ngIf="skeleton" />
+
+    <div class="flex gap-1 items-center">
+      <div class="text-medium truncate" *ngIf="!skeleton">{{ items_length }} item{{ items_length === 1 ? "" : "s"}}</div>
+      <ion-skeleton-text [animated]="true" *ngIf="skeleton" />
+
+      <ion-icon name="ellipse" class="text-[0.4rem]"></ion-icon>
+
+      <div class="text-medium truncate" *ngIf="!skeleton">{{ order?.total_price }} €</div>
+      <ion-skeleton-text [animated]="true" *ngIf="skeleton" />
+    </div>
+    <div class="text-xs text-medium truncate" *ngIf="!cartPage">{{ formatDeliveryTime(order?.delivery_time) }}</div>
+    <div class="text-xs text-medium truncate" *ngIf="!skeleton && cartPage">Delivery at {{ order!.delivery_info.address }}</div>
+    <ion-skeleton-text [animated]="true" *ngIf="skeleton"/>
+
+    <ion-button *ngIf="this.delivery">Follow delivery</ion-button>
+  </div>
+
+  <div class="flex items-center p-2" *ngIf="!delivery && order?.status !== 'delivered' && !skeleton">
+    <ion-icon name="chevron-forward" size="large"></ion-icon>
+  </div>
+  <ion-ripple-effect *ngIf="order?.status !== 'delivered'"></ion-ripple-effect>
+</ion-card>

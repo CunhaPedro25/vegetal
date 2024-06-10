@@ -37,5 +37,110 @@
  */
 
 /* @import "@ionic/angular/css/palettes/dark.always.css"; */
-/* @import "@ionic/angular/css/palettes/dark.class.css"; */
-@import "@ionic/angular/css/palettes/dark.system.css";
+@import "@ionic/angular/css/palettes/dark.class.css";
+/* @import "@ionic/angular/css/palettes/dark.system.css"; */
+
+/* Custom Global Styles */
+* {
+  @apply transition-colors duration-100;
+}
+
+.round-button {
+  @apply rounded-full;
+  --background: var(--ion-background-color) !important;
+}
+
+ion-input, ion-textarea {
+  @apply rounded-xl bg-gray-200 dark:bg-white/20 flex-1;
+  --padding-start: 1rem !important;
+  --highlight-height: 0 !important;
+}
+
+ion-textarea {
+  --padding-end: 1rem !important;
+  --padding-bottom: 1rem !important;
+}
+
+ion-chip.active {
+  --background: var(--ion-color-primary);
+  --color: var(--ion-color-light);
+}
+
+ion-card {
+  box-shadow: 0 0;
+  @apply rounded-lg;
+}
+
+.sc-ion-searchbar-md-h, .sc-ion-searchbar-ios-h {
+  --background: var(--ion-searchbar-background);
+  --box-shadow: 0 !important;
+  --border-radius: 2rem;
+}
+
+ion-button{
+  --box-shadow: 0 0;
+  --border-radius: 2rem;
+  @apply font-semibold capitalize;
+
+  &.dark-button {
+    --background: var(--ion-color-step-950) !important;
+    --color: var(--ion-color-step-50) !important;
+  }
+}
+
+ion-list {
+  background: var(--ion-background-color) !important;
+}
+
+ion-item {
+  --background: var(--ion-background-color) !important;
+}
+
+.dark-theme .leaflet-control-zoom-in, .dark-theme .leaflet-control-zoom-out{
+  background-color: #333 !important;
+  color: #fff !important;
+  border: 1px solid #444 !important;
+}
+
+ion-progress-bar {
+  @apply h-4 rounded-xl
+}
+
+ion-progress-bar::part(progress) {
+  border-radius: 0.75rem !important;
+}
+
+.logo-text{
+  @apply fill-black dark:fill-white;
+}
+
+ion-header, ion-header *, ion-toolbar, ion-toolbar * {
+  box-shadow: 0 0 !important;
+  --background: var(--ion-background-color) !important;
+  @apply font-semibold text-2xl
+}
+
+ion-modal.popover {
+  --height: fit;
+  --border-radius: 16px;
+  padding: 1rem !important;
+}
+
+ion-alert {
+  .alert-wrapper{
+    padding: 0.2rem !important;
+    border-radius: 1rem !important;
+
+    button {
+
+      &.alert-button-role-confirm{
+        background-color: var(--ion-color-primary) !important;
+        color: var(--ion-color-light) !important;
+        padding: 0.2rem 1rem !important;
+      }
+
+      text-transform: capitalize !important;
+      border-radius: 2rem !important;
+    }
+  }
+}

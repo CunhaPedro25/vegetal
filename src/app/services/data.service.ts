@@ -8,34 +8,42 @@ import {Address} from '../models/address.model';
 import {Item} from '../models/item.model';
 import {Order} from '../models/order.model';
 import {OrderItem} from '../models/order-item.model';
-import {Delivery} from '../models/delivery.model';
-import {DeliveryType} from '../models/delivery-type.model';
 import {Category} from '../models/category.model';
 import {Favorite} from '../models/favorite.model';
+import {Storage} from "@ionic/storage-angular";
+import {BehaviorSubject} from "rxjs";
 
 @Injectable({
   providedIn: 'root'
 })
 export class DataService {
   private supabase: SupabaseClient;
-  private selectedAddress: Address = {
-    address: 'Av. do Atlântico 644 4900, Viana do Castelo',
-    latitude: 41.69427867398096,  // Default latitude
-    longitude: -8.846855462371082,  // Default longitude
-    city: "Viana do Castelo",
-    zip_code: "644-4900"
-  };
+  private selectedAddressSubject: BehaviorSubject<Address>;
 
-  setSelectedAddress(address: Address): void {
-    this.selectedAddress = address;
+  constructor(private storage: Storage) {
+    this.supabase = AuthService.client();
+    const initialAddress: Address = {
+      address: 'Av. do Atlântico 644 4900, Viana do Castelo',
+      latitude: 41.69427867398096,
+      longitude: -8.846855462371082,
+      city: "Viana do Castelo",
+      zip_code: "644-4900",
+      door: 45,
+      info: "Big school"
+    };
+    this.selectedAddressSubject = new BehaviorSubject<Address>(initialAddress);
+  }
+
+  async setSelectedAddress(address: Address) {
+    this.selectedAddressSubject.next(address);
   }
 
   getSelectedAddress(): Address {
-    return this.selectedAddress;
+    return this.selectedAddressSubject.value;
   }
 
-  constructor() {
-    this.supabase = AuthService.getSupabaseClient();
+  getSelectedAddressObservable() {
+    return this.selectedAddressSubject.asObservable();
   }
 
   // Restaurants
@@ -53,7 +61,7 @@ export class DataService {
 
     data.forEach(item => {
       const restaurant = new Restaurant(item);
-      restaurant.calculateDistance(this.selectedAddress.latitude, this.selectedAddress.longitude);
+      restaurant.calculateDistance(this.getSelectedAddress().latitude, this.getSelectedAddress().longitude);
       if (restaurant.distance < maxDistance) {
         restaurants.push(restaurant);
       }
@@ -70,7 +78,7 @@ export class DataService {
       .single();
     if (error) throw error;
     const restaurant = new Restaurant(data);
-    restaurant.calculateDistance(this.selectedAddress.latitude, this.selectedAddress.longitude);
+    restaurant.calculateDistance(this.getSelectedAddress().latitude, this.getSelectedAddress().longitude);
     return restaurant;
   }
 
@@ -84,6 +92,16 @@ export class DataService {
     return data as Review[];
   }
 
+  async uploadReview(restaurant: number, user: string, comment: string, rating: number, delivery_type: string): Promise<Review> {
+    const { data, error } = await this.supabase
+      .from('reviews')
+      .insert({ restaurant: restaurant, user: user, comment: comment, rating: rating, delivery_type: delivery_type })
+      .select()
+      .single();
+    if (error) throw error;
+    return data as Review;
+  }
+
   // Addresses
   async getUserAddresses(user: string): Promise<Address[]> {
     const { data, error } = await this.supabase
@@ -94,7 +112,45 @@ export class DataService {
     return data as UserAddress[];
   }
 
-  // Items
+  async checkAddressExists(user: string, address: string): Promise<Address | null> {
+    const { data, error } = await this.supabase
+      .from('addresses')
+      .select('*')
+      .eq('user', user)
+      .eq('address', address)
+      .limit(1)
+      .maybeSingle();
+
+    if (error) throw error;
+    return data ? (data as Address) : null;
+  }
+
+  async createAddress(user: string, address: Address): Promise<Address> {
+    const { data, error } = await this.supabase
+      .from('addresses')
+      .insert({ ...address, user: user })
+      .select()
+      .single();
+
+    if (error) throw error;
+    return data as Address;
+  }
+
+  async updateAddress(id: number | undefined, address: Address): Promise<Address> {
+    const { data, error } = await this.supabase
+      .from('addresses')
+      .update(address)
+      .eq('id', id)
+      .select()
+      .single();
+
+    if (error) throw error;
+    return data as Address;
+  }
+
+
+
+  // ------ Items -------
   async getItems(restaurant: number): Promise<Item[]> {
     const { data, error } = await this.supabase
       .from('items')
@@ -104,45 +160,17 @@ export class DataService {
     return data as Item[];
   }
 
-  // Orders
-  async getUserOrders(user: string): Promise<Order[]> {
+  async getItem(id: number): Promise<Item> {
     const { data, error } = await this.supabase
-      .from('orders')
+      .from('items')
       .select('*')
-      .eq('user', user);
-    if (error) throw error;
-    return data as Order[];
-  }
-
-  // Order Items
-  async getOrderItems(order: number): Promise<OrderItem[]> {
-    const { data, error } = await this.supabase
-      .from('order_items')
-      .select('*')
-      .eq('order', order);
-    if (error) throw error;
-    return data as OrderItem[];
-  }
-
-  // Deliveries
-  async getDelivery(order: number): Promise<Delivery> {
-    const { data, error } = await this.supabase
-      .from('deliveries')
-      .select('*')
-      .eq('order', order)
+      .eq('id', id)
       .single();
     if (error) throw error;
-    return data as Delivery;
+    return data as Item;
   }
 
-  // Delivery Types
-  async getDeliveryTypes(): Promise<DeliveryType[]> {
-    const { data, error } = await this.supabase
-      .from('delivery_types')
-      .select('*');
-    if (error) throw error;
-    return data as DeliveryType[];
-  }
+
 
   // Categories
   async getCategories(): Promise<Category[]> {
@@ -169,7 +197,7 @@ export class DataService {
     return categories.data as Category[];
   }
 
-  // Favorites
+  // ------ Favorites ------
   async getUserFavorites(user: string): Promise<Favorite[]> {
     const { data, error } = await this.supabase
       .from('favorites')
@@ -178,4 +206,131 @@ export class DataService {
     if (error) throw error;
     return data as Favorite[];
   }
+
+  async getUserFavorite(user: string, restaurant: number): Promise<Favorite | null> {
+    const { data, error } = await this.supabase
+      .from('favorites')
+      .select('*')
+      .eq('user', user)
+      .eq('restaurant', restaurant)
+      .limit(1)
+      .maybeSingle();
+    if (error) throw error;
+    return data ? (data as Favorite) : null;
+  }
+
+  async setUserFavorite(user: string, restaurant: number): Promise<void> {
+    const { data, error } = await this.supabase
+      .from('favorites')
+      .insert({ restaurant: restaurant, user: user });
+    if (error) throw error;
+  }
+
+  async deleteUserFavorite(user: string, restaurant: number): Promise<void> {
+    const { data, error } = await this.supabase
+      .from('favorites')
+      .delete()
+      .eq('user', user)
+      .eq('restaurant', restaurant);
+    if (error) throw error;
+  }
+
+  // ------ Order ------
+  async getOrder(id: number): Promise<Order> {
+    const { data, error } = await this.supabase
+      .from('orders')
+      .select('*')
+      .eq('id', id)
+      .single();
+    if (error) throw error;
+    return data as Order;
+  }
+
+  async getUserOrders(user: string): Promise<Order[]> {
+    const { data, error } = await this.supabase
+      .from('orders')
+      .select('*')
+      .eq('user', user);
+    if (error) throw error;
+    return data as Order[];
+  }
+
+  async getRecentOrder(user: string | null, restaurant: number): Promise<Order> {
+    const { data, error } = await this.supabase
+      .from('orders')
+      .select()
+      .eq('user', user)
+      .eq('restaurant', restaurant)
+      .is('status', "NULL");
+    if (error) throw error;
+    return data[0] as Order;
+  }
+
+  async createOrder(user: string | null, restaurant: number): Promise<Order> {
+    const type = await this.storage.get(`tab`)
+    const { data, error } = await this.supabase
+      .from('orders')
+      .insert({ user: user, restaurant: restaurant, delivery_info: this.getSelectedAddress(), delivery_type: type })
+      .select()
+      .single();
+    if (error) throw error;
+    return data as Order;
+  }
+
+  async updateOrderStatus(id: number, status: string) {
+    const { data, error } = await this.supabase
+      .from('orders')
+      .update({status: status})
+      .eq('id', id)
+    if (error) throw error;
+  }
+
+  async updateOrderDeliveryTime(id: number, deliveryTime?: string) {
+    const time = deliveryTime ? deliveryTime : new Date().toISOString();
+    const { data, error } = await this.supabase
+      .from('orders')
+      .update({ delivery_time: time })
+      .eq('id', id);
+    if (error) throw error;
+  }
+
+
+
+  // ------ Order Items ------
+  async getOrderItems(order: number): Promise<OrderItem[]> {
+    const { data, error } = await this.supabase
+      .from('order_item')
+      .select('*')
+      .eq('"order"', order);
+    if (error) throw error;
+    return data as OrderItem[];
+  }
+
+  async getOrderItemByItem(order: number, item: number): Promise<OrderItem> {
+    const { data, error } = await this.supabase
+      .from('order_item')
+      .select('*')
+      .eq('"order"', order)
+      .eq('item', item);
+    if (error) throw error;
+    return data[0] as OrderItem;
+  }
+
+  async createOrderItem(order: number, item: number, quantity: number): Promise<OrderItem> {
+    const { data, error } = await this.supabase
+      .from('order_item')
+      .insert({order: order, item: item, quantity: quantity})
+      .single();
+    if (error) throw error;
+    return data as OrderItem;
+  }
+
+  async updateOrderItem(id: number, quantity: number) {
+    const { data, error } = await this.supabase
+      .from('order_item')
+      .update({quantity: quantity})
+      .eq('id', id)
+    if (error) throw error;
+  }
+
 }

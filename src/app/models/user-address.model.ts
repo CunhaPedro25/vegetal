@@ -7,4 +7,6 @@ export interface UserAddress {
   latitude: number;
   longitude: number;
   created_at: string;
+  door: number;
+  info: string;
 }

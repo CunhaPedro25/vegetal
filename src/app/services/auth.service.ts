@@ -8,7 +8,6 @@ import {environment} from "../../environments/environment"
 import {BehaviorSubject, Observable} from "rxjs"
 import {Router} from "@angular/router"
 import {Users} from '../models/users.model';
-import {Restaurant} from "../models/restaurant.model";
 
 @Injectable({
   providedIn: 'root'
@@ -76,30 +75,11 @@ export class AuthService {
       password: credentials.password,
       options: {
         data: {
-          firstName: credentials.firstName,
-          lastName: credentials.lastName,
+          full_name: credentials.firstName + " " + credentials.lastName,
         }
       }
     });
-
     const user = data.user;
-
-    if (user) {
-      // Insert user details into the `users` table
-      const { error: insertError } = await AuthService.supabase
-        .from('users')
-        .insert([{
-          id: user.id,
-          email: user.email,
-          phone: credentials.phone,
-          name: `${credentials.firstName} ${credentials.lastName}`
-        }]);
-
-      if (insertError) {
-        throw insertError;
-      }
-    }
-
     return { user, error };
   }
 
@@ -112,7 +92,7 @@ export class AuthService {
     await this.router.navigateByUrl("/login", {replaceUrl: true})
   }
 
-  static getSupabaseClient() {
+  static client() {
     return AuthService.supabase
   }
 }

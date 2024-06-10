@@ -14,9 +14,6 @@ export class Restaurant {
   delivery_fee: number;
   latitude: number;
   longitude: number;
-  filledStars: number;
-  semiFilledStars: number;
-  emptyStars: number;
   distance: number;
 
   constructor(data: any) {
@@ -27,13 +24,10 @@ export class Restaurant {
     this.phone = data.phone;
     this.opening_hours = data.opening_hours;
     this.created_at = data.created_at;
-    this.rating = data.rating;
+    this.rating = parseFloat(data.rating.toFixed(1));
     this.delivery_fee = data.delivery_fee;
     this.latitude = data.latitude;
     this.longitude = data.longitude;
-    this.filledStars = Math.floor(this.rating);
-    this.semiFilledStars = this.rating % 1 >= 0.5 ? 1 : 0;
-    this.emptyStars = 5 - this.filledStars - this.semiFilledStars;
     this.distance = 0;
   }
 

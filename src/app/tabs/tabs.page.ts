@@ -1,7 +1,4 @@
 import {Component, OnInit} from '@angular/core';
-import {AuthService} from "../services/auth.service";
-import {Router} from "@angular/router";
-import {LoadingController} from "@ionic/angular";
 
 @Component({
   selector: 'app-tabs',
@@ -10,7 +7,8 @@ import {LoadingController} from "@ionic/angular";
 })
 export class TabsPage implements OnInit{
 
-  constructor() {}
+  constructor(
+  ) {}
 
   ngOnInit() {
   }

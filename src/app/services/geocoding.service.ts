@@ -26,6 +26,6 @@ export class GeocodingService {
       lat: latitude,
       lon: longitude
     };
-    return this.http.get<any[]>(this.apiUrl + "reverse", { params });
+    return this.http.get<any>(this.apiUrl + "reverse", {params});
   }
 }

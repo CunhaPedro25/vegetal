@@ -21,7 +21,7 @@ export class HomePage implements OnInit {
   tab: string = "delivery";
   reviewAlert: boolean = false;
   param: number = 0;
-  type: string = "" 
+  type: string = ""
   restaurantName: string = ""
 
   constructor(
@@ -79,9 +79,9 @@ export class HomePage implements OnInit {
     await this.storage.set(`tab`, this.tab)
   }
 
-  search(event: any) {
+  async search(event: any) {
     const searched = event.detail.value;
-  
+
     if (searched && searched.trim() !== '') {
       this.restaurants = this.restaurants.filter((restaurant) => {
         return (restaurant.name.toLowerCase().indexOf(searched.toLowerCase()) > -1);
@@ -96,5 +96,9 @@ export class HomePage implements OnInit {
     this.tab = await this.storage.get(`tab`)
     if (!this.tab) this.tab = "Delivery"
     await this.loadRestaurants()
+
+    this.data.getSelectedAddressObservable().subscribe(() => {
+      this.loadRestaurants();
+    });
   }
 }

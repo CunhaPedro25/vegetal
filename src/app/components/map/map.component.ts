@@ -43,53 +43,28 @@ export class MapComponent implements OnInit, AfterViewInit {
   async ngAfterViewInit() {
     await this.initMap();
 
-    this.addressSubscription = this.data.getSelectedAddressObservable().subscribe(address => {
+    this.addressSubscription = this.data.getSelectedAddressObservable().subscribe(() => {
       this.updateMap();
     });
 
     this.map!.whenReady(() => {
       setTimeout(() => {
         this.map!.invalidateSize();
-      }, 10);
+      }, 500);
     });
   }
 
   async updateMap() {
     if(this.map) {
-      let storage = await this.storage.get("theme");
-      const theme = storage ? "dark" : "light";
-      this.setTiles(theme);
-
-      this.map.on('drag', () => {
-        if (this.selectLocationMode) {
-          const center = this.map!.getCenter();
-          this.centerChanged.emit({lat: center.lat, lng: center.lng});
-          if (!this.centerMarker) {
-            this.centerMarker = Leaflet.marker(center, {
-              icon: new Leaflet.Icon({
-                iconSize: [30, 30],
-                iconAnchor: [12.5, 30],
-                iconUrl: 'assets/icons/location_map_pin.png',
-              }),
-            }).addTo(this.map!);
-          } else {
-            this.centerMarker.setLatLng(center);
-          }
+      this.map.eachLayer((layer) => {
+        if (layer instanceof Leaflet.Marker) {
+          this.map!.removeLayer(layer);
         }
       });
 
-      if (this.selectLocationMode) {
-        const center = this.map.getCenter();
-        this.centerMarker = Leaflet.marker(center, {
-          icon: new Leaflet.Icon({
-            iconSize: [30, 30],
-            iconAnchor: [12.5, 30],
-            iconUrl: 'assets/icons/location_map_pin.png',
-          }),
-        }).addTo(this.map);
-
-        return;
-      }
+      let storage = await this.storage.get("theme");
+      const theme = storage ? "dark" : "light";
+      this.setTiles(theme);
 
       const currentLocation = Leaflet.latLng(this.data.getSelectedAddress().latitude, this.data.getSelectedAddress().longitude);
       const markers = [];
@@ -102,50 +77,56 @@ export class MapComponent implements OnInit, AfterViewInit {
         }),
       }).addTo(this.map));
 
-      if (this.latitude && this.longitude) {
-        const destination = Leaflet.latLng(this.latitude, this.longitude);
-        let bounds = Leaflet.latLngBounds([currentLocation, destination]);
-
-        bounds = bounds.pad(0.5);
-        this.map.fitBounds(bounds);
-
-        Leaflet.marker(destination, {
-          icon: new Leaflet.Icon({
-            iconSize: [30, 30],
-            iconAnchor: [12.5, 30],
-            iconUrl: 'assets/icons/location_map_pin.png',
-          }),
-        }).addTo(this.map);
-
-        Leaflet.polyline([currentLocation, destination], {color: "#25a749"}).addTo(this.map);
+      if (this.selectLocationMode) {
+        this.map.flyTo(currentLocation)
       } else {
-        const restaurants = await this.data.getRestaurantsWithinRadius();
+        if (this.latitude && this.longitude) {
+          const destination = Leaflet.latLng(this.latitude, this.longitude);
+          let bounds = Leaflet.latLngBounds([currentLocation, destination]);
 
-        if (restaurants.length > 0) {
-          for (const restaurant of restaurants) {
-            const marker = Leaflet.marker([restaurant.latitude, restaurant.longitude], {
-              icon: new Leaflet.Icon({
-                iconSize: [30, 30],
-                iconAnchor: [12.5, 30],
-                iconUrl: 'assets/icons/location_map_pin.png',
-              }),
-              title: restaurant.name
-            }).addTo(this.map);
-            markers.push(marker);
+          bounds = bounds.pad(0.5);
+          this.map.fitBounds(bounds);
+
+          Leaflet.marker(destination, {
+            icon: new Leaflet.Icon({
+              iconSize: [30, 30],
+              iconAnchor: [12.5, 30],
+              iconUrl: 'assets/icons/location_map_pin.png',
+            }),
+          }).addTo(this.map);
+
+          Leaflet.polyline([currentLocation, destination], {color: "#25a749"}).addTo(this.map);
+        } else {
+          const restaurants = await this.data.getRestaurantsWithinRadius();
+
+          if (restaurants.length > 0) {
+            for (const restaurant of restaurants) {
+              const marker = Leaflet.marker([restaurant.latitude, restaurant.longitude], {
+                icon: new Leaflet.Icon({
+                  iconSize: [30, 30],
+                  iconAnchor: [12.5, 30],
+                  iconUrl: 'assets/icons/location_map_pin.png',
+                }),
+                title: restaurant.name
+              }).addTo(this.map);
+              markers.push(marker);
+            }
+
+            const bounds = Leaflet.latLngBounds(markers.map(marker => marker.getLatLng()));
+            const paddedBounds = bounds.pad(0.4);
+            this.map.fitBounds(paddedBounds);
+          } else {
+            this.map.setView(currentLocation);
           }
-
-          const bounds = Leaflet.latLngBounds(markers.map(marker => marker.getLatLng()));
-          const paddedBounds = bounds.pad(0.4);
-          this.map.fitBounds(paddedBounds);
         }
       }
-
-      this.map!.whenReady(() => {
-        setTimeout(() => {
-          this.map!.invalidateSize();
-        }, 10);
-      });
     }
+
+    this.map!.whenReady(() => {
+      setTimeout(() => {
+        this.map!.invalidateSize();
+      }, 500);
+    });
   }
 
   async initMap() {
@@ -166,9 +147,15 @@ export class MapComponent implements OnInit, AfterViewInit {
       tap: this.showControls,
       doubleClickZoom: this.showControls,
       keyboard: this.showControls,
-      zoomControl: this.showControls,
+      zoomControl: false,
       attributionControl: false
     });
+    if(this.showControls){
+      Leaflet.control.zoom({
+        position: 'topright'
+      }).addTo(this.map);
+    }
+
     this.setTiles(theme);
 
     prefersDark.addEventListener('change', (mediaQuery) => {
@@ -193,18 +180,7 @@ export class MapComponent implements OnInit, AfterViewInit {
       }
     });
 
-    if (this.selectLocationMode) {
-      const center = this.map.getCenter();
-      this.centerMarker = Leaflet.marker(center, {
-        icon: new Leaflet.Icon({
-          iconSize: [30, 30],
-          iconAnchor: [12.5, 30],
-          iconUrl: 'assets/icons/location_map_pin.png',
-        }),
-      }).addTo(this.map);
-
-      return;
-    }
+    if (this.selectLocationMode) {return;}
 
     const currentLocation = Leaflet.latLng(this.data.getSelectedAddress().latitude, this.data.getSelectedAddress().longitude);
     const markers = [];
@@ -254,12 +230,6 @@ export class MapComponent implements OnInit, AfterViewInit {
         this.map.fitBounds(paddedBounds);
       }
     }
-
-    this.map!.whenReady(() => {
-      setTimeout(() => {
-        this.map!.invalidateSize();
-      }, 10);
-    });
   }
 
   setTiles(theme: string) {

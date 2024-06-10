@@ -120,7 +120,7 @@ ion-header, ion-header *, ion-toolbar, ion-toolbar * {
   @apply font-semibold text-2xl
 }
 
-ion-modal {
+ion-modal.popover {
   --height: fit;
   --border-radius: 16px;
   padding: 1rem !important;

@@ -1,7 +1,7 @@
 <ion-content [fullscreen]="true">
   <div class="flex flex-col h-full w-full">
     <div class="flex flex-col gap-2">
-      <ion-searchbar placeholder="Search"></ion-searchbar>
+      <ion-searchbar placeholder="Search" (ionInput)="search($event)"></ion-searchbar>
 
       <ion-radio-group [(ngModel)]="tab" (ngModelChange)="onTabChange()" name="reviewType" class="flex gap-2 w-full justify-center">
         <ion-radio slot="start" value="Delivery">

@@ -21,7 +21,7 @@ export class HomePage implements OnInit {
   tab: string = "delivery";
   reviewAlert: boolean = false;
   param: number = 0;
-  type: string = ""
+  type: string = "" 
   restaurantName: string = ""
 
   constructor(
@@ -77,6 +77,18 @@ export class HomePage implements OnInit {
 
   async onTabChange() {
     await this.storage.set(`tab`, this.tab)
+  }
+
+  search(event: any) {
+    const searched = event.detail.value;
+  
+    if (searched && searched.trim() !== '') {
+      this.restaurants = this.restaurants.filter((restaurant) => {
+        return (restaurant.name.toLowerCase().indexOf(searched.toLowerCase()) > -1);
+      });
+    } else {
+      this.loadRestaurants();
+    }
   }
 
   async ngOnInit() {

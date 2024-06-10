@@ -1,10 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import {DataService} from "../../services/data.service";
-import {ActivatedRoute} from "@angular/router";
 import {Storage} from "@ionic/storage-angular";
 import {AuthService} from "../../services/auth.service";
 import {Restaurant} from "../../models/restaurant.model";
-import {Favorite} from "../../models/favorite.model";
 
 @Component({
   selector: 'app-favorites',
@@ -33,10 +31,10 @@ export class FavoritesPage implements OnInit {
       for (const favorite of favorites) {
         this.data.getRestaurant(favorite.restaurant).then((restaurant) => {
           this.favorites.push(restaurant);
-          this.loaded = true;
         })
       }
     }
+    this.loaded = true;
   }
 
 }
